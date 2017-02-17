@@ -1,14 +1,15 @@
-const superagent = require('superagent');
+const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg, cmdArgs) => {
     let argsJoin = cmdArgs.join(' ');
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Title name or IMDb ID required.');
-    var type = 't';
-    if (argsJoin.startsWith('tt')) type = 'i';
-    let message = bot.createMessage(msg.channel.id, `ℹ Getting information for the title '${argsJoin}'...`);
-    let title = await superagent.get(`http://svr2.omdbapi.com/?${type}=${argsJoin}&plot=short&r=json`);
-    if (title.Response === "False") return message.edit('❌ No results found.');
+    let message = await bot.createMessage(msg.channel.id, `ℹ Getting information for the title '${argsJoin}'...`);
+    let title = await u.api.getTitle(argsJoin);
+    if (title.Response && title.Response === 'False') return message.edit('❌ No results found.');
+    if (title.Error) return (`❌ ${title.Error}`);
+    let poster = title.Poster;
+    if (title.Poster === 'N/A') poster = '';
     message.edit({embed: {
         title: title.Title,
         description: title.Plot,
@@ -39,23 +40,23 @@ c.process = async (bot, msg, cmdArgs) => {
         }, {
             name: 'Language',
             value: title.Language,
-            inline: false
+            inline: true
         }, {
             name: 'Awards',
             value: title.Awards,
-            inline: false
+            inline: true
         }, {
             name: 'Director',
             value: title.Director,
-            inline: false
+            inline: true
         }, {
             name: 'Writer',
             value: title.Writer,
-            inline: false
+            inline: true
         }, {
             name: 'Actors',
             value: title.Actors,
-            inline: false
+            inline: true
         }, {
             name: 'Metascore',
             value: title.Metascore,
@@ -74,6 +75,9 @@ c.process = async (bot, msg, cmdArgs) => {
             inline: true
         }],
         color: 0xE6B91E,
-        url: `http://www.imdb.com/title/${title.imdbID}/`
+        url: `http://www.imdb.com/title/${title.imdbID}/`,
+        thumbnail: {
+            url: poster
+        }
     }});
 }

@@ -18,17 +18,24 @@ bot.on("messageCreate", async (msg) => {
     let prefix = config.prefix;
     let guild = null;
     if (msg.channel.guild) guild = await u.db.getGuild(msg.channel.guild.id);
-    if (!guild && msg.channel.guild) u.db.createGuild(msg.channel.guild.id);
+    if (!guild && msg.channel.guild) {
+        u.db.createGuild(msg.channel.guild.id);
+        guild = await u.db.getGuild(msg.channel.guild.id);
+    }
     if (guild && guild.prefix) prefix = guild.prefix;
     if (!msg.content.startsWith(prefix)) return;
     let user = await u.db.getUser(msg.author.id);
-    if (!user) u.db.createUser(msg.author.id);
+    if (!user) {
+        u.db.createUser(msg.author.id);
+        user = await u.db.getUser(msg.author.id);
+    }
     let msgSplit = msg.content.split(' ');
     let cmdName = msgSplit[0].toLowerCase().slice(prefix.length);
     if (!main.commands[cmdName]) return;
+    if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerid) return;
     let cmdArgs = msgSplit.slice(1);
     main.commands[cmdName].process(bot, msg, cmdArgs, guild, user);
-    if (msg.channel.guild && guild) {
+    if (msg.channel.guild) {
         let count = 1;
         if (guild.count) count = guild.count + 1;
         u.db.updateGuild(msg.channel.guild.id, {"count": count});
