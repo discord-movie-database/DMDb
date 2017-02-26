@@ -6,8 +6,6 @@ const bot = new Eris(config.token.bot, {
 const u = require('./util/main.js');
 global.main = {};
 
-let loaded = 0;
-
 bot.on("ready", () => {
     u.commands.loadCommands();
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
@@ -35,6 +33,8 @@ bot.on("messageCreate", async (msg) => {
     let cmdName = msgSplit[0].toLowerCase().slice(prefix.length);
     if (!main.commands[cmdName]) return;
     if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerid) return;
+    if (main.commands[cmdName].verified === true && guild.verified === false);
+    if (!guild.count) guild.count = 1;
     let cmdArgs = msgSplit.slice(1);
     main.commands[cmdName].process(bot, msg, cmdArgs, guild, user);
     if (msg.channel.guild) {
