@@ -1,7 +1,7 @@
 const config = require('./config.json');
 const Eris = require('eris');
 const bot = new Eris(config.token.bot, {
-    maxShards: 4
+    maxShards: config.shardCount
 });
 const u = require('./util/main.js');
 global.main = {};
@@ -37,7 +37,8 @@ bot.on("messageCreate", async (msg) => {
     let cmdName = msgSplit[0].toLowerCase().slice(prefix.length);
     if (!main.commands[cmdName]) return;
     if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerid) return;
-    if (main.commands[cmdName].verified === true && guild.verified === false);
+    if (main.commands[cmdName].verified === true && user.verified === false) return;
+    if (main.commands[cmdName].verified === true && guild.verified === false) return;
     if (!guild.count) guild.count = 1;
     let cmdArgs = msgSplit.slice(1);
     main.commands[cmdName].process(bot, msg, cmdArgs, guild, user);
@@ -52,5 +53,11 @@ bot.on("messageCreate", async (msg) => {
         u.db.updateUser(msg.author.id, {"count": count});
     }
 });
+
+let listUpdate = setInterval(() => {
+    const post = require('./events/post.js');
+    post.main(bot.guilds.size);
+    console.log('Posted guild count.');
+}, 1800000);
 
 bot.connect();
