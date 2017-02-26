@@ -6,15 +6,19 @@ const bot = new Eris(config.token.bot, {
 const u = require('./util/main.js');
 global.main = {};
 
+let loaded = 0;
+
 bot.on("ready", () => {
     u.commands.loadCommands();
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
     console.log('IMDb Ready!');
+    loaded = 1;
 });
 
 bot.on("messageCreate", async (msg) => {
     if (!msg.author) return;
     if (msg.author.bot) return;
+    if (loaded === 0) return;
     let prefix = config.prefix;
     let guild = null;
     if (msg.channel.guild) guild = await u.db.getGuild(msg.channel.guild.id);

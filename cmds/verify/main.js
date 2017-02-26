@@ -3,26 +3,26 @@ const u = require('../../util/main.js');
 const admins = ["148899081304014848"];
 const admin = {
     guild: {
-        add: (msg, guild, user) => {
+        add: async (msg, guild, user) => {
             if (guild.verified) return {type: '❌', message: 'Guild already verified'};
-            await u.db.updateGuild({verified: true});
+            let update = await u.db.updateGuild(guild.id, {verified: true});
             return {type: '✅', message: 'Verified this guild.'};
         },
-        remove: (msg, guild, user) => {
-            if (guild.verified && guild.verified === false) return {type: '❌', message: 'Guild already unverified.'};
-            await u.db.updateGuild({verified: false});
+        remove: async (msg, guild, user) => {
+            if (guild.verified === false) return {type: '❌', message: 'Guild already unverified.'};
+            let update = await u.db.updateGuild(guild.id, {verified: false});
             return {type: '✅', message: 'Unverified this guild.'};
         }
     },
     user: {
-        add: (msg, guild, user) => {
+        add: async (msg, guild, user) => {
             if (user.verified) return {type: '❌', message: 'User already verified.'};
-            await u.db.updateUser({verified: true});
+            let update = await u.db.updateUser(user.id, {verified: true});
             return {type: '✅', message: 'Verified this user.'};
         },
-        remove: (msg, guild, user) => {
-            if (user.verified && user.verified === false) return {type: '❌', message: 'Sser already unverified.'};
-            await u.db.updateUser({verified: false});
+        remove: async (msg, guild, user) => {
+            if (user.verified === false) return {type: '❌', message: 'User already unverified.'};
+            let update = await u.db.updateUser(user.id, {verified: false});
             return {type: '✅', message: 'Unverified this user.'};
         }
     }
@@ -51,7 +51,7 @@ c.process = async (bot, msg, cmdArgs, guild, user) => {
     if (msg.author.id !== msg.channel.guild.ownerID || msg.author.id !== '148899081304014848') return bot.createMessage(msg.channel.id, '❌ Only the server owner can use this command.');
     if (cmdArgs[0] === 'admin' && admins.indexOf(msg.author.id) > -1) {
         if (cmdArgs[1] && admin[cmdArgs[1]] && cmdArgs[2] && admin[cmdArgs[1]][cmdArgs[2]]) {
-            let process = admin[cmdArgs[1]][cmdArgs[2]](msg, guild, user);
+            let process = await admin[cmdArgs[1]][cmdArgs[2]](msg, guild, user);
             bot.createMessage(msg.channel.id, process.type + ' ' + process.message);
         } else {
             bot.createMessage(msg.channel.id, '❌ Invalid arguments.');
