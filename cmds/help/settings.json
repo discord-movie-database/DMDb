@@ -1,7 +1,6 @@
 {
-    "verified": false,
     "restricted": false,
-    "hidden": false,
+    "hidden": true,
     "usage": "Command Name",
     "description": "Get information on a title based on name or IMDb ID.",
     "large_description": "I'll do large descripion later."

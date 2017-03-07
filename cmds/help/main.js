@@ -41,24 +41,12 @@ c.process = async (bot, msg, cmdArgs) => {
         }});
         return;
     }
-    let cmds = [];
+    let description = `__**IMDb Commands**__\n`;
     for (i in main.commands) {
         if (main.commands[i].settings.hidden) continue;
-        let cmdInfo = '';
-        if (main.commands[i].settings.usage) cmdInfo += `*\`${main.commands[i].settings.usage}\`* - `;
-        if (main.commands[i].settings.description) cmdInfo += main.commands[i].settings.description;
-        cmds.push({
-            name: `${config.prefix}${i}`,
-            value: cmdInfo,
-            inline: false
-        });
+        description += `\n**${config.prefix}${i}** `
+        if (main.commands[i].settings.usage) description += `\`${main.commands[i].settings.usage}\` `;
+        if (main.commands[i].settings.description) description += main.commands[i].settings.description;
     }
-    bot.createMessage(msg.channel.id, {embed: {
-        author: {
-            name: "Internet Movie Database"
-        },
-        description: `Get information on your favourite movies, series and celebrities from IMDb.\nUse ${config.prefix}help [Command Name] to get more information about a command.`,
-        fields: cmds,
-        color: 0xE6B91E
-    }});
+    bot.createMessage(msg.channel.id, description);
 }

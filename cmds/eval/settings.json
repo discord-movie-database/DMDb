@@ -1,5 +1,4 @@
 {
-    "verified": false,
     "restricted": true,
     "hidden": true,
     "description": "Developer only command for testing.",
