@@ -9,7 +9,6 @@ c.process = async (bot, msg) => {
     bot.createMessage(msg.channel.id, 'ℹ Pinging...').then(message => {
         discordPing = Math.round(process.hrtime(discordPing)[1] / 1000000);
         message.edit({embed: {
-            title: 'Pong',
             fields: [{
                 name: 'Discord',
                 value: `${discordPing}ms`,

@@ -13,13 +13,13 @@ c.process = async (bot, msg, cmdArgs) => {
         let type = search.Search[i].Type;
         fields.push({
             name: search.Search[i].Title,
-            value: `${search.Search[i].Year} | ${type[0].toUpperCase() + type.slice(1)} | ${search.Search[i].imdbID}`,
+            value: `${search.Search[i].Year} **|** ${type[0].toUpperCase() + type.slice(1)} **|** ${search.Search[i].imdbID}`,
             inline: false
         });
     }
     message.edit({embed: {
         title: argsJoin[0].toUpperCase() + argsJoin.slice(1),
-        description: `${search.totalResults} Results`,
+        description: `Showing best results out of ${search.totalResults}.`,
         fields: fields,
         color: 0xE6B91E
     }});
