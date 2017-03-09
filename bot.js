@@ -61,6 +61,7 @@ bot.on("messageCreate", async (msg) => {
     console.log(`${msg.author.username} (${msg.author.id}) executed ${cmdName} in ${msg.channel.name} (${msg.channel.id}) in ${msg.channel.guild.name} (${msg.channel.guild.id})`);
 });
 
+
 const listUpdate = () => {
     const post = require('./events/post.js');
     post.main(bot.guilds.size);
@@ -69,6 +70,8 @@ const listUpdate = () => {
 let listUpdateInt = setInterval(() => {
     listUpdate();
 }, 1800000);
-listUpdate();
+setTimeout(() => {
+    listUpdate();
+}, 15000);
 
 bot.connect();

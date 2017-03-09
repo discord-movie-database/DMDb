@@ -34,7 +34,7 @@ c.process = async (bot, msg, cmdArgs, guild) => {
         return;
     }
     let prefix = guild.prefix || config.prefix;
-    let description = `__**IMDb Commands**__\n`;
+    let description = `__**IMDb Commands**__\n*Remember to give IMDb permission to Embed Links.*\n`;
     for (i in main.commands) {
         if (main.commands[i].settings.hidden) continue;
         description += `\n**${prefix}${i}** `
