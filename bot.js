@@ -42,7 +42,12 @@ bot.on("messageCreate", async (msg) => {
     if (!main.commands[cmdName]) return;
     if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerid) return;
     let cmdArgs = msgSplit.slice(1);
-    main.commands[cmdName].process(bot, msg, cmdArgs, guild, user);
+    try {
+        main.commands[cmdName].process(bot, msg, cmdArgs, guild, user);
+    } catch (err) {
+        bot.createMessage(msg.channel.id, '❌ Uh Oh, there was an error when executing this command. The bot develoepr has been notified and the issue will be sorted shortly.');
+        bot.createMessage("241149423227240458", `❌ ${err}`);
+    }
     if (msg.channel.guild) {
         let count = 1;
         if (guild.count) count = guild.count + 1;
