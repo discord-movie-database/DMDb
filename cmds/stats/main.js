@@ -9,7 +9,6 @@ c.process = async (bot, msg) => {
     uptime += d.getUTCSeconds() + ' Seconds ';
     let memUsage = Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB';
     bot.createMessage(msg.channel.id, {embed: {
-        title: 'Statistics',
         fields: [{
             name: 'Uptime',
             value: uptime,

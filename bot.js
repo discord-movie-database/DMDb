@@ -58,12 +58,17 @@ bot.on("messageCreate", async (msg) => {
         if (user.count) count = user.count + 1;
         u.db.updateUser(msg.author.id, {"count": count});
     }
+    console.log(`${msg.author.username} (${msg.author.id}) executed ${cmdName} in ${msg.channel.name} (${msg.channel.id}) in ${msg.channel.guild.name} (${msg.channel.guild.id})`);
 });
 
-let listUpdate = setInterval(() => {
+const listUpdate = () => {
     const post = require('./events/post.js');
     post.main(bot.guilds.size);
-    console.log('Posted guild count.');
+    console.log('Posted new guild count.');
+}
+let listUpdateInt = setInterval(() => {
+    listUpdate();
 }, 1800000);
+listUpdate();
 
 bot.connect();
