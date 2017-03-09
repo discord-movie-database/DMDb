@@ -14,7 +14,7 @@ c.process = async (bot, msg) => {
                 value: `${discordPing}ms`,
                 inline: true
             }, {
-                name: 'API 1',
+                name: 'API',
                 value: `${apiPing}ms`,
                 inline: true
             }],
