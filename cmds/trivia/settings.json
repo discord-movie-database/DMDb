@@ -1,0 +1,7 @@
+{
+    "restricted": false,
+    "hidden": true,
+    "usage": "start, end, status",
+    "description": "Trivia game for the IMDb Discord Guild.",
+    "large_description": "A trivia game for the IMDb Discord Guild."
+}
