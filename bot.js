@@ -45,8 +45,8 @@ bot.on("messageCreate", async (msg) => {
     try {
         main.commands[cmdName].process(bot, msg, cmdArgs, guild, user);
     } catch (err) {
-        bot.createMessage(msg.channel.id, '❌ Uh Oh, there was an error when executing this command. The bot develoepr has been notified and the issue will be sorted shortly.');
-        bot.createMessage("241149423227240458", `❌ ${err}`);
+        bot.createMessage(msg.channel.id, '❌ Uh Oh, there was an error when executing this command. The bot developer has been notified and the issue will be sorted shortly.');
+        bot.createMessage(config.errorChannel, `❌ ${err}`);
     }
     if (msg.channel.guild) {
         let count = 1;
@@ -61,7 +61,7 @@ bot.on("messageCreate", async (msg) => {
     let logMsg = `${msg.author.username} (${msg.author.id}) executed ${cmdName}`;
     if (msg.channel.guild) logMsg += ` in ${msg.channel.name} (${msg.channel.id}) in ${msg.channel.guild.name} (${msg.channel.guild.id})`;
     if (!msg.channel.guild) logMsg += ' in a direct message';
-    if (cmdArgs[0]) logMsg += ` with the args ${cmdArgs.join('')}`;
+    if (cmdArgs[0]) logMsg += ` with the args ${cmdArgs.join(' ')}`;
     console.log(logMsg);
 });
 

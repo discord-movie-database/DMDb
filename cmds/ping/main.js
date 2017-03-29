@@ -5,20 +5,18 @@ c.process = async (bot, msg) => {
     let apiPing = process.hrtime();
     let apiRequest = await u.api.getTitle((Math.round(Math.random() * 9999) + 1).toString());
     apiPing = Math.round(process.hrtime(apiPing)[1] / 1000000);
-    let discordPing = process.hrtime();
-    bot.createMessage(msg.channel.id, 'ℹ Pinging...').then(message => {
-        discordPing = Math.round(process.hrtime(discordPing)[1] / 1000000);
-        message.edit({embed: {
-            fields: [{
-                name: 'Discord',
-                value: `${discordPing}ms`,
-                inline: true
-            }, {
-                name: 'API',
-                value: `${apiPing}ms`,
-                inline: true
-            }],
-            color: 0xE6B91E
-        }});
-    });
+    let shardPing = '-';
+    if (msg.channel.guild) shardPing = msg.channel.guild.shard.latency + 'ms';
+    bot.createMessage(msg.channel.id, {embed: {
+        fields: [{
+            name: 'Shard',
+            value: `${shardPing}`,
+            inline: true
+        }, {
+            name: 'API',
+            value: `${apiPing}ms`,
+            inline: true
+        }],
+        color: 0xE6B91E
+    }});
 }
