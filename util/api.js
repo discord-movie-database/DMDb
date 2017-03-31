@@ -35,8 +35,10 @@ api.shortUrl = async (url) => {
     return data.data.url;
 }
 
-api.searchTitles = async (query) => {
-    let search = await superagent.get(`${omdb}?s=${query}`);
+api.searchTitles = async (query, year) => {
+    let searchYear = '';
+    if (year) searchYear = year;
+    let search = await superagent.get(`${omdb}?s=${query}&y=${searchYear}`);
     if (search.statusCode != 200) return {"Error": apiError};
     search = search.body;
     return search;

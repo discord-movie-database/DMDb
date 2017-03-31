@@ -1,0 +1,6 @@
+{
+    "restricted": false,
+    "hidden": true,
+    "description": "Shard information.",
+    "large_description": "List of shards to check if all are connected. Mainly used for testing."
+}

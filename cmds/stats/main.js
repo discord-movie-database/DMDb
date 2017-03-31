@@ -1,3 +1,4 @@
+const config = require('../../config.json');
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg) => {
@@ -8,11 +9,13 @@ c.process = async (bot, msg) => {
     if (d.getUTCMinutes() !== 0) uptime += d.getUTCMinutes() + ' Minutes, ';
     uptime += d.getUTCSeconds() + ' Seconds ';
     let memUsage = Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB';
+    let currentShard = '';
+    if (msg.channel.guild) currentShard = ` (${msg.channel.guild.shard.id})`;
     bot.createMessage(msg.channel.id, {embed: {
         fields: [{
             name: 'Uptime',
             value: uptime,
-            inline: true
+            inline: false
         }, {
             name: 'Mem Usage',
             value: memUsage,
@@ -20,6 +23,10 @@ c.process = async (bot, msg) => {
         }, {
             name: 'Commands',
             value: Object.keys(main.commands).length,
+            inline: true
+        }, {
+            name: 'Shards',
+            value: config.shardCount + currentShard,
             inline: true
         }, {
             name: 'Guilds',
