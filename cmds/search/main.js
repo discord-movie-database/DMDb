@@ -2,20 +2,14 @@ const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg, cmdArgs) => {
-    let year = '';
-    for (let i = 0; i < cmdArgs.length; i++) {
-        let arg = cmdArgs[i].toLowerCase();
-        let nextArg = cmdArgs[i + 1];
-        if (arg === '-y' && nextArg) {
-            year = nextArg;
-            cmdArgs.splice(i, 2);
-            break;
-        }
-    }
-    let argsJoin = cmdArgs.join(' ');
+    let cmds = u.ah.main(cmdArgs, ['year', 'page']);
+    let year = cmds.year || '';
+    let page = cmds.page || 1;
+    let argsJoin = cmds.args.join(' ');
+    console.log(argsJoin);
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Search term required.');
     let message = await bot.createMessage(msg.channel.id, 'ℹ Searching for titles...');
-    let search = await u.api.searchTitles(argsJoin, year);
+    let search = await u.api.searchTitles(argsJoin, year, page);
     if (search.Response && search.Response === 'False') return message.edit('❌ No results found.');
     if (search.Error) return (`❌ ${search.Error}`);
     let fields = [];
