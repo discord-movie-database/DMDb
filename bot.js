@@ -65,12 +65,12 @@ bot.on("messageCreate", async (msg) => {
     console.log(logMsg);
 });
 
-/*const listUpdate = () => {
+const listUpdate = () => {
     const post = require('./events/post.js');
     post.main(bot.guilds.size);
     console.log('Posted new guild count.');
 }
 let listUpdateInt = setInterval(() => { listUpdate(); }, 1800000);
-setTimeout(() => { listUpdate(); }, 15000);*/
+setTimeout(() => { listUpdate(); }, 15000);
 
 bot.connect();
