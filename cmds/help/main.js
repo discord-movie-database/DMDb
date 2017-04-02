@@ -8,8 +8,8 @@ c.process = async (bot, msg, cmdArgs, guild) => {
         if (!main.commands[cmd]) return bot.createMessage(msg.channel.id, '❌ Command not found.');
         let usage = main.commands[cmd].settings.usage || 'N/A';
         let desc = main.commands[cmd].settings.large_description || main.commands[cmd].settings.description || 'N/A';
-        let hidden = main.commands[cmd].settings.hidden;
-        let restricted = main.commands[cmd].settings.restricted;
+        let hidden = main.commands[cmd].settings.hidden || 'False';
+        let restricted = main.commands[cmd].settings.restricted || 'False';
         let formatCmd = cmd.charAt(0).toUpperCase() + cmd.slice(1);
         bot.createMessage(msg.channel.id, {embed: {
             author: {

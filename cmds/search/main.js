@@ -6,9 +6,6 @@ c.process = async (bot, msg, cmdArgs) => {
     let year = cmds.year || '';
     let page = cmds.page || 1;
     let argsJoin = cmds.args.join(' ');
-    console.log(argsJoin);
-    console.log(year);
-    console.log(page);
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Search term required.');
     let message = await bot.createMessage(msg.channel.id, 'ℹ Searching for titles...');
     let search = await u.api.searchTitles(argsJoin, year, page);
