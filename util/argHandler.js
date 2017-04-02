@@ -6,11 +6,13 @@ ah.main = (args, cmds) => {
     for (let i = 0; i < args.length; i++) {
         let arg = args[i].toLowerCase();
         let nextArg = args[i + 1];
-        for (let o = 0; o < cmds.length; i++) {
+        for (let o = 0; o < cmds.length; o++) {
             let cmd = cmds[o];
             let shortCmd = cmds[o][0];
             if (arg === `-${shortCmd}` || arg === `--${cmd}` && nextArg) {
                 result[cmd] = nextArg;
+                args.splice(i, 2);
+                i--;
             }
         }
     }
