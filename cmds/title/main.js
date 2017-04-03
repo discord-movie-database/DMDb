@@ -9,6 +9,9 @@ c.process = async (bot, msg, cmdArgs) => {
     if (title.Response && title.Response === 'False') return message.edit('❌ No results found.');
     if (title.Error) return (`❌ ${title.Error}`);
     let poster = title.Poster;
+    let boxOffice = title.BoxOffice || 'N/A';
+    let website = title.Website || 'N/A';
+    if (website !== 'N/A') website = await u.api.shortUrl(website);
     if (title.Poster === 'N/A') poster = '';
     message.edit({embed: {
         title: title.Title,
@@ -58,12 +61,20 @@ c.process = async (bot, msg, cmdArgs) => {
             value: title.Actors,
             inline: true
         }, {
+            name: 'Box Office',
+            value: boxOffice,
+            inline: true
+        }, {
+            name: 'Website',
+            value: website,
+            inline: true
+        }, {
             name: 'Metascore',
             value: title.Metascore,
             inline: true
         }, {
             name: 'Rating',
-            value: title.imdbRating,
+            value: `${title.imdbRating}/10`,
             inline: true
         }, {
             name: 'Votes',

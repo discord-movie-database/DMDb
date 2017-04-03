@@ -23,7 +23,7 @@ c.process = async (bot, msg, cmdArgs) => {
     if (year.length > 0) year = ` in the year ${year}`;
     message.edit({embed: {
         title: argsJoin[0].toUpperCase() + argsJoin.slice(1),
-        description: `Showing best results out of ${search.totalResults}${year}.`,
+        description: `Showing 10 results out of ${search.totalResults} at page ${page}${year}.`,
         fields: fields,
         color: 0xE6B91E
     }});
