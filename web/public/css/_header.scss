@@ -4,15 +4,46 @@ header {
     width: 100%;
     background-color: $primary-black;
     height: $header-height;
+    z-index: 999;
 }
 header .header-inner {
     margin: 0 auto;
     padding: 0;
     list-style-type: none;
-    max-width: 1300px;
+    max-width: $header-inner-width;
 }
+
 .header-inner > div li a {
     display: block;
     line-height: $header-height;
-    width: 200px;
+    width: $header-nav-width;
+    text-align: center;
+    color: $primary-white;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color $header-nav-hov-trans-time ease-in-out;
+}
+.header-inner > div li a:hover {
+    color: $primary-yellow;
+}
+
+.header-inner > .title {
+    float: left;
+}
+.header-inner > .title li a {
+    font-weight: 700;
+    font-size: $header-title-size;
+    color: $primary-yellow;
+}
+
+.header-inner > .toggle {
+    float: right;
+    display: none;
+}
+
+.header-inner > .navs {
+    float: right;
+}
+.header-inner > .navs li {
+    float: left;
 }

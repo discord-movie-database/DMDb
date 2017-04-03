@@ -1,11 +1,22 @@
 // Fonts
-$primary-font: "Open Sans", sans-serif;
+$primary-font:                      "Open Sans", sans-serif;
+
 
 // Colors
-$transparent: transparent;
-$black: #000000;
-$white: #FFFFFF;
-$primary-black: #0C0B00;
+$transparent:                       transparent;
+$black:                             #000000;
+$white:                             #FFFFFF;
+$white-grey:                        #EEEEEE;
+
+$primary-black:                     #111;
+$primary-yellow:                    #DEB522;
+$primary-blue:                      #128BB5;
+$primary-white:                     #FcF7F7;
+
 
 // Header
-$header-height: 60px;
+$header-height:                     60px;
+$header-inner-width:                1300px;
+$header-nav-width:                  175px;
+$header-nav-hov-trans-time:         .3s;
+$header-title-size:                 28px;

@@ -1,0 +1,34 @@
+.home {
+    height: 100vh;
+    position: relative;
+}
+.background {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-image: url('https://source.unsplash.com/23LET4Hxj_U/1920x1080');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.overlay {
+    @extend .background;
+    background-image: none;
+    background-color: rgba($primary-black, .3);
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $primary-white;
+    z-index: 99;
+}
+.content h1 {
+    
+}
+.content p {
+    color: $white-grey;
+}
