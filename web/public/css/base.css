@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800");
+body {
+  margin: 0;
+  font-family: "Open Sans", sans-serif; }
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background-color: #0C0B00;
+  height: 60px; }
+
+header .header-inner {
+  margin: 0 auto;
+  padding: 0;
+  list-style-type: none;
+  max-width: 1300px; }
+
+.header-inner > div li a {
+  display: block;
+  line-height: 60px;
+  width: 200px; }

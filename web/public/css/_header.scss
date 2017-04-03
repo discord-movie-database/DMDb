@@ -1,0 +1,18 @@
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: $primary-black;
+    height: $header-height;
+}
+header .header-inner {
+    margin: 0 auto;
+    padding: 0;
+    list-style-type: none;
+    max-width: 1300px;
+}
+.header-inner > div li a {
+    display: block;
+    line-height: $header-height;
+    width: 200px;
+}
