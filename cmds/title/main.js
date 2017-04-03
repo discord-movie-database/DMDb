@@ -2,10 +2,12 @@ const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg, cmdArgs) => {
-    let argsJoin = cmdArgs.join(' ');
+    let cmds = u.ah.main(cmdArgs, ['year']);
+    let year = cmds.year || '';
+    let argsJoin = cmds.args.join(' ');
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Title name or IMDb ID required.');
     let message = await bot.createMessage(msg.channel.id, `ℹ Getting information for the title '${argsJoin}'...`);
-    let title = await u.api.getTitle(argsJoin);
+    let title = await u.api.getTitle(argsJoin, year);
     if (title.Response && title.Response === 'False') return message.edit('❌ No results found.');
     if (title.Error) return (`❌ ${title.Error}`);
     let poster = title.Poster;
