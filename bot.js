@@ -48,15 +48,15 @@ bot.on("messageCreate", async (msg) => {
         bot.createMessage(msg.channel.id, '❌ Uh Oh, there was an error when executing this command. The bot developer has been notified and the issue will be sorted shortly.');
         bot.createMessage(config.errorChannel, `❌ ${err}`);
     }
-    if (msg.channel.guild) {
-        let count = 1;
-        if (guild.count) count = guild.count + 1;
-        u.db.updateGuild(msg.channel.guild.id, {"count": count});
-    }
     if (user) {
         let count = 1;
         if (user.count) count = user.count + 1;
         u.db.updateUser(msg.author.id, {"count": count});
+    }
+    if (msg.channel.guild) {
+        let count = 1;
+        if (guild.count) count = guild.count + 1;
+        u.db.updateGuild(msg.channel.guild.id, {"count": count});
     }
     let logMsg = `${msg.author.username} (${msg.author.id}) executed ${cmdName}`;
     if (msg.channel.guild) logMsg += ` in ${msg.channel.name} (${msg.channel.id}) in ${msg.channel.guild.name} (${msg.channel.guild.id})`;
