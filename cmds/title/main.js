@@ -2,7 +2,7 @@ const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg, cmdArgs) => {
-    let cmds = u.ah.main(cmdArgs, ['year']);
+    let cmds = u.f.main(cmdArgs, ['year']);
     let year = cmds.year || '';
     let argsJoin = cmds.args.join(' ');
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Title name or IMDb ID required.');

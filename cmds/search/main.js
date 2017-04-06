@@ -2,7 +2,7 @@ const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg, cmdArgs) => {
-    let cmds = u.ah.main(cmdArgs, ['year', 'page']);
+    let cmds = u.f.main(cmdArgs, ['year', 'page']);
     let year = cmds.year || '';
     let page = cmds.page || 1;
     let argsJoin = cmds.args.join(' ');

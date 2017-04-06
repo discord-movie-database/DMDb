@@ -1,9 +1,12 @@
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg) => {
-    let result = '__**Shards**__\n';
+    let fields = [];
     bot.shards.forEach((shard) => {
-        result += `\n[**${shard.id}**] Status: ${shard.status}. Latency: ${shard.latency}.`
+        fields.push({name: shard.id, value: `Status: ${shard.status}\nLatency: ${shard.latency}`, inline: true});
     });
-    bot.createMessage(msg.channel.id, result);
+    bot.createMessage(msg.channel.id, {embed: {
+        fields: fields,
+        color: 0xE6B91E
+    }});
 }

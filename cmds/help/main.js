@@ -42,5 +42,6 @@ c.process = async (bot, msg, cmdArgs, guild) => {
         if (main.commands[i].settings.usage) description += `\`${main.commands[i].settings.usage}\` `;
         if (main.commands[i].settings.description) description += main.commands[i].settings.description;
     }
+    description += `\n\n*Use \`${prefix}help [Command Name]\` to get a detailed usage for a command.*`;
     bot.createMessage(msg.channel.id, description);
 }
