@@ -1,8 +1,7 @@
 const fs = require('fs');
-const path = require('path');
-const u = module.exports = {};
+const l = module.exports = {};
 
-u.loadCommands = async () => {
+l.loadCommands = async () => {
     main.commands = {};
     let cmdsDir = fs.readdirSync('./cmds/').reverse();
     for (let i = 0; i < cmdsDir.length; i++) {
@@ -11,28 +10,28 @@ u.loadCommands = async () => {
     }
 }
 
-u.unloadCommands = async () => {
+l.unloadCommands = async () => {
     for (i in main.commands) {
         delete require.cache[require.resolve(`../cmds/${i}/main.js`)];
         delete require.cache[require.resolve(`../cmds/${i}/settings.json`)];
     }
 }
 
-u.reloadUtil = async () => {
+l.reloadUtil = async () => {
     let utilDir = fs.readdirSync('./util/');
     for (let i = 0; i < utilDir.length; i++) {
         delete require.cache[require.resolve(`./${utilDir[i]}`)];
     }
 }
 
-u.reloadCommands = async () => {
-    u.unloadCommands();
-    u.loadCommands();
-    u.reloadUtil();
+l.reloadCommands = async () => {
+    l.unloadCommands();
+    l.loadCommands();
+    l.reloadUtil();
     console.log('Reloaded commands.');
 }
 
-u.reloadCommand = async (cmd, cb) => {
+l.reloadCommand = async (cmd, cb) => {
     cmd = cmd.toLowerCase();
     if (main.commands[cmd]) {
         delete require.cache[require.resolve(`../cmds/${cmd}/main.js`)];

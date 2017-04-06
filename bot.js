@@ -13,7 +13,7 @@ global.main = {};
 let loaded = 0;
 
 bot.on("ready", () => {
-    u.commands.loadCommands();
+    u.loader.loadCommands();
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
     console.log('IMDb Ready!');
     loaded = 1;
@@ -21,8 +21,8 @@ bot.on("ready", () => {
 
 bot.on("messageCreate", async (msg) => {
     if (!msg.author) return;
-    if (msg.author.bot) return;
     if (loaded === 0) return;
+    if (msg.author.bot) return;
     let prefix = config.prefix;
     let guild = null;
     if (msg.channel.guild) guild = await u.db.getGuild(msg.channel.guild.id);
@@ -47,6 +47,7 @@ bot.on("messageCreate", async (msg) => {
     } catch (err) {
         bot.createMessage(msg.channel.id, '❌ Uh Oh, there was an error when executing this command. The bot developer has been notified and the issue will be sorted shortly.');
         bot.createMessage(config.errorChannel, `❌ ${err}`);
+        console.log(`\n${err}\n`);
     }
     if (user) {
         let count = 1;

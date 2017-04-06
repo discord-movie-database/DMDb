@@ -1,7 +1,7 @@
 const config = require('../config.json');
-const ah = module.exports = {};
+const f = module.exports = {};
 
-ah.main = (args, flags) => {
+f.main = (args, flags) => {
     let result = {};
     for (let i = 0; i < args.length; i++) {
         let arg = args[i].toLowerCase();
