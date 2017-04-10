@@ -35,12 +35,3 @@ l.reloadCommands = () => {
     l.loadCommands();
     l.reloadUtil();
 }
-
-l.reloadCommand = (cmd) => {
-    cmd = cmd.toLowerCase();
-    if (main.commands[cmd]) {
-        l.deleteCache(cmd, true);
-        return {"err": false, "msg": `Reloaded command ${cmd}.`};
-    }
-    return {"err": true, "msg": "Command not found."};
-}
