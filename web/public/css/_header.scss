@@ -3,6 +3,7 @@ header {
     top: 0;
     width: 100%;
     background-color: $primary-black;
+    font-family: Montserrat;
     height: $header-height;
     z-index: 999;
 }
@@ -11,39 +12,42 @@ header .header-inner {
     padding: 0;
     list-style-type: none;
     max-width: $header-inner-width;
-}
+    
+    > div li a {
+        display: block;
+        line-height: $header-height;
+        width: $header-nav-width;
+        text-align: center;
+        color: $primary-white;
+        text-decoration: none;
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: color $header-nav-trans-delay ease-in-out;
+        &:hover {
+            color: $primary-yellow;
+        }
+    }
+    
+    > .title {
+        float: left;
+        li a {
+            font-weight: bold;
+            font-size: $header-title-size;
+            color: $primary-yellow;
+            text-transform: none;
+        }
+    }
 
-.header-inner > div li a {
-    display: block;
-    line-height: $header-height;
-    width: $header-nav-width;
-    text-align: center;
-    color: $primary-white;
-    text-decoration: none;
-    font-size: 15px;
-    transition: color $header-nav-hov-trans-time ease-in-out;
-}
-.header-inner > div li a:hover {
-    color: $primary-yellow;
-}
+    > .toggle {
+        float: right;
+        display: none;
+    }
 
-.header-inner > .title {
-    float: left;
-}
-.header-inner > .title li a {
-    font-weight: 700;
-    font-size: $header-title-size;
-    color: $primary-yellow;
-}
-
-.header-inner > .toggle {
-    float: right;
-    display: none;
-}
-
-.header-inner > .navs {
-    float: right;
-}
-.header-inner > .navs li {
-    float: left;
+    > .navs {
+        float: right;
+        li {
+            float: left;
+        }
+    }
 }

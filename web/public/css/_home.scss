@@ -1,34 +1,49 @@
 .home {
     height: 100vh;
+    width: 100%;
     position: relative;
-}
-.background {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-image: url('https://source.unsplash.com/23LET4Hxj_U/1920x1080');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-.overlay {
-    @extend .background;
-    background-image: none;
-    background-color: rgba($primary-black, .3);
-}
-
-.content {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    top: 50%;
-    transform: translateY(-50%);
-    color: $primary-white;
-    z-index: 99;
-}
-.content h1 {
     
-}
-.content p {
-    color: $white-grey;
+    .background {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(150deg, $primary-yellow, $primary-yellow-light);
+    }
+    .overlay {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        background-color: rgba($black, $overlay-transparency);
+        z-index: 1;
+    }
+    
+    .content {
+        position: absolute;
+        width: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        text-align: center;
+        z-index: 2;
+        
+        .title {
+            h1, p {
+                color: $white;
+            }
+            h1 {
+                font-size: 42px;
+            }
+            p {
+                font-size: 16px;
+            }
+        }
+        
+        .buttons {
+            margin-top: 35px;
+            .home-button {
+                display: inline-block;
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+        }
+    }
 }
