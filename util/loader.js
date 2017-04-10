@@ -1,7 +1,16 @@
 const fs = require('fs');
 const l = module.exports = {};
 
-l.loadCommands = async () => {
+l.deleteCache = (name, cmd) => {
+    if (cmd) {
+        delete require.cache[require.resolve(`../cmds/${name}/main.js`)];
+        delete require.cache[require.resolve(`../cmds/${name}/settings.json`)];
+        return;
+    }
+    delete require.cache[require.resolve(name)];
+}
+
+l.loadCommands = () => {
     main.commands = {};
     let cmdsDir = fs.readdirSync('./cmds/').reverse();
     for (let i = 0; i < cmdsDir.length; i++) {
@@ -10,33 +19,28 @@ l.loadCommands = async () => {
     }
 }
 
-l.unloadCommands = async () => {
-    for (i in main.commands) {
-        delete require.cache[require.resolve(`../cmds/${i}/main.js`)];
-        delete require.cache[require.resolve(`../cmds/${i}/settings.json`)];
-    }
+l.unloadCommands = () => {
+    for (i in main.commands) l.deleteCache(i, true);
 }
 
-l.reloadUtil = async () => {
+l.reloadUtil = () => {
     let utilDir = fs.readdirSync('./util/');
     for (let i = 0; i < utilDir.length; i++) {
-        delete require.cache[require.resolve(`./${utilDir[i]}`)];
+        l.deleteCache(`./${utilDir[i]}`, false);
     }
 }
 
-l.reloadCommands = async () => {
+l.reloadCommands = () => {
     l.unloadCommands();
     l.loadCommands();
     l.reloadUtil();
-    console.log('Reloaded commands.');
 }
 
-l.reloadCommand = async (cmd, cb) => {
+l.reloadCommand = (cmd) => {
     cmd = cmd.toLowerCase();
     if (main.commands[cmd]) {
-        delete require.cache[require.resolve(`../cmds/${cmd}/main.js`)];
-        cb({success: `Reloaded command '${cmd}'`});
-        return;
+        l.deleteCache(cmd, true);
+        return {"err": false, "msg": `Reloaded command ${cmd}.`};
     }
-    cb({error: "Command doesn't exist."});
+    return {"err": true, "msg": "Command not found."};
 }

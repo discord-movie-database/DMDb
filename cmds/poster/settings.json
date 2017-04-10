@@ -3,5 +3,5 @@
     "hidden": false,
     "usage": "Title Name OR IMDb ID",
     "description": "Get a poster based on name or IMDb ID.",
-    "large_description": "I'll do large descripion later."
+    "large_description": "Get just the poster for a title."
 }

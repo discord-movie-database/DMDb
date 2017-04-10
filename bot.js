@@ -9,6 +9,7 @@ const bot = new Eris(config.token.bot, {
     autoreconnect: true
 });
 const u = require('./util/main.js');
+const post = require('./events/post.js');
 global.main = {};
 let loaded = 0;
 
@@ -66,12 +67,9 @@ bot.on("messageCreate", async (msg) => {
     console.log(logMsg);
 });
 
-/*const listUpdate = () => {
-    const post = require('./events/post.js');
+const listUpdate = setInterval(() => {
+    if (loaded === 0) return;
     post.main(bot.guilds.size);
-    console.log('Posted new guild count.');
-}
-let listUpdateInt = setInterval(() => { listUpdate(); }, 1800000);
-setTimeout(() => { listUpdate(); }, 15000);*/
+}, 1800000);
 
 bot.connect();
