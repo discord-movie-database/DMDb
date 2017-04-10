@@ -20,8 +20,8 @@ api.getTitle = async (name, year) => {
     return title;
 }
 
-api.getPoster = async (name) => {
-    let title = await api.getTitle(name);
+api.getPoster = async (name, year) => {
+    let title = await api.getTitle(name, year);
     let poster = {};
     poster.Poster = title.Poster;
     poster.Response = title.Response;

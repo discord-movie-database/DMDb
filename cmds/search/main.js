@@ -2,10 +2,10 @@ const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg, cmdArgs) => {
-    let cmds = u.f.main(cmdArgs, ['year', 'page']);
-    let year = cmds.year || '';
-    let page = cmds.page || 1;
-    let argsJoin = cmds.args.join(' ');
+    let flags = u.f.main(cmdArgs, ['year', 'page']);
+    let year = flags.year || '';
+    let page = flags.page || 1;
+    let argsJoin = flags.args.join(' ');
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Search term required.');
     let message = await bot.createMessage(msg.channel.id, 'ℹ Searching for titles...');
     let search = await u.api.searchTitles(argsJoin, year, page);
