@@ -1,7 +1,6 @@
-const config = require('../../config.json');
 const c = module.exports = {};
 c.settings = require('./settings.json');
-c.process = async (bot, msg) => {
+c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let uptime = '';
     let d = new Date(bot.uptime);
     if ((d.getUTCDate() - 1) !== 0) uptime += d.getUTCDate() - 1 + ' Days, ';

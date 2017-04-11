@@ -1,7 +1,6 @@
-const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
-c.process = async (bot, msg, cmdArgs) => {
+c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let flags = u.f.main(cmdArgs, ['year', 'page']);
     let year = flags.year || '';
     let page = flags.page || 1;

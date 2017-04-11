@@ -1,8 +1,6 @@
-const u = require('../../util/main.js');
-const config = require('../../config.json');
 const c = module.exports = {};
 c.settings = require('./settings.json');
-c.process = async (bot, msg, cmdArgs, guild) => {
+c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     if (cmdArgs[0]) {
         let cmd = cmdArgs[0].toLowerCase();
         if (!main.commands[cmd]) return bot.createMessage(msg.channel.id, '❌ Command not found.');

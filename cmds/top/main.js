@@ -1,9 +1,7 @@
 const fs = require('fs');
-const u = require('../../util/main.js');
-
 const c = module.exports = {};
 c.settings = require('./settings.json');
-c.process = async (bot, msg, cmdArgs, guild, user) => {
+c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let message = await bot.createMessage(msg.channel.id, 'ℹ Getting information...');
     let top = require('./top.json');
     let page = (cmdArgs[0] - 1) || 0;

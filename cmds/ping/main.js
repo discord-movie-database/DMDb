@@ -1,7 +1,6 @@
-const u = require('../../util/main.js');
 const c = module.exports = {};
 c.settings = require('./settings.json');
-c.process = async (bot, msg) => {
+c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let apiPing = process.hrtime();
     let apiRequest = await u.api.getTitle((Math.round(Math.random() * 9999) + 1).toString());
     apiPing = Math.round(process.hrtime(apiPing)[1] / 1000000);

@@ -9,7 +9,7 @@ const bot = new Eris(config.token.bot, {
     autoreconnect: true
 });
 const u = require('./util/main.js');
-const post = require('./events/post.js');
+const post = require('./util/post.js');
 global.main = {};
 let loaded = 0;
 
@@ -44,7 +44,7 @@ bot.on("messageCreate", async (msg) => {
     if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerid) return;
     let cmdArgs = msgSplit.slice(1);
     try {
-        main.commands[cmdName].process(bot, msg, cmdArgs, guild, user);
+        main.commands[cmdName].process(bot, msg, cmdArgs, guild, user, config, u);
     } catch (err) {
         bot.createMessage(msg.channel.id, '❌ Uh Oh, there was an error when executing this command. The bot developer has been notified and the issue will be sorted shortly.');
         bot.createMessage(config.errorChannel, `❌ ${err}`);
