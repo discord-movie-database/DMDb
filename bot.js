@@ -14,6 +14,7 @@ global.main = {};
 let loaded = 0;
 
 bot.on("ready", () => {
+    main.executed = 0;
     u.loader.loadCommands();
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
     console.log('IMDb Ready!');
@@ -60,6 +61,7 @@ bot.on("messageCreate", async (msg) => {
         if (guild.count) count = guild.count + 1;
         u.db.updateGuild(msg.channel.guild.id, {"count": count});
     }
+    main.executed++;
     let logMsg = `${msg.author.username} (${msg.author.id}) executed ${cmdName}`;
     if (msg.channel.guild) logMsg += ` in ${msg.channel.name} (${msg.channel.id}) in ${msg.channel.guild.name} (${msg.channel.guild.id})`;
     if (!msg.channel.guild) logMsg += ' in a direct message';

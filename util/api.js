@@ -2,7 +2,7 @@ const superagent = require('superagent');
 const config = require('../config.json');
 const api = module.exports = {};
 const omdb = 'http://svr2.omdbapi.com/';
-const bitly = `https://api-ssl.bitly.com/v3/shorten`;
+const bitly = 'https://api-ssl.bitly.com/v3/shorten';
 const apiError = 'API is having issues. Try again later.'
 
 const getType = (name) => {

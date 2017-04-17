@@ -1,13 +1,23 @@
 const c = module.exports = {};
 c.settings = require('./settings.json');
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
-    let apiPing = process.hrtime();
+    let apiPing = new Date().getTime();
     let apiRequest = await u.api.getTitle((Math.round(Math.random() * 9999) + 1).toString());
-    apiPing = Math.round(process.hrtime(apiPing)[1] / 1000000);
+    apiPing = new Date().getTime() - apiPing;
+    
+    let discordPing = new Date().getTime();
+    let message = await bot.createMessage(msg.channel.id, 'Pinging...');
+    discordPing = new Date().getTime() - discordPing;
+    
     let shardPing = '-';
     if (msg.channel.guild) shardPing = msg.channel.guild.shard.latency + 'ms';
-    bot.createMessage(msg.channel.id, {embed: {
+    
+    message.edit({embed: {
         fields: [{
+            name: 'Pong!',
+            value: `${discordPing}ms`,
+            inline: true
+        }, {
             name: 'Shard',
             value: `${shardPing}`,
             inline: true

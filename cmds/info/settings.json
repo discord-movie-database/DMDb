@@ -1,6 +1,6 @@
 {
     "restricted": false,
     "hidden": false,
-    "description": "Statistics about the bot.",
+    "description": "Statistics and information about the bot.",
     "large_description": "Get information about the bot including guild count, channel count, user count and uptime."
 }

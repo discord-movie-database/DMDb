@@ -11,10 +11,20 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let currentShard = '';
     if (msg.channel.guild) currentShard = ` (${msg.channel.guild.shard.id})`;
     bot.createMessage(msg.channel.id, {embed: {
+        title: 'IMDb Information',
+        description: 'Invite Bot: <http://bit.ly/inviteimdb>\nSupport Guild: <https://discord.gg/PDSsfBj>',
         fields: [{
-            name: 'Uptime',
-            value: uptime,
-            inline: false
+            name: 'Developer',
+            value: 'DumplingsWithToads\n#7460',
+            inline: true
+        }, {
+            name: 'Libary',
+            value: 'Eris',
+            inline: true
+        }, {
+            name: 'Commands Executed',
+            value: (main.executed + 1),
+            inline: true
         }, {
             name: 'Mem Usage',
             value: memUsage,
@@ -39,6 +49,10 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
             name: 'Users',
             value: bot.users.size,
             inline: true
+        }, {
+            name: 'Uptime',
+            value: uptime,
+            inline: false
         }],
         color: 0xE6B91E
     }});
