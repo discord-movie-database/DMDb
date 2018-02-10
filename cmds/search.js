@@ -39,5 +39,5 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         description: `Showing 10 results out of ${search.totalResults} at page ${page}${year}.`,
         fields: fields,
         color: 0xE6B91E
-    }});
+    }, "content": ""});
 }
