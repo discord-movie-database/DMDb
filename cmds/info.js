@@ -1,5 +1,11 @@
 const c = module.exports = {};
-c.settings = require('./settings.json');
+c.settings = {
+    "restricted": false,
+    "hidden": false,
+    "description": "Statistics and information about the bot.",
+    "large_description": "Get information about the bot including guild count, channel count, user count and uptime."
+};
+
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let uptime = '';
     let d = new Date(bot.uptime);
@@ -7,15 +13,18 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     if (d.getUTCHours() !== 0) uptime += d.getUTCHours() + ' Hours, ';
     if (d.getUTCMinutes() !== 0) uptime += d.getUTCMinutes() + ' Minutes, ';
     uptime += d.getUTCSeconds() + ' Seconds ';
+
     let memUsage = Math.round(process.memoryUsage().heapUsed / 1024 / 1024) + ' MB';
+    
     let currentShard = '';
     if (msg.channel.guild) currentShard = ` (${msg.channel.guild.shard.id})`;
+
     bot.createMessage(msg.channel.id, {embed: {
         title: 'IMDb Information',
-        description: 'Invite Bot: <http://bit.ly/inviteimdb>\nSupport Guild: <https://discord.gg/PDSsfBj>',
+        description: 'Invite Bot: <http://bit.ly/inviteimdbbot>\nGuild/Server: <https://discord.gg/fwAxQjV>',
         fields: [{
             name: 'Developer',
-            value: 'DumplingsWithToads\n#7460',
+            value: 'Dumplings\n#7460',
             inline: true
         }, {
             name: 'Libary',

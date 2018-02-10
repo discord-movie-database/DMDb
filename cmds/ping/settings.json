@@ -1,6 +1,0 @@
-{
-    "restricted": false,
-    "hidden": true,
-    "description": "Test the bots responsiveness.",
-    "large_description": "Test the bots responsiveness by checking delay with the bot and Discord in milliseconds."
-}

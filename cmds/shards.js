@@ -1,10 +1,17 @@
 const c = module.exports = {};
-c.settings = require('./settings.json');
+c.settings = {
+    "restricted": false,
+    "hidden": true,
+    "description": "Shard information.",
+    "large_description": "List of shards to check if all are connected. Mainly used for testing."
+};
+
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let fields = [];
     bot.shards.forEach((shard) => {
         fields.push({name: shard.id, value: `Status: ${shard.status}\nLatency: ${shard.latency}`, inline: true});
     });
+
     bot.createMessage(msg.channel.id, {embed: {
         fields: fields,
         color: 0xE6B91E

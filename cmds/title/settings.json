@@ -1,7 +1,0 @@
-{
-    "restricted": false,
-    "hidden": false,
-    "usage": "Title Name OR IMDb ID",
-    "description": "Get information on a title based on name or IMDb ID.",
-    "large_description": "Get detailed information about a certain title.\n\nYou can use flags for advanced usage:\nYear: `-y` or `--year`\n\nExamples:\n`!?title life -y 2017`\n`!?title life --year 2017`"
-}
