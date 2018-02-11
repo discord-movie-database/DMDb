@@ -19,11 +19,11 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let results = pages[page];
     if (!results) return message.edit('❌ Page not found.');
     let response = '';
-    for (let i = 0; i < results.length; i++) response += `\n[**${results[i].num + 1}**] ${results[i].name} *(${results[i].year})* **${results[i].rating}** *${results[i].id}*`;
+    for (let i = 0; i < results.length; i++) response += `\n[**${i + 1}**] ${results[i].name} *(${results[i].year})* **${results[i].rating}** *${results[i].id}*`;
     
     message.edit({embed: {
         title: 'Top Rated Titles',
         description: `**Page: ${page + 1}/${pages.length}**\n${response}`,
         color: 0xE6B91E
-    }});
+    }, content: ''});
 }

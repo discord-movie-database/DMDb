@@ -29,6 +29,7 @@ bot.on("ready", () => {
     loaded = 1;
 
     handler.post.all(bot);
+    handler.scrape.top();
 });
 
 bot.on("messageCreate", async (msg) => {
@@ -98,5 +99,11 @@ const listUpdate = setInterval(() => {
 
     handler.post.all(bot);
 }, 1800000);
+
+const scrapeTop = setInterval(() => {
+    const topData = handler.scrape.top();
+
+    if (topData) console.log('Scraped new data for top command.');
+}, 86400000);
 
 bot.connect();
