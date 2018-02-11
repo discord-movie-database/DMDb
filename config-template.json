@@ -1,0 +1,21 @@
+{
+    "token": {
+        "discord": "",
+        "devDiscord": "",
+        "bitly": "",
+        "omdb": "",
+        "botlist": {
+            "dbl": "",
+            "dbots": "",
+            "carbon": ""
+        }
+    },
+    "db": {
+        "host": "",
+        "port": ""
+    },
+    "prefix": "",
+    "shardCount": 1,
+    "botOwnerId": "",
+    "errorChannelId": ""
+}

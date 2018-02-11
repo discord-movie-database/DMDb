@@ -2,7 +2,9 @@ const config = require('./config.json');
 
 const Eris = require('eris');
 
-const bot = new Eris(config.token.bot, {
+let botToken = config.token.discord;
+if (process.argv[2] && process.argv[2] === "dev") botToken = config.token.devDiscord;
+const bot = new Eris(botToken, {
     maxShards: config.shardCount,
     disableEveryone: true,
     disableEvents: {
@@ -11,8 +13,7 @@ const bot = new Eris(config.token.bot, {
     autoreconnect: true
 });
 
-const u = require('./util/main.js');
-const post = require('./util/post.js');
+const handler = require('./handlers/index.js');
 
 global.main = {};
 let loaded = 0;
@@ -20,12 +21,14 @@ let loaded = 0;
 bot.on("ready", () => {
     main.executed = 0;
 
-    u.loader.loadCommands();
+    handler.loader.loadCommands();
 
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
     console.log('IMDb Ready!');
 
     loaded = 1;
+
+    handler.post.all(bot);
 });
 
 bot.on("messageCreate", async (msg) => {
@@ -36,32 +39,32 @@ bot.on("messageCreate", async (msg) => {
     let prefix = config.prefix;
     let guild = null;
 
-    if (msg.channel.guild) guild = await u.db.getGuild(msg.channel.guild.id);
+    if (msg.channel.guild) guild = await handler.db.getGuild(msg.channel.guild.id);
     if (!guild && msg.channel.guild) {
-        u.db.createGuild(msg.channel.guild.id);
-        guild = await u.db.getGuild(msg.channel.guild.id);
+        handler.db.createGuild(msg.channel.guild.id);
+        guild = await handler.db.getGuild(msg.channel.guild.id);
     }
 
     if (guild && guild.prefix) prefix = guild.prefix;
     if (!msg.content.startsWith(prefix)) return;
 
-    let user = await u.db.getUser(msg.author.id);
+    let user = await handler.db.getUser(msg.author.id);
     if (!user) {
-        u.db.createUser(msg.author.id);
-        user = await u.db.getUser(msg.author.id);
+        handler.db.createUser(msg.author.id);
+        user = await handler.db.getUser(msg.author.id);
     }
 
     let msgSplit = msg.content.split(' ');
     let cmdName = msgSplit[0].toLowerCase().slice(prefix.length);
     if (!main.commands[cmdName]) return;
-    if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerid) return;
+    if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerId) return;
     let cmdArgs = msgSplit.slice(1);
 
     try {
-        main.commands[cmdName].process(bot, msg, cmdArgs, guild, user, config, u);
+        main.commands[cmdName].process(bot, msg, cmdArgs, guild, user, config, handler);
     } catch (err) {
         bot.createMessage(msg.channel.id, '❌ Uh Oh, there was an error when executing this command. The bot developer has been notified and the issue will be sorted shortly.');
-        bot.createMessage(config.errorChannel, `❌ ${err}`);
+        bot.createMessage(config.errorChannelId, `❌ ${err}`);
 
         console.log(`\n${err}\n`);
     }
@@ -70,14 +73,14 @@ bot.on("messageCreate", async (msg) => {
         let count = 1;
 
         if (user.count) count = user.count + 1;
-        u.db.updateUser(msg.author.id, {"count": count});
+        handler.db.updateUser(msg.author.id, {"count": count});
     }
 
     if (msg.channel.guild) {
         let count = 1;
 
         if (guild.count) count = guild.count + 1;
-        u.db.updateGuild(msg.channel.guild.id, {"count": count});
+        handler.db.updateGuild(msg.channel.guild.id, {"count": count});
     }
 
     main.executed++;
@@ -90,10 +93,10 @@ bot.on("messageCreate", async (msg) => {
     console.log(logMsg);
 });
 
-/* const listUpdate = setInterval(() => {
+const listUpdate = setInterval(() => {
     if (loaded === 0) return;
 
-    post.main(bot.guilds.size);
-}, 1800000); */
+    handler.post.all(bot);
+}, 1800000);
 
 bot.connect();

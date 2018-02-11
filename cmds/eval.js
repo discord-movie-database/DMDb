@@ -1,6 +1,3 @@
-const u = require('../util/main.js');
-const config = require('../config.json');
-
 const c = module.exports = {};
 c.settings = {
     "restricted": true,
