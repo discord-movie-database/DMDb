@@ -3,7 +3,7 @@ c.settings = {
     "restricted": false,
     "hidden": true,
     "description": "Shard information.",
-    "large_description": "List of shards to check if all are connected. Mainly used for testing."
+    "large_description": "Lists shards with their latency. Used for testing."
 };
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {

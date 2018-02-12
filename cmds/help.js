@@ -3,8 +3,8 @@ c.settings = {
     "restricted": false,
     "hidden": true,
     "usage": "Command Name",
-    "description": "Get information on a title based on name or IMDb ID.",
-    "large_description": "I'll do large descripion later."
+    "description": ":/",
+    "large_description": "Get simplified or detailed information about commands or a command."
 };
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {

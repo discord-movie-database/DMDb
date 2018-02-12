@@ -3,7 +3,7 @@ c.settings = {
     "restricted": true,
     "hidden": true,
     "description": "Reload the every command for IMDb.",
-    "large_description": "Unload every command and load them again when changes are made to a command."
+    "large_description": "Reload commands and handlers after an update instead of restarting bot."
 };
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {

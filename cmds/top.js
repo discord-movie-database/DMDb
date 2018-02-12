@@ -6,7 +6,7 @@ c.settings = {
     "hidden": false,
     "usage": "Page Number",
     "description": "List of best rated titles.",
-    "large_description": "Get a large list of the best 250 rated titles."
+    "large_description": "Get a list of the best 250 rated titles on IMDb."
 };
 c.top = require('../top.json');
 c.reload = () => delete require.cache[require.resolve(`../top.json`)];
