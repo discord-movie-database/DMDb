@@ -5,7 +5,7 @@ const fs = require('fs');
 const scrape = module.exports = {};
 
 scrape.top = async () => {
-    const raw = await superagent.get('http://www.imdb.com/chart/top');
+    const raw = await superagent.get('http://www.imdb.com/chart/top').set('X-Forwarded-For', '1.2.3.0');
     const $ = cheerio.load(raw.text);
 
     const titles = [];
@@ -15,7 +15,8 @@ scrape.top = async () => {
             "year": $(el).find('.titleColumn span').text().slice(1, -1),
             "rating": $(el).find('.ratingColumn.imdbRating').text().replace('\n', '').trim(),
             "id": $(el).find('.watchlistColumn > div').attr('data-tconst'),
-            "poster": $(el).find('.posterColumn img').attr('src')
+            "poster": $(el).find('.posterColumn img').attr('src'),
+            "index": i
         };
     });
 

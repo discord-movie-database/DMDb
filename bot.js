@@ -28,7 +28,7 @@ bot.on("ready", () => {
 
     loaded = 1;
 
-    handler.post.all(bot);
+    if (!process.argv[2] === "dev") handler.post.all(bot);
     handler.scrape.top();
 });
 
@@ -58,7 +58,7 @@ bot.on("messageCreate", async (msg) => {
     let msgSplit = msg.content.split(' ');
     let cmdName = msgSplit[0].toLowerCase().slice(prefix.length);
     if (!main.commands[cmdName]) return;
-    if (main.commands[cmdName].settings.restricted && msg.author.id !== config.ownerId) return;
+    if (main.commands[cmdName].settings.restricted && msg.author.id !== config.botOwnerId) return;
     let cmdArgs = msgSplit.slice(1);
 
     try {
@@ -94,13 +94,13 @@ bot.on("messageCreate", async (msg) => {
     console.log(logMsg);
 });
 
-const listUpdate = setInterval(() => {
+if (!process.argv[2] === "dev") setInterval(() => {
     if (loaded === 0) return;
 
     handler.post.all(bot);
 }, 1800000);
 
-const scrapeTop = setInterval(() => {
+setInterval(() => {
     const topData = handler.scrape.top();
 
     if (topData) console.log('Scraped new data for top command.');

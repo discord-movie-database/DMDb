@@ -2,6 +2,17 @@ const fs = require('fs');
 
 const l = module.exports = {};
 
+l.loadCommand = (cmd) => {
+    main.commands[cmd] = require(`../cmds/${cmd}`);
+}
+
+l.reloadCommand = (cmd) => {
+    if (main.commands[cmd]) {
+        l.deleteCache(cmd, true);
+        l.loadCommand(cmd);
+    }
+}
+
 l.deleteCache = (name, cmd) => {
     if (cmd) {
         delete require.cache[require.resolve(`../cmds/${name}.js`)];
@@ -18,17 +29,20 @@ l.loadCommands = () => {
     let cmdsDir = fs.readdirSync('./cmds/').reverse();
 
     for (let i = 0; i < cmdsDir.length; i++) {
-        let cmdName = cmdsDir[i].substring(0, cmdsDir[i].length - 3);
-        main.commands[cmdName] = require(`../cmds/${cmdName}`);
+        let cmdName = cmdsDir[i].match(/([a-z]+)\.js/)[1];
+        l.loadCommand(cmdName);
     }
 }
 
 l.unloadCommands = () => {
-    for (i in main.commands) l.deleteCache(i, true);
+    for (i in main.commands) {
+        if (main.commands[i].reload) main.commands[i].reload();
+        l.deleteCache(i, true);
+    }
 }
 
 l.reloadUtil = () => {
-    let utilDir = fs.readdirSync('./util/');
+    let utilDir = fs.readdirSync('./handlers/');
 
     for (let i = 0; i < utilDir.length; i++) l.deleteCache(`./${utilDir[i]}`, false);
 }
