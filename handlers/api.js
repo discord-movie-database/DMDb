@@ -18,7 +18,13 @@ const getType = (name) => {
 api.getTitle = async (name, year) => {
     let searchYear = year || '';
     let type = getType(name);
-    let title = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${searchYear}${omdbToken}`);
+    try {
+        let title = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${searchYear}${omdbToken}`);
+    } catch (err) {
+        console.error(err);
+
+        return {"Error": apiError};
+    }
 
     if (title.statusCode != 200) return {"Error": apiError};
 
@@ -49,7 +55,13 @@ api.shortUrl = async (url) => {
 api.searchTitles = async (query, year, page) => {
     let searchYear = year || '';
     let searchPage = page || 1;
-    let search = await superagent.get(`${omdb}?s=${query}&y=${searchYear}&page=${searchPage}${omdbToken}`);
+    try {
+        let search = await superagent.get(`${omdb}?s=${query}&y=${searchYear}&page=${searchPage}${omdbToken}`);
+    } catch (err) {
+        console.error(err);
+        
+        return {"Error": apiError};
+    }
 
     if (search.statusCode != 200) return {"Error": apiError};
     
