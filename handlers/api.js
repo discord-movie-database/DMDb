@@ -18,8 +18,9 @@ const getType = (name) => {
 api.getTitle = async (name, year) => {
     let searchYear = year || '';
     let type = getType(name);
+    let title;
     try {
-        let title = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${searchYear}${omdbToken}`);
+        title = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${searchYear}${omdbToken}`);
     } catch (err) {
         console.error(err);
 
