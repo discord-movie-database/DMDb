@@ -15,7 +15,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
 
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Search term required.');
 
-    let message = await bot.createMessage(msg.channel.id, `ℹ Searching for titles with the term \`${argsJoin}\`...`);
+    let message = await bot.createMessage(msg.channel.id, `ℹ Searching for titles with the term '**${argsJoin}**'...`);
     let search = await u.api.searchTitles(argsJoin, year, page);
 
     if (search.Response && search.Response === 'False') return message.edit('❌ No results found.');

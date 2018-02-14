@@ -3,7 +3,7 @@ const config = require('./config.json');
 const Eris = require('eris');
 
 let botToken = config.token.discord;
-if (process.argv[2] && process.argv[2] === "dev") botToken = config.token.devDiscord;
+if (process.argv[2] && process.argv[2] === 'dev') botToken = config.token.devDiscord;
 const bot = new Eris(botToken, {
     maxShards: config.shardCount,
     disableEveryone: true,
@@ -15,18 +15,16 @@ const bot = new Eris(botToken, {
 
 const handler = require('./handlers/index.js');
 
-global.main = {};
 let loaded = 0;
 
 bot.on("ready", () => {
-    main.executed = 0;
-
-    handler.loader.loadCommands();
+    handler.loader.startup();
 
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
-    console.log('IMDb Ready!');
 
     loaded = 1;
+    console.log('IMDb Ready!');
+    if (main.dev) console.log('Development version.');
 
     if (!process.argv[2] === "dev") handler.post.all(bot);
     handler.scrape.top();
@@ -102,8 +100,11 @@ if (!process.argv[2] === "dev") setInterval(() => {
 
 setInterval(() => {
     const topData = handler.scrape.top();
-
     if (topData) console.log('Scraped new data for top command.');
+
+    cache = [];
 }, 86400000);
+
+
 
 bot.connect();

@@ -14,7 +14,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
 
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Title name or IMDb ID required.');
 
-    let message = await bot.createMessage(msg.channel.id, `ℹ Getting poster for the title '${argsJoin}'...`);
+    let message = await bot.createMessage(msg.channel.id, `ℹ Getting poster for the title '**${argsJoin}**'...`);
     
     let poster = await u.api.getPoster(argsJoin, year);
     if (poster.Response && poster.Response === 'False') return message.edit('❌ No results found.');
@@ -23,6 +23,6 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let posterRes = poster.Poster;
     if (posterRes === 'N/A') return message.edit('❌ No poster available for this title.');
 
-    let shortUrl = await u.api.shortUrl(posterRes) || '❌ There was an issue with the bit.ly API.';
+    let shortUrl = await u.api.shortUrl(posterRes) || `${posterRes} *There was an issue with the bit.ly API so we couldn't shorten the url for you.*`;
     message.edit(shortUrl);
 }
