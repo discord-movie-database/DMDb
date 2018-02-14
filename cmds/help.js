@@ -54,7 +54,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         if (main.commands[i].settings.description) description += main.commands[i].settings.description;
     }
 
-    description += `\n\n*Use \`${prefix}help [Command Name]\` to get a detailed description for a command.*`;
+    description += `\n\n*Use \`${prefix}help [Command Name]\` to get a detailed description for a command.*\n*Actor related commands coming soon as the data is currently being mined.*`;
 
     bot.createMessage(msg.channel.id, description);
 }
