@@ -56,8 +56,9 @@ api.shortUrl = async (url) => {
 api.searchTitles = async (query, year, page) => {
     let searchYear = year || '';
     let searchPage = page || 1;
+    let search;
     try {
-        let search = await superagent.get(`${omdb}?s=${query}&y=${searchYear}&page=${searchPage}${omdbToken}`);
+        search = await superagent.get(`${omdb}?s=${query}&y=${searchYear}&page=${searchPage}${omdbToken}`);
     } catch (err) {
         console.error(err);
         

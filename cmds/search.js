@@ -4,7 +4,7 @@ c.settings = {
     "hidden": false,
     "usage": "Title Name",
     "description": "Find multiple titles based on a search term.",
-    "large_description": "Get a list of titles based on a search term.\n\nYou can use flags for advanced search.\nPage: `-p` or `--page`\nYear: `-y` or `--year`\n\nExamples:\n`!?search hello -y 2010 -p 2`\n`!?search hello --year 2010 --page 2`"
+    "large_description": "Get a list of titles based on a search term.\n\nYou can use flags for advanced search.\nPage: `-p` or `--page`\nYear: `-y` or `--year`\n\nExamples:\n`!?search Spiderman -y 2010 -p 2`\n`!?search Maze Runner --year 2010 --page 2`"
 };
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
@@ -15,7 +15,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
 
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Search term required.');
 
-    let message = await bot.createMessage(msg.channel.id, 'ℹ Searching for titles...');
+    let message = await bot.createMessage(msg.channel.id, `ℹ Searching for titles with the term \`${argsJoin}\`...`);
     let search = await u.api.searchTitles(argsJoin, year, page);
 
     if (search.Response && search.Response === 'False') return message.edit('❌ No results found.');
@@ -32,11 +32,11 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         });
     }
 
-    if (year.length > 0) year = ` in the year ${year}`;
+    if (year.length > 0) year = ` in the year **${year}**`;
     
     message.edit({embed: {
         title: argsJoin[0].toUpperCase() + argsJoin.slice(1),
-        description: `Showing 10 results out of ${search.totalResults} at page ${page}${year}.`,
+        description: `Showing **${search.Search.length}** results out of **${search.totalResults}** at page **${page}**${year}.\n*To learn how to change the page use the command \`!?help search\`.*`,
         fields: fields,
         color: 0xE6B91E
     }, "content": ""});
