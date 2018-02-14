@@ -61,7 +61,11 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         }, {
             name: 'Uptime',
             value: uptime,
-            inline: false
+            inline: true
+        }, {
+            name: 'Titles in cache',
+            value: cache.titles.length,
+            inline: true
         }],
         color: 0xE6B91E
     }});
