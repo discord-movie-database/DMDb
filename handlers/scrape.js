@@ -58,7 +58,7 @@ scrape.top = async () => {
         return false;
     }
     
-    fs.writeFileSync('topdetailed.json', JSON.stringify(titles));
+    fs.writeFileSync('top.json', JSON.stringify(titles));
 
     return true;
 }
