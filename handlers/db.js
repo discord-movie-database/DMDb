@@ -1,5 +1,3 @@
-const config = require('../config.json');
-
 const db = module.exports = {};
 
 const r = require('rethinkdbdash')({

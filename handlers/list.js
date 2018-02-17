@@ -1,4 +1,3 @@
-const config = require('../config.json');
 const superagent = require('superagent');
 
 const e = module.exports = {};
@@ -20,9 +19,9 @@ e.post.dbl = async (count) => {
         'Content-Type': 'application/json'
     }).send({
         'server_count': count
-    }).catch((err) => console.error(err));
+    }).catch((err) => { console.error(err) });
 
-    if (post.statuscode !== 200) console.log(`Cannot post new server count to dbl. (${post.statuscode})`);
+    if (post.statusCode !== 200) console.log(`Cannot post new server count to dbl. (${post.statusCode})`);
 }
 
 e.post.dbots = async (count) => {
@@ -31,9 +30,9 @@ e.post.dbots = async (count) => {
         'Content-Type': 'application/json'
     }).send({
         'server_count': count
-    }).catch((err) => console.error(err));
+    }).catch((err) => { console.error(err) });
 
-    if (post.statuscode !== 200) console.log(`Cannot post new server count to dbots. (${post.statuscode})`);
+    if (post.statusCode !== 200 && post.statusCode !== 204) console.log(`Cannot post new server count to dbots. (${post.statusCode})`);
 }
 
 e.post.carbon = async (count) => {
@@ -42,7 +41,7 @@ e.post.carbon = async (count) => {
     }).send({
         'key': config.token.botlist.carbon,
         'servercount': count
-    }).catch((err) => console.error(err));
+    }).catch((err) => { console.error(err) });
 
-    if (post.statuscode !== 200) console.log(`Cannot post new server count to carbon. (${post.statuscode})`);
+    if (post.statusCode !== 200) console.log(`Cannot post new server count to carbon. (${post.statusCode})`);
 }

@@ -1,4 +1,4 @@
-const config = require('./config.json');
+global.config = require('./config.json');
 
 const Eris = require('eris');
 

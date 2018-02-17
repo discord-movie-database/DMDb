@@ -1,5 +1,3 @@
-const config = require('../config.json');
-
 const f = module.exports = {};
 
 f.main = (args, flags) => {
