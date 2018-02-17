@@ -2,6 +2,7 @@ const superagent = require('superagent');
 const config = require('../config.json');
 
 const omdb = 'http://omdbapi.com/';
+const omdbPoster = 'http://img.omdbapi.com/';
 const omdbToken = `&apikey=${config.token.omdb}`;
 const bitly = 'https://api-ssl.bitly.com/v3/shorten';
 const apiError = 'API is having issues. Try again later.';
@@ -18,6 +19,7 @@ const getType = (name) => {
 api.getTitle = async (name, year) => {
     let searchYear = year || '';
     let type = getType(name);
+
     let title;
     try {
         title = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${searchYear}${omdbToken}`);
@@ -41,6 +43,24 @@ api.getPoster = async (name, year) => {
     poster.Response = title.Response;
 
     return poster;
+}
+
+api.getHDPoster = async (name) => {
+    const type = getType(name);
+    if (type !== 'i') return {"Error": "Argument must be an IMDb ID."};
+
+    let poster;
+    try {
+        poster = await superagent.get(`${omdbPoster}?i=${name}&h=600${omdbToken}`).buffer(true).parse(superagent.parse.image);
+    } catch (err) {
+        console.error(err);
+
+        return {"Error": apiError};
+    }
+
+    console.log(poster.buffered);
+
+    return poster.text;
 }
 
 api.shortUrl = async (url) => {

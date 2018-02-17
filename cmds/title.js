@@ -38,55 +38,55 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         title: title.Title,
         description: title.Plot,
         fields: [{
-            name: 'Released', // 1
-            value: title.Released,
-            inline: true
-        }, {
-            name: 'Runtime', // 2
-            value: title.Runtime,
-            inline: true
-        }, {
-            name: 'Rated', // 3
-            value: title.Rated,
-            inline: true
-        }, {
-            name: 'Genre', // 4
-            value: title.Genre,
-            inline: true
-        }, {
-            name: 'Type', // 5
+            name: 'Type', // 1
             value: title.Type.charAt(0).toUpperCase() + title.Type.slice(1),
             inline: true
         }, {
-            name: 'Country', // 6
+            name: 'Released', // 2
+            value: title.Released,
+            inline: true
+        }, {
+            name: 'Runtime', // 3
+            value: title.Runtime,
+            inline: true
+        }, {
+            name: 'Rated', // 4
+            value: title.Rated,
+            inline: true
+        }, {
+            name: 'Genre(s)', // 5
+            value: title.Genre,
+            inline: true
+        }, {
+            name: 'Countr(y/ies)', // 6
             value: title.Country,
             inline: true
         }, {
-            name: 'Language', // 7
+            name: 'Language(s)', // 7
             value: title.Language,
             inline: true
         }, {
-            name: 'Awards', // 8
+            name: 'Award(s)', // 8
             value: title.Awards,
             inline: true
         }, {
-            name: 'Director', // 9
+            name: 'Director(s)', // 9
             value: title.Director,
             inline: true
         }, {
-            name: 'Writer', // 10
+            name: 'Writer(s)', // 10
             value: title.Writer,
             inline: true
         }, {
-            name: 'Actors', // 11
+            name: 'Actor(s)', // 11
             value: title.Actors,
             inline: true
         }, {
-            name: 'Website', // 13
+            name: 'Website', // 12
             value: website,
             inline: true
         }, {
-            name: 'Box Office', // 12
+            name: 'Box Office', // 13
             value: boxOffice,
             inline: true
         }, {
@@ -111,8 +111,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         thumbnail: {
             url: poster
         }
-    },
-    "content": ""}).catch((err) => {
+    }, "content": ""}).catch((err) => {
         message.edit('❌ There was an error with the embed. Try a different movie or try again later.');
         
         console.error(err);

@@ -26,7 +26,7 @@ bot.on("ready", () => {
     console.log('IMDb Ready!');
     if (main.dev) console.log('Development version.');
 
-    if (!process.argv[2] === "dev") handler.post.all(bot);
+    if (!process.argv[2] === "dev") handler.list.post.all(bot);
     handler.scrape.top();
 });
 
@@ -95,14 +95,14 @@ bot.on("messageCreate", async (msg) => {
 if (!process.argv[2] === "dev") setInterval(() => {
     if (loaded === 0) return;
 
-    handler.post.all(bot);
+    handler.list.post.all(bot);
 }, 1800000);
 
 setInterval(() => {
     const topData = handler.scrape.top();
     if (topData) console.log('Scraped new data for top command.');
 
-    cache = [];
+    handler.loader.cache();
 }, 86400000);
 
 

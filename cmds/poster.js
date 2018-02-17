@@ -4,7 +4,7 @@ c.settings = {
     "hidden": false,
     "usage": "Title Name OR IMDb ID",
     "description": "Get a poster based on name or IMDb ID.",
-    "large_description": "Get just the poster for a title.\n\nYou can use flags for advanced usage:\nYear: `-y` or `--year`\n\nExamples:\n`!?poster life -y 2017`\n`!?poster life --year 2017`"
+    "large_description": "Get just the poster for a title.\n\nYou can use flags for advanced usage:\nYear: `-y` or `--year`\n\nExamples:\n`!?poster Life -y 2017`\n`!?poster Gravity --year 2013`"
 };
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
