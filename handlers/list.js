@@ -12,7 +12,7 @@ e.post.all = async (bot) => {
     // await e.post.carbon(count);
 }
 
-e.post.dbl = (count) => {
+e.post.dbl = async (count) => {
     const dbl = await superagent.post('https://discordbots.org/api/bots/412006490132447249/stats').set({
         'Authorization': config.token.botlist.dbl,
         'Content-Type': 'application/json'
@@ -23,7 +23,7 @@ e.post.dbl = (count) => {
     if (api.statuscode !== 200) console.log(`Cannot post new server count to dbl. (${api.statuscode})`);
 }
 
-e.post.dbots = (count) => {
+e.post.dbots = async (count) => {
     const dbots = await superagent.post('https://bots.discord.pw/api/bots/412006490132447249/stats').set({
         'Authorization': config.token.botlist.dbots,
         'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ e.post.dbots = (count) => {
     if (api.statuscode !== 200) console.log(`Cannot post new server count to dbots. (${api.statuscode})`);
 }
 
-e.post.carbon = (count) => {
+e.post.carbon = async (count) => {
     const carbon = await superagent.post(`https://www.carbonitex.net/discord/data/botdata.php`).set({
         'Content-Type': 'application/json'
     }).send({
