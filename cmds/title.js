@@ -10,23 +10,14 @@ c.settings = {
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let flags = u.f.main(cmdArgs, ['year']);
     let year = flags.year || '';
-    let argsJoin = flags.args.join(' ').toLowerCase();
+    let argsJoin = flags.args.join(' ');
 
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Title name or IMDb ID required.');
     let message = await bot.createMessage(msg.channel.id, `ℹ Getting information for the title '**${argsJoin}**'...`);
 
-    let title;
-
-    for (let i = 0; i < cache.titles.length; i++) if (cache.titles[i].terms.indexOf(argsJoin) > -1) title = cache.titles[i];
-
-    if (!title) {
-        title = await u.api.getTitle(argsJoin, year);
-        if (title.Response && title.Response === 'False') return message.edit('❌ No results found.');
-        if (title.Error) return (`❌ ${title.Error}`);
-
-        title.terms = [argsJoin];
-        cache.titles.push(title);
-    }
+    const title = await u.api.getTitle(argsJoin, year);
+    if (title.Response && title.Response === 'False') return message.edit('❌ No results found.');
+    if (title.Error) return (`❌ ${title.Error}`);
 
     let poster = title.Poster;
     let boxOffice = title.BoxOffice || 'N/A';
@@ -66,7 +57,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
             value: title.Language,
             inline: true
         }, {
-            name: 'Award(s)', // 8
+            name: 'Awards', // 8
             value: title.Awards,
             inline: true
         }, {
@@ -90,12 +81,12 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
             value: boxOffice,
             inline: true
         }, {
-            name: 'Metascore', // 14
-            value: title.Metascore,
-            inline: true
-        }, {
             name: 'Rating', // 15
             value: `${title.imdbRating}`,
+            inline: true
+        }, {
+            name: 'Metascore', // 14
+            value: title.Metascore,
             inline: true
         }, {
             name: 'Votes', // 16

@@ -14,10 +14,9 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let argsJoin = flags.args.join(' ');
 
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Search term required.');
-
     let message = await bot.createMessage(msg.channel.id, `ℹ Searching for titles with the term '**${argsJoin}**'...`);
-    let search = await u.api.searchTitles(argsJoin, year, page);
-
+    
+    const search = await u.api.searchTitles(argsJoin, year, page);
     if (search.Response && search.Response === 'False') return message.edit('❌ No results found.');
     if (search.Error) return (`❌ ${search.Error}`);
 
@@ -39,5 +38,9 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         description: `Showing **${search.Search.length}** results out of **${search.totalResults}** at page **${page}**${year}.\n*To learn how to change the page use the command \`!?help search\`.*`,
         fields: fields,
         color: 0xE6B91E
-    }, "content": ""});
+    }, "content": ""}).catch((err) => {
+        message.edit('❌ There was an error with the embed. Try a different movie or try again later.');
+        
+        console.error(err);
+    });
 }

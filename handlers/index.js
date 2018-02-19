@@ -4,6 +4,7 @@ const api = require('./api.js');
 const f = require('./flag.js');
 const list = require('./list.js');
 const scrape = require('./scrape.js');
+const log = require('./log.js');
 
 const u = module.exports = {};
 
@@ -13,3 +14,4 @@ u.api = api;
 u.f = f;
 u.list = list;
 u.scrape = scrape;
+u.log = log;

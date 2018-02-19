@@ -69,27 +69,20 @@ bot.on("messageCreate", async (msg) => {
     }
 
     if (user) {
-        let count = 1;
+        let count = user.count + 1 || 1;
 
-        if (user.count) count = user.count + 1;
         handler.db.updateUser(msg.author.id, {"count": count});
     }
 
     if (msg.channel.guild) {
-        let count = 1;
-
-        if (guild.count) count = guild.count + 1;
+       let count = guild.count + 1 || 1;
+        
         handler.db.updateGuild(msg.channel.guild.id, {"count": count});
     }
 
     main.executed++;
 
-    let logMsg = `${msg.author.username} (${msg.author.id}) executed ${cmdName}`;
-    if (msg.channel.guild) logMsg += ` in ${msg.channel.name} (${msg.channel.id}) in ${msg.channel.guild.name} (${msg.channel.guild.id})`;
-    if (!msg.channel.guild) logMsg += ' in a direct message';
-    if (cmdArgs[0]) logMsg += ` with the args ${cmdArgs.join(' ')}`;
-
-    console.log(logMsg);
+    handler.log.command(msg, cmdName, cmdArgs);
 });
 
 if (process.argv[2] !== "dev") setInterval(() => {

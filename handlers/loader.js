@@ -53,12 +53,6 @@ l.reloadCommands = () => {
     l.reloadUtil();
 }
 
-l.cache = () => {
-    global.cache = {
-        "titles": []
-    };
-}
-
 l.startup = () => {
     global.main = {
         "executed": 0,
@@ -67,5 +61,4 @@ l.startup = () => {
     if (process.argv[2] === 'dev') main.dev = true;
 
     l.loadCommands();
-    l.cache();
 }

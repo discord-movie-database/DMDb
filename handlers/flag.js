@@ -1,6 +1,6 @@
-const f = module.exports = {};
+const flag = module.exports = {};
 
-f.main = (args, flags) => {
+flag.main = (args, flags) => {
     let result = {};
 
     for (let i = 0; i < args.length; i++) {
