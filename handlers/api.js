@@ -1,11 +1,10 @@
 const superagent = require('superagent');
-const config = require('../config.json');
+const log = require('./log.js');
 
 const omdb = 'http://omdbapi.com/';
 const omdbPoster = 'http://img.omdbapi.com/';
 const omdbToken = `&apikey=${config.token.omdb}`;
 const bitly = 'https://api-ssl.bitly.com/v3/shorten';
-const apiError = 'API is having issues. Try again later.';
 
 const api = module.exports = {};
 
@@ -17,76 +16,86 @@ const getType = (name) => {
 }
 
 api.getTitle = async (name, year) => {
-    let searchYear = year || '';
-    let type = getType(name);
+    const errorMsg = `Cannot get title ${name} from the API.`;
 
-    let title;
+    const type = getType(name);
+
+    let title = {};
     try {
-        title = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${searchYear}${omdbToken}`);
-    } catch (err) {
-        console.error(err);
+        const raw = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${year}${omdbToken}`);
+        if (raw.statusCode != 200) title.Error = `${errorMsg} Try again later.`;
 
-        return {"Error": apiError};
+        title = raw.body;
+    } catch (err) {
+        log.error(err, errorMsg);
+        title.Error = `${errorMsg} Try again later.`;
     }
 
-    if (title.statusCode != 200) return {"Error": apiError};
-
-    title = title.body;
     return title;
 }
 
-api.getPoster = async (name, year) => {
-    let title = await api.getTitle(name, year);
+api.searchTitles = async (query, year, page) => {
+    const errorMsg = 'Cannot get search results from the API.';
 
-    let poster = {};
+    let search = {};
+    try {
+        const raw = await superagent.get(`${omdb}?s=${query}&y=${year}&page=${page}${omdbToken}`);
+        if (raw.statusCode != 200) search.Error = `${errorMsg} Try again later.`;
+
+        search = raw.body;
+    } catch (err) {
+        log.error(err, errorMsg);
+        search.Error = `${errorMsg} Try again later.`;
+    }
+
+    return search;
+}
+
+api.getPoster = async (name, year) => {
+    const title = await api.getTitle(name, year);
+
+    const poster = {};
     poster.Poster = title.Poster;
     poster.Response = title.Response;
+    if (title.Error) poster.Error = title.Error;
 
     return poster;
 }
 
 api.getHDPoster = async (name) => {
+    const errorMsg = 'Cannot get poster from the API.';
+    const errorMsg404 = 'Title doesn\'t exist or doesn\'t have a poster.';
+
     const type = getType(name);
-    if (type !== 'i') return {"Error": "Argument must be an IMDb ID."};
 
-    let poster;
+    const poster = {};
     try {
-        poster = await superagent.get(`${omdbPoster}?i=${name}&h=600${omdbToken}`).buffer(true).parse(superagent.parse.image);
-    } catch (err) {
-        console.error(err);
+        const raw = await superagent.get(`${omdbPoster}?i=${name}&h=600${omdbToken}`).buffer(true).parse(superagent.parse.image);
+        if (raw.statusCode != 200) poster.Error =  errorMsg;
+        if (raw.statusCode === 404) poster.Error = errorMsg404;
 
-        return {"Error": apiError};
+        poster.data = raw.body;
+    } catch (err) {
+        log.error(err, errorMsg);
+        poster.Error = errorMsg;
     }
 
-    console.log(poster.buffered);
-
-    return poster.text;
+    return poster;
 }
 
 api.shortUrl = async (url) => {
-    let pars = `?access_token=${config.token.bitly}&longUrl=${url}&format=json`;
-    let data = await superagent.get(`${bitly}${pars}`);
+    const errorMsg = 'Cannot shorten URL.';
 
-    if (data.statusCode != 200) return {"Error": apiError};
-
-    data = data.body;
-    return data.data.url;
-}
-
-api.searchTitles = async (query, year, page) => {
-    let searchYear = year || '';
-    let searchPage = page || 1;
-    let search;
+    let data = {};
     try {
-        search = await superagent.get(`${omdb}?s=${query}&y=${searchYear}&page=${searchPage}${omdbToken}`);
+        data = await superagent.get(`${bitly}?access_token=${config.token.bitly}&longUrl=${url}&format=json`);
+        if (data.statusCode != 200) data.Error = errorMsg;
+
+        data = data.body.data;
     } catch (err) {
-        console.error(err);
-        
-        return {"Error": apiError};
+        log.error(err, errorMsg);
+        data.Error = errorMsg;
     }
 
-    if (search.statusCode != 200) return {"Error": apiError};
-    
-    search = search.body;
-    return search;
+    return data;
 }

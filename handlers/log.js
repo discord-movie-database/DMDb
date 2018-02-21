@@ -1,9 +1,12 @@
 const chalk = require('chalk');
 
 const log = module.exports = {};
+const line = '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~';
 
 log.command = (msg, cmdName, cmdArgs) => {
-    let logMsg = chalk.blue('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+    const lineCol = chalk.blue(line);
+
+    let logMsg = lineCol;
     logMsg += `\n${chalk.bold('Command:')} ${cmdName.charAt(0).toUpperCase() + cmdName.slice(1)}`;
     logMsg += `\n${chalk.bold('Username:')} ${msg.author.username} (${chalk.italic.dim(msg.author.id)})`;
     if (msg.channel.guild) {
@@ -13,11 +16,13 @@ log.command = (msg, cmdName, cmdArgs) => {
         logMsg += `\n${chalk.bold('Channel:')} Direct Message`;
     }
     if (cmdArgs[0]) logMsg += `\n${chalk.bold('Arguments:')} ${cmdArgs.join(' ')}`;
-    logMsg += chalk.blue('\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+    logMsg += `\n${lineCol}`;
 
     console.log(logMsg);
 }
 
-log.error = () => {
-    // TODO
+log.error = (err, msg) => {
+    const lineCol = chalk.red.bold(line);
+
+    console.log(`${lineCol}\n${chalk.bold(msg || 'No custom error message.')}\n\n${err}\n${lineCol}`);
 }

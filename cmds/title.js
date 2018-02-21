@@ -22,7 +22,10 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let poster = title.Poster;
     let boxOffice = title.BoxOffice || 'N/A';
     let website = title.Website || 'N/A';
-    if (website !== 'N/A') website = await u.api.shortUrl(website);
+    if (website !== 'N/A') {
+        website = await u.api.shortUrl(website);
+        website = website.url;
+    }
     if (title.Poster === 'N/A') poster = '';
     
     message.edit({embed: {
@@ -105,6 +108,6 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     }, "content": ""}).catch((err) => {
         message.edit('❌ There was an error with the embed. Try a different movie or try again later.');
         
-        console.error(err);
+        log.error(err);
     });
 }
