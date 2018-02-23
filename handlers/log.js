@@ -8,10 +8,10 @@ log.command = (msg, cmdName, cmdArgs) => {
 
     let logMsg = lineCol;
     logMsg += `\n${chalk.bold('Command:')} ${cmdName.charAt(0).toUpperCase() + cmdName.slice(1)}`;
-    logMsg += `\n${chalk.bold('Username:')} ${msg.author.username} (${chalk.italic.dim(msg.author.id)})`;
+    logMsg += `\n${chalk.bold('Username:')} ${msg.author.username} (${chalk.dim(msg.author.id)})`;
     if (msg.channel.guild) {
-        logMsg += `\n${chalk.bold('Channel:')} ${msg.channel.name} (${chalk.italic.dim(msg.channel.id)})`;
-        logMsg += `\n${chalk.bold('Guild:')} ${msg.channel.guild.name} (${chalk.italic.dim(msg.channel.guild.id)})`;
+        logMsg += `\n${chalk.bold('Channel:')} ${msg.channel.name} (${chalk.dim(msg.channel.id)})`;
+        logMsg += `\n${chalk.bold('Guild:')} ${msg.channel.guild.name} (${chalk.dim(msg.channel.guild.id)})`;
     } else {
         logMsg += `\n${chalk.bold('Channel:')} Direct Message`;
     }

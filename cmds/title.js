@@ -48,31 +48,31 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
             value: title.Rated,
             inline: true
         }, {
-            name: 'Genre(s)', // 5
+            name: `Genre${title.Genre.split(', ').length > 1 ? 's' : ''}`, // 5
             value: title.Genre,
             inline: true
         }, {
-            name: 'Countr(y/ies)', // 6
+            name: `Countr${title.Country.split(', ').length > 1 ? 'ies' : 'y'}`, // 6
             value: title.Country,
             inline: true
         }, {
-            name: 'Language(s)', // 7
+            name: `Language${title.Language.split(', ').length > 1 ? 's' : ''}`, // 7
             value: title.Language,
             inline: true
         }, {
-            name: 'Awards', // 8
+            name: `Award${title.Awards.split(', ').length > 1 ? 's' : ''}`, // 8
             value: title.Awards,
             inline: true
         }, {
-            name: 'Director(s)', // 9
+            name: `Director${title.Director.split(', ').length > 1 ? 's' : ''}`, // 9
             value: title.Director,
             inline: true
         }, {
-            name: 'Writer(s)', // 10
+            name: `Writer${title.Writer.split(', ').length > 1 ? 's' : ''}`, // 10
             value: title.Writer,
             inline: true
         }, {
-            name: 'Actor(s)', // 11
+            name: `Actor${title.Actors.split(', ').length > 1 ? 's' : ''}`, // 11
             value: title.Actors,
             inline: true
         }, {

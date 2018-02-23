@@ -4,39 +4,17 @@ const fs = require('fs');
 
 const scrape = module.exports = {};
 
-/* scrape.topSimplified = async () => {
-    const raw = await superagent.get('http://www.imdb.com/chart/top').set('X-Forwarded-For', '1.2.3.0');
-    const $ = cheerio.load(raw.text);
-
-    const titles = [];
-    await $('table.chart tbody tr').each((i, el) => {
-        titles[i] = {
-            "name": $(el).find('.titleColumn a').text(),
-            "year": $(el).find('.titleColumn span').text().slice(1, -1),
-            "rating": $(el).find('.ratingColumn.imdbRating').text().replace('\n', '').trim(),
-            "id": $(el).find('.watchlistColumn > div').attr('data-tconst'),
-            "poster": $(el).find('.posterColumn img').attr('src'),
-            "index": i
-        };
-    });
-
-    if (titles.length !== 250) {
-        console.error('Error getting all top 250 titles with scraper.');
-        return false;
-    }
-    
-    fs.writeFileSync('top.json', JSON.stringify(titles));
-
-    return true;
-} */
-
 scrape.top = async () => {
     const raw = await superagent.get('http://www.imdb.com/search/title?groups=top_250&adult=include&count=250&sort=user_rating,desc').set('X-Forwarded-For', '1.2.3.0');
     const $ = cheerio.load(raw.text);
 
-    const titles = [];
+    const top = {
+        "titles": [],
+        "timeOfScrape": new Date().getTime()
+    };
+
     await $('.list .lister-list .lister-item').each((i, elem) => {
-        titles[i] = {
+        top.titles[i] = {
             "name": $(elem).find('.lister-item-header a').text(),
             "year": $(elem).find('.lister-item-header .lister-item-year').text().slice(1, -1),
             "rating": $(elem).find('.ratings-bar .ratings-imdb-rating').text().trim(),
@@ -53,12 +31,12 @@ scrape.top = async () => {
         }
     });
 
-    if (titles.length !== 250) {
+    if (top.titles.length !== 250) {
         console.error('Error getting all top 250 titles with scraper.');
         return false;
     }
     
-    fs.writeFileSync('top.json', JSON.stringify(titles));
+    fs.writeFileSync('top.json', JSON.stringify(top));
 
     return true;
 }
