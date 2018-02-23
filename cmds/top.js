@@ -11,8 +11,8 @@ c.settings = {
 };
 
 c.top = require('../top.json');
-c.scrape = () => {
-    const topData = handlers.scrape.top();
+c.scrape = async () => {
+    const topData = await handlers.scrape.top();
     if (topData) c.top = topData;
 }
 c.start = () => c.scrape();
@@ -25,7 +25,7 @@ c.reload = () => {
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     const message = await bot.createMessage(msg.channel.id, 'ℹ Getting information...');
-
+    
     const titles = c.top.titles;
     const page = (cmdArgs[0] - 1) || 0;
 
