@@ -24,7 +24,7 @@ e.post.dbl = async (count) => {
         'Content-Type': 'application/json'
     }).send({
         'server_count': count
-    }).catch((err) => { log.error(err, `Cannot post new server count to dbl. (${post.statusCode})`) });
+    }).catch((err) => { log.error(err, `Cannot post new server count to dbl.`) });
 }
 
 e.post.dbots = async (count) => {
@@ -33,7 +33,7 @@ e.post.dbots = async (count) => {
         'Content-Type': 'application/json'
     }).send({
         'server_count': count
-    }).catch((err) => { log.error(`Cannot post new server count to dbots. (${post.statusCode})`) });
+    }).catch((err) => { log.error(`Cannot post new server count to dbots.`) });
 }
 
 e.post.carbon = async (count) => {
@@ -42,5 +42,5 @@ e.post.carbon = async (count) => {
     }).send({
         'key': config.token.botlist.carbon,
         'servercount': count
-    }).catch((err) => { log.error(err, `Cannot post new server count to carbon. (${post.statusCode})`) });
+    }).catch((err) => { log.error(err, `Cannot post new server count to carbon.`) });
 }

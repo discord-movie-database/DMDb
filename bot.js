@@ -89,7 +89,7 @@ if (process.argv[2] !== "dev") setInterval(() => {
     if (loaded === 0) return;
 
     handler.list.post.all(bot);
-}, 1800000);
+}, 2700000);
 
 setInterval(() => {
     const topData = handler.scrape.top();
