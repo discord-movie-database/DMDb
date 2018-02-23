@@ -1,4 +1,5 @@
 const fs = require('fs');
+const handlers = require('../handlers/index.js');
 
 const c = module.exports = {};
 c.settings = {
@@ -8,8 +9,19 @@ c.settings = {
     "description": "List of best rated titles.",
     "large_description": "Get a list of the best 250 rated titles on IMDb."
 };
+
 c.top = require('../top.json');
-c.reload = () => delete require.cache[require.resolve(`../top.json`)];
+c.scrape = () => {
+    const topData = handlers.scrape.top();
+    if (topData) c.top = topData;
+}
+c.start = () => c.scrape();
+c.interval = setInterval(c.scrape, 86400000);
+
+c.reload = () => {
+    delete require.cache[require.resolve(`../top.json`)];
+    clearInterval(c.interval);
+}
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     const message = await bot.createMessage(msg.channel.id, 'ℹ Getting information...');
@@ -28,7 +40,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
 
         fields.push({
             name: `${results[i].name}`,
-            value: `${results[i].index + 1} **|** **${results[i].rating}** **|** ${results[i].year} **|** ${results[i].id}`,
+            value: `**${results[i].index + 1}** **|** Rating: ${results[i].rating} **|** Year: ${results[i].year} **|** IMDb ID: ${results[i].id}`,
             inline: false
         });
     }
@@ -39,7 +51,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         fields: fields,
         color: 0xE6B91E,
         footer: {
-            text: `Information Updated: ${new Date(c.top.timeOfScrape).toString()}.`
+            text: `Updated: ${new Date(c.top.timeOfScrape).toUTCString()}.`
         }
     }, content: ''});
 }

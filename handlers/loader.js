@@ -4,6 +4,7 @@ const l = module.exports = {};
 
 l.loadCommand = (cmd) => {
     main.commands[cmd] = require(`../cmds/${cmd}`);
+    if (main.commands[cmd].start) main.commands[cmd].start();
 }
 
 l.reloadCommand = (cmd) => {

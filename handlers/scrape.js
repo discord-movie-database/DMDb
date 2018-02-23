@@ -16,7 +16,7 @@ scrape.top = async () => {
     await $('.list .lister-list .lister-item').each((i, elem) => {
         top.titles[i] = {
             "name": $(elem).find('.lister-item-header a').text(),
-            "year": $(elem).find('.lister-item-header .lister-item-year').text().slice(1, -1),
+            "year": $(elem).find('.lister-item-header .lister-item-year').text().split(' ').pop().slice(1, -1),
             "rating": $(elem).find('.ratings-bar .ratings-imdb-rating').text().trim(),
             "metascore": $(elem).find('.ratings-bar .ratings-metascore .metascore').text().trim(),
             "id": $(elem).find('.lister-item-header a').attr('href').split('/')[2],
@@ -36,7 +36,8 @@ scrape.top = async () => {
         return false;
     }
     
+    console.log('Scraped new top data.');
     fs.writeFileSync('top.json', JSON.stringify(top));
 
-    return true;
+    return top;
 }

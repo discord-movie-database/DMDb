@@ -22,12 +22,12 @@ bot.on("ready", () => {
 
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
 
-    loaded = 1;
+    if (process.argv[2] !== "dev") handler.list.post.all(bot);
+
     console.log('IMDb Ready!');
     if (main.dev) console.log('Development version.');
 
-    if (process.argv[2] !== "dev") handler.list.post.all(bot);
-    handler.scrape.top();
+    loaded = 1;
 });
 
 bot.on("messageCreate", async (msg) => {
@@ -86,18 +86,7 @@ bot.on("messageCreate", async (msg) => {
 });
 
 if (process.argv[2] !== "dev") setInterval(() => {
-    if (loaded === 0) return;
-
     handler.list.post.all(bot);
 }, 2700000);
-
-setInterval(() => {
-    const topData = handler.scrape.top();
-    if (topData) console.log('Scraped new data for top command.');
-
-    handler.loader.cache();
-}, 86400000);
-
-
 
 bot.connect();
