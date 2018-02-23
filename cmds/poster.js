@@ -26,5 +26,5 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     const shortUrl = await u.api.shortUrl(posterRes);
     if (shortUrl.Error) message.edit(`${posterRes} *There was an issue with the bit.ly API so we couldn't shorten the url for you.*`);
 
-    message.edit(`**${title.Title}** (${title.imdbID}) *${shortUrl.url}*`);
+    message.edit(`${shortUrl.url}`);
 }
