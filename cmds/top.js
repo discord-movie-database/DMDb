@@ -40,7 +40,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
 
         fields.push({
             name: `${results[i].name}`,
-            value: `**${results[i].index + 1}** **|** Rating: ${results[i].rating} **|** Year: ${results[i].year} **|** IMDb ID: ${results[i].id}`,
+            value: `**${results[i].rating}** **|** ${results[i].year} **|** ${results[i].id} **|** ${results[i].index + 1}`,
             inline: false
         });
     }
