@@ -1,7 +1,15 @@
-@import 'reset';
-@import 'fonts';
-@import 'variables';
-@import 'main';
-@import 'header';
-@import 'home';
-@import 'buttons';
+// #E6B91E
+
+body {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    letter-spacing: .25px;
+    background-color: #252525;
+    color: #EEE;
+    margin: 0;
+    text-align: center;
+    line-height: 1;
+}
+li, ul, p, h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}

@@ -2,27 +2,24 @@
 <html lang="en-gb">
     <% include includes/head %>
     <body>
-        <% include includes/header %>
-        
-        <div class="home">
-            <div class="content">
-                <div class="title">
-                    <h1>The IMDb Discord Bot</h1>
-                    <p>Get information on your favourite movies, series and celebrities from the Internet Movie Datbase.</p>
-                </div>
-                <div class="buttons">
-                    <a class="home-button" href="#">Invite</a>
-                    <a class="home-button" href="#">Server</a>
-                </div>
+        <div class="content">
+            <div class="title">
+                <h1>DMDb</h1>
+                <h3>The Discord Movie Database.</h3>
             </div>
-            <div class="overlay"></div>
-            <div class="background"></div>
+
+            <div class="not-logged-in login">
+                <p>You're not logged in.</p>
+                <a class="btn btn-login">Login With Discord</a>
+                <h3>OR</h3>
+                <a class="btn btn-invite">Invite Bot</a>
+            </div>
         </div>
         
         <script>
             // Global EJS Variables:
             
         </script>
-        <script src="assets/js/main.js"></script>
+        <script src="/assets/js/main.js"></script>
     </body>
 </html>
