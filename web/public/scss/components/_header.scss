@@ -1,0 +1,62 @@
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: $header-height;
+    background-color: $dark-grey;
+
+    .header-inner {
+        list-style-type: none;
+        margin: 0 auto;
+        padding: 0;
+        max-width: 1550px;
+
+        > div li a {
+            display: block;
+            padding: 0 25px;
+            line-height: $header-height;
+            color: $light-grey;
+            text-decoration: none;
+
+            &:hover {
+                color: $white;
+            }
+        }
+
+        .title {
+            float: left;
+
+            li a {
+                font-size: 25px;
+                color: $primary-yellow;
+                width: $sidebar-width;
+                padding: 0;
+                text-align: center;
+                font-weight: 800;
+
+                &:hover {
+                    color: $primary-yellow;
+                }
+            }
+        }
+
+        .toggle {
+            display: none;
+        }
+
+        .navs {
+            float: right;
+
+            li {
+                float: left;
+
+                a.bold {
+                    font-weight: 700;
+                    color: $really-light-grey;
+                }
+            }
+        }
+    }
+}

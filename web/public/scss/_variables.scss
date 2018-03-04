@@ -1,0 +1,43 @@
+// COLORs
+
+$black: #000000;
+$white: #FFFFFF;
+
+// MORE COLORS
+
+$really-dark-grey: #111111;
+$dark-grey: #202225;
+$grey: #36393E;
+$light-grey: #D6D6D6;
+$really-light-grey: #EEEEEE;
+$light-grey-blue: #99AAB5;
+
+// PRIMARY COLORS
+
+$primary-yellow: #D8AC13;
+$primary-yellow-light: #E6B91E;
+
+// HEADER
+
+$header-height: 50px;
+
+// SIDEBAR
+
+$sidebar-width: 225px;
+
+// MISC
+
+$bottom-shadow: 0 6px 5px 0 rgba($really-dark-grey, 0.15);
+$bottom-shadow-large: 0 6px 10px 0 rgba($really-dark-grey, 0.35);
+
+// MIXINS
+
+@mixin shadow-hover {
+    box-shadow: $bottom-shadow;
+
+    transition: .25s ease-in-out;
+    &:hover {
+        box-shadow: $bottom-shadow-large;
+        transform: translateY(-1px);
+    }
+}

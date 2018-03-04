@@ -1,15 +1,24 @@
-// #E6B91E
+@import 'variables';
 
 body {
-    font-family: 'Quicksand', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     font-size: 15px;
-    letter-spacing: .25px;
-    background-color: #252525;
-    color: #EEE;
+    color: $light-grey;
+    background-color: $dark-grey;
+    padding-top: $header-height + 30px;
     margin: 0;
-    text-align: center;
     line-height: 1;
+    font-weight: 400;
+    overflow: hidden;
 }
 li, ul, p, h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
+
+@import 'components/header';
+@import 'components/sidebar';
+@import 'components/footer';
+
+@import 'pages/home';
+@import 'pages/panel';
+@import 'pages/404';
