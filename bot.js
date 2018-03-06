@@ -22,7 +22,7 @@ bot.on("ready", () => {
 
     bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
 
-    if (process.argv[2] !== "dev") handler.list.post.all(bot);
+    if (process.argv[2] !== "dev") handler.stats.list.all(bot);
 
     console.log('IMDb Ready!');
     if (main.dev) console.log('Development version.');
@@ -86,7 +86,7 @@ bot.on("messageCreate", async (msg) => {
 });
 
 if (process.argv[2] !== "dev") setInterval(() => {
-    handler.list.post.all(bot);
+    handler.stats.list.all(bot);
 }, 2700000);
 
 bot.connect();
