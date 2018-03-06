@@ -5,13 +5,12 @@ header {
     left: 0;
     right: 0;
     height: $header-height;
-    background-color: $dark-grey;
 
     .header-inner {
         list-style-type: none;
         margin: 0 auto;
         padding: 0;
-        max-width: 1550px;
+        max-width: $header-width;
 
         > div li a {
             display: block;

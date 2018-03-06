@@ -9,16 +9,18 @@ body {
     margin: 0;
     line-height: 1;
     font-weight: 400;
-    overflow: hidden;
 }
 li, ul, p, h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+@import 'components/page';
+@import 'components/background';
 @import 'components/header';
 @import 'components/sidebar';
 @import 'components/footer';
 
 @import 'pages/home';
+@import 'pages/docs';
 @import 'pages/panel';
 @import 'pages/404';

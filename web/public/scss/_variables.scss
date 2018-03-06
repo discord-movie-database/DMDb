@@ -20,6 +20,7 @@ $primary-yellow-light: #E6B91E;
 // HEADER
 
 $header-height: 50px;
+$header-width: 1550px;
 
 // SIDEBAR
 
@@ -38,6 +39,6 @@ $bottom-shadow-large: 0 6px 10px 0 rgba($really-dark-grey, 0.35);
     transition: .25s ease-in-out;
     &:hover {
         box-shadow: $bottom-shadow-large;
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 }

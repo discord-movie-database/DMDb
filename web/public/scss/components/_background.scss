@@ -1,0 +1,22 @@
+.background {
+    background-image: url('/public/img/background.jpg');
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.06;
+    z-index: -999;
+}
+
+.shadow {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: -999;
+    box-shadow: inset 0 0 40px rgba($really-dark-grey, 0.5);
+}
