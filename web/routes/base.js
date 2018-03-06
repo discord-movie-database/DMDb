@@ -12,13 +12,11 @@ base.get('/invite', (req, res) => {
 base.get('/guild', (req, res) => {
     res.redirect('https://discord.gg/fwAxQjV');
 });
-
-base.get('/docs', (req, res) => {
-    res.render('pages/docs');
+base.get('/github', (req, res) => {
+    res.redirect('https://github.com/dumplingsr/IMDb');
 });
-
-base.get('/stats', (req, res) => {
-    res.render('pages/stats');
+base.get('/impulse', (req, res) => {
+    res.redirect('https://discordapp.com/oauth2/authorize?client_id=409327998182096907&permissions=3148800&scope=bot');
 });
 
 module.exports = base;
