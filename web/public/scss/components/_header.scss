@@ -5,6 +5,7 @@ header {
     left: 0;
     right: 0;
     height: $header-height;
+    z-index: 999;
 
     .header-inner {
         list-style-type: none;
@@ -43,6 +44,44 @@ header {
 
         .toggle {
             display: none;
+            float: right;
+
+            li a {
+                width: $header-height;
+                height: $header-height;
+                padding: 0;
+                position: relative;
+
+                span {
+                    display: block;
+                    position: absolute;
+                    width: 50%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    height: 2px;
+                    background-color: $white;
+                    margin: 0 auto;
+                    left: 0;
+                    right: 0;
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        background-color: $white;
+                        bottom: 7px;
+                    }
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        background-color: $white;
+                        top: 7px;
+                    }
+                }
+            }
         }
 
         .navs {
@@ -54,8 +93,37 @@ header {
                 a.bold {
                     font-weight: 700;
                     color: $really-light-grey;
+                    cursor: not-allowed;
                 }
             }
         }
+    }
+}
+
+header.toggled .header-inner .toggle li a span {
+    background-color: transparent;
+
+    &:before {
+        transform: rotate(45deg);
+        bottom: 0;
+    }
+    &:after {
+        transform: rotate(-45deg);
+        top: 0;
+    }
+}
+
+@media screen and (max-width: 660px) {
+    .header-inner .title a {
+        width: unset !important;
+        padding: 0 25px !important;
+    }
+
+    .header-inner .navs {
+        display: none;
+    }
+
+    .header-inner .toggle {
+        display: block !important;
     }
 }

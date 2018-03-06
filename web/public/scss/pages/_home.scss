@@ -1,5 +1,5 @@
 .home {
-    margin-top: 65px;
+    margin-top: 60px;
     padding: 0 5%;
 
     .title {
@@ -15,6 +15,7 @@
 
         p {
             font-size: 16px;
+            line-height: 19px;
         }
     }
 
@@ -45,7 +46,7 @@
     }
 
     .examples {
-        margin-top: 100px;
+        margin-top: 95px;
         display: flex;
         justify-content: center;
 
@@ -66,6 +67,28 @@
     }
 }
 
-@media screen and (max-width: 660px) {
+@media screen and (max-width: 575px) {
+    .home .examples {
+        .example {
+            width: 300px;
+        }
+    }
+}
 
+@media screen and (max-width: 525px) {
+    .home {
+        margin-top: 40px;
+
+        .examples {
+            margin-top: 75px;
+            
+            .example-1 {
+                display: none;
+            }
+    
+            .example-2 {
+                margin: 0;
+            }
+        }
+    }
 }
