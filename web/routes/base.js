@@ -11,7 +11,8 @@ base.get('/dbots', (req, res) => {
 });
 
 base.get('/robots.txt', (req, res) => {
-    res.send('test');
+    res.type('text/plain');
+    res.render('robots');
 });
 
 base.get('/invite', (req, res) => {
