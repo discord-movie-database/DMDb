@@ -14,6 +14,17 @@ li, ul, p, h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
 
+.no-js {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 22px;
+    font-weight: 700;
+    font-size: 17px;
+    background-color: $really-dark-grey;
+}
+
 @import 'components/page';
 @import 'components/background';
 @import 'components/header';

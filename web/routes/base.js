@@ -6,6 +6,14 @@ base.get('/', (req, res) => {
     res.render('pages/index');
 });
 
+base.get('/dbots', (req, res) => {
+    res.render('pages/dbots');
+});
+
+base.get('/robots.txt', (req, res) => {
+    res.send('test');
+});
+
 base.get('/invite', (req, res) => {
     res.redirect('https://discordapp.com/oauth2/authorize?client_id=412006490132447249&scope=bot');
 });
