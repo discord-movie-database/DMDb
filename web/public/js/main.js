@@ -8,6 +8,6 @@ $('.background').css({
 
 $(document).ready(function() {
     $('.background').css({
-        "opacity": "0.0825"
+        "opacity": "0.085"
     });
 });
