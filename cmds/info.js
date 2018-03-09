@@ -20,8 +20,8 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     if (msg.channel.guild) currentShard = ` (${msg.channel.guild.shard.id})`;
 
     bot.createMessage(msg.channel.id, {embed: {
-        title: 'IMDb Information',
-        description: 'Invite Bot: <http://bit.ly/inviteimdbbot>\nGuild/Server: <https://discord.gg/fwAxQjV>',
+        title: 'DMDb Information',
+        description: 'Invite Bot: <https://dmdb.me/invite>\nGuild/Server: https://dmdb.me/guild',
         fields: [{
             name: 'Developer',
             value: 'Dumplings\n#7460',

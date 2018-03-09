@@ -45,7 +45,8 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let prefix = config.prefix;
     if (guild && guild.prefix) prefix = guild.prefix;
 
-    let description = `__**IMDb Commands**__\n`;
+    let description = `__**Discord Movie Database Command List**__\n`;
+    description += `\n*Use \`${prefix}help [Command Name]\` to get a detailed description for a command.*\n`;
 
     for (i in main.commands) {
         if (main.commands[i].settings.hidden) continue;
@@ -53,8 +54,6 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
         if (main.commands[i].settings.usage) description += `\`${main.commands[i].settings.usage}\` `;
         if (main.commands[i].settings.description) description += main.commands[i].settings.description;
     }
-
-    description += `\n\n*Use \`${prefix}help [Command Name]\` to get a detailed description for a command.*\n*Actor related commands coming soon as the data is currently being mined.*`;
 
     bot.createMessage(msg.channel.id, description);
 }

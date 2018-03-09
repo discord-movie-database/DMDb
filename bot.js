@@ -24,7 +24,7 @@ bot.on("ready", () => {
 
     if (process.argv[2] !== "dev") handler.stats.list.all(bot);
 
-    console.log('IMDb Ready!');
+    console.log('DMDb Ready!');
     if (main.dev) console.log('Development version.');
 
     loaded = 1;

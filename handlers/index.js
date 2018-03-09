@@ -2,7 +2,7 @@ const loader = require('./loader.js');
 const db = require('./db.js');
 const api = require('./api.js');
 const f = require('./flag.js');
-const list = require('./list.js');
+const stats = require('./stats.js');
 const scrape = require('./scrape.js');
 const log = require('./log.js');
 
@@ -12,6 +12,6 @@ u.loader = loader;
 u.db = db;
 u.api = api;
 u.f = f;
-u.list = list;
+u.stats = stats;
 u.scrape = scrape;
 u.log = log;
