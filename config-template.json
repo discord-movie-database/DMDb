@@ -14,8 +14,20 @@
         "host": "",
         "port": ""
     },
+    "web": {
+        "session": {
+            "secret": ""
+        },
+        "redirectUri": "",
+        "authorizeUri": "",
+        "tokenUri": "",
+        "userUri": "",
+        "guildsUri": ""
+    },
     "prefix": "",
     "shardCount": 1,
     "botOwnerId": "",
-    "errorChannelId": ""
+    "errorChannelId": "",
+    "clientId": "",
+    "clientSecret": ""
 }

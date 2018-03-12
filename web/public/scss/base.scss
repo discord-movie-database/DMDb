@@ -1,7 +1,7 @@
 @import 'variables';
 
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: $font-stack;
     font-size: 15px;
     color: $light-grey;
     background-color: $dark-grey;

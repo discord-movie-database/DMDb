@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+    <%- include('../components/head', {panel: true}) %>
+
+    <body>
+        <%- include('../components/header', {panel: true}) %>
+
+        <div id="panel" class="panel page">
+            <div class="hello">
+                <h1>Hello, <span class="username"><%= locals.session.user.username %></span> !</h1>
+                <p>Here you can change the bots configuration to suit you and your guild. If the bot is in more than one guild you own, click the arrow on the guild you want to configure.</p>
+            </div>
+            <div class="guilds">
+                <% for (var i = 0; i < locals.session.guilds.length; i++) { %>
+                <form class="guild" id="<%= locals.session.guilds[i].id %>">
+                    <div class="top">
+                        <img src="https://cdn.discordapp.com/icons/<%= locals.session.guilds[i].id %>/<%= locals.session.guilds[i].icon %>.jpg" alt="Icon" class="icon">
+                        <h2 class="name"><%= locals.session.guilds[i].name %></h2>
+                        <a class="arrow" href="javascript:void(0);"><i class="fas fa-angle-down"></i></a>
+                    </div>
+                    <div class="hidden">
+                        <div class="settings">
+                            <p>...</p>
+                        </div>
+                        <div class="bottom">
+                            <div class="btns">
+                                <input type="submit" value="Cancel" name="cancel" class="btn btn-1" />
+                                <input type="submit" value="Save" name="save" class="btn btn-2" />
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <% } %>
+            </div>
+        </div>
+    
+        <%- include('../components/footer') %>
+        
+        <script src="/public/js/main.js"></script>
+    </body>
+</html>

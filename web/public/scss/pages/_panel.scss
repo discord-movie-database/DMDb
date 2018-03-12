@@ -1,0 +1,125 @@
+#panel.panel {
+    max-width: 660px;
+    padding: 25px;
+    border-radius: 30px;
+    margin-top: 10px auto;
+    
+    .hello {
+        h1 {
+            font-size: 29px;
+            color: $white;
+
+            .username {
+                color: $primary-yellow-light;
+            }
+        }
+
+        p {
+            margin-top: 15px;
+        }
+    }
+    
+    .guilds {
+        width: 100%;
+        margin-top: 35px;
+
+        .guild {
+            background-color: rgba($really-dark-grey, 0.65);
+            border-radius: 25px;
+            box-shadow: $bottom-shadow-large;
+
+            &:not(:last-child) {
+                margin-bottom: 25px;
+            }
+
+            .top {
+                display: flex;
+                align-items: center;
+                padding: 8px;
+                
+                .icon {
+                    display: block;
+                    width: 34px;
+                    height: 34px;
+                    border-radius: 50%;
+                }
+
+                .name {
+                    margin-left: 10px;
+                    font-size: 18px;
+                    color: $white;
+                }
+
+                .arrow {
+                    margin-left: auto;
+                    margin-right: 16px;
+                    font-size: 20px;
+                    color: $really-light-grey;
+
+                    transition: transform .3s ease-in-out;
+                    &:hover {
+                        color: $white;
+                    }
+                }
+            }
+
+            .settings {
+                border-style: solid;
+                border-width: 2px;
+                border-right-width: 0;
+                border-left-width: 0;
+                border-color: $primary-yellow;
+                padding: 12px 6px;
+
+                p {
+                    margin: 0;
+                }
+            }
+
+            .bottom {
+                .btns {
+                    display: flex;
+                    justify-content: center;
+                    
+                    .btn {
+                        line-height: 32px;
+                        width: 125px;
+                        border: 0;
+                        margin: 8px;
+                        border-radius: 5px;
+                        background-color: $really-light-grey;
+                        color: $really-dark-grey;
+                        font-weight: 700;
+                        cursor: pointer;
+                        font-family: $font-stack;
+
+                        @include shadow-hover;
+                    }
+
+                    .btn-2 {
+                        background-color: $primary-yellow;
+                        color: $white;
+                    }
+                }
+            }
+
+            .hidden {
+                display: none;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height .3s ease-in-out;
+            }
+        }
+
+        .guild.toggled {
+            .top .arrow {
+                transform: rotate(180deg);
+            }
+
+            .hidden {
+                display: block;
+                max-height: 9999px;
+            }
+        }
+    }
+}

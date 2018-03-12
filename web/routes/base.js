@@ -6,10 +6,6 @@ base.get('/', (req, res) => {
     res.render('pages/index');
 });
 
-base.get('/dbots', (req, res) => {
-    res.render('pages/dbots');
-});
-
 base.get('/robots.txt', (req, res) => {
     res.type('text/plain');
     res.render('robots');

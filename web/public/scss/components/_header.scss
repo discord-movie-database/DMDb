@@ -37,7 +37,7 @@ header {
                 font-weight: 800;
 
                 &:hover {
-                    color: $primary-yellow;
+                    color: $primary-yellow-light;
                 }
             }
         }
@@ -93,7 +93,6 @@ header {
                 a.bold {
                     font-weight: 700;
                     color: $really-light-grey;
-                    cursor: not-allowed;
                 }
             }
         }

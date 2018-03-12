@@ -9,20 +9,15 @@
     <meta property="og:title" content="The Discord Movie Database (DMDb)" />
     <meta property="og:description" content="Get fast and simplified information about movies from IMDb in Discord." />
 
-    <title>Discord Movie Database (DMDb)</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/public/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="public/img/favicon-16x16.png">
+
+    <title><% if (locals.panel) { %>Panel - <% } %>Discord Movie Database (DMDb)</title>
     
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="/public/css/main.min.css" />
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115169113-1"></script>
-    
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'UA-115169113-1');
-    </script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
 </head>
