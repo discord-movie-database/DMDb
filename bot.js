@@ -20,7 +20,7 @@ let loaded = 0;
 bot.on("ready", () => {
     handler.loader.startup();
 
-    bot.editStatus({"name": "[!?Help] Movies, TV and Celebrities"});
+    bot.editStatus({"name": "https://dmdb.me"});
 
     if (process.argv[2] !== "dev") handler.stats.list.all(bot);
 
