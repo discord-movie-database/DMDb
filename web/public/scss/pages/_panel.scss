@@ -56,7 +56,6 @@
                     font-size: 20px;
                     color: $really-light-grey;
 
-                    transition: transform .3s ease-in-out;
                     &:hover {
                         color: $white;
                     }
@@ -65,14 +64,50 @@
 
             .settings {
                 border-style: solid;
-                border-width: 2px;
-                border-right-width: 0;
-                border-left-width: 0;
+                border-width: 1px 0px;
                 border-color: $primary-yellow;
-                padding: 12px 6px;
+                padding: 10px;
 
-                p {
+                .input {
+                    display: flex;
+                    align-items: center;
+
+                    p, label {
+                        margin-right: 6px;
+                        font-size: 14px;
+                        font-weight: 600;
+                    }
+
+                    $input-size: 21px;
+
+                    input {
+                        border-radius: 11px;
+                        border: 1px solid $light-grey;
+                        background-color: $really-light-grey;
+                        outline: 0;
+                        padding: 0px 8px;
+                        line-height: $input-size;
+                        font-family: $font-stack;
+                        font-weight: 600;
+                        font-size: 13px;
+
+                        transition: border .3s ease-in-out;
+                        &:focus {
+                            border-color: $primary-yellow;
+                        }
+                    }
+
+                    input[type="checkbox"] {
+                        height: $input-size;
+                    }
+                }
+
+                .response {
                     margin: 0;
+                    font-size: 14px;
+                    font-weight: 600;
+                    font-style: italic;
+                    line-height: 20px;
                 }
             }
 
@@ -105,9 +140,6 @@
 
             .hidden {
                 display: none;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height .3s ease-in-out;
             }
         }
 
@@ -118,7 +150,6 @@
 
             .hidden {
                 display: block;
-                max-height: 9999px;
             }
         }
     }

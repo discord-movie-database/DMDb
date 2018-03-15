@@ -8,11 +8,11 @@
         <div id="panel" class="panel page">
             <div class="hello">
                 <h1>Hello, <span class="username"><%= locals.session.user.username %></span> !</h1>
-                <p>Here you can change the bots configuration to suit you and your guild. If the bot is in more than one guild you own, click the arrow on the guild you want to configure.</p>
+                <p>In order to update a guild, you need to be owner and used a command atlesst one time for it to show. If there are no guilds and you think there's an error, log out and back in again.</p>
             </div>
             <div class="guilds">
                 <% for (var i = 0; i < locals.session.guilds.length; i++) { %>
-                <form class="guild" id="<%= locals.session.guilds[i].id %>">
+                <form class="guild <% if (locals.session.guilds.length === 1) { %>toggled<% } %>" id="<%= locals.session.guilds[i].id %>">
                     <div class="top">
                         <img src="https://cdn.discordapp.com/icons/<%= locals.session.guilds[i].id %>/<%= locals.session.guilds[i].icon %>.jpg" alt="Icon" class="icon">
                         <h2 class="name"><%= locals.session.guilds[i].name %></h2>
@@ -20,7 +20,12 @@
                     </div>
                     <div class="hidden">
                         <div class="settings">
-                            <p>...</p>
+                            <div class="input">
+                                <label for="prefix">Prefix: </label>
+                                <input type="text" name="prefix" value="!?" placeholder="Example: !?" id="prefix">
+                                <!--<input type="checkbox" name="prefixToggle" checked id="prefix-toggle">-->
+                            </div>
+                            <p class="response"></p>
                         </div>
                         <div class="bottom">
                             <div class="btns">
@@ -34,7 +39,7 @@
             </div>
         </div>
     
-        <%- include('../components/footer') %>
+        <%- include('../components/footer', {panel: true}) %>
         
         <script src="/public/js/main.js"></script>
     </body>

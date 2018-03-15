@@ -1,3 +1,5 @@
+const db = require('../../handlers/db.js');
+
 const express = require('express');
 const superagent = require('superagent');
 
@@ -19,10 +21,8 @@ panel.get('/login', async (req, res) => {
 
     // Get user guild information.
     const { body: guilds } = await superagent.get(config.web.guildsUri).set('Authorization', req.session.token);
-    req.session.guilds = guilds.filter((guild) => guild.owner);
-
-    // Check if user has permission in a guild to edit the bot.
-    if (req.session.guilds.length === 0) return res.redirect('/invite');
+    // Filter guilds.
+    req.session.guilds = await guilds.filter((guild) => guild.owner);
 
     // Logged in.
     req.session.authenticated = true;
@@ -33,6 +33,7 @@ panel.get('/login', async (req, res) => {
 
 panel.get('/logout', (req, res) => {
     // Delete session.
+    req.session.authenticated = false;
     req.session.destroy();
 
     // Redirect back to home.
@@ -50,8 +51,37 @@ panel.get('/', (req, res) => {
     });
 });
 
-panel.post('/guild/:id/update', (req, res) => {
+panel.post('/guild/:id/update', async (req, res) => {
+    // Check if logged in.
+    if (!req.session.authenticated) return res.json({error: 'Not logged in.'});
+    // Check if user is the owner.
+    var permission = false;
+    for (var i = 0; i < req.session.guilds.length; i++) if (req.session.guilds[i].id === req.params.id) permission = true;
+    if (!permission) return res.json({error: 'No permission.'});
 
+    // Get guild from database.
+    const guildDB = await db.getGuild(req.params.id);
+    // Check if guild is in database.
+    if (!guildDB) return res.json({error: 'Guild not in database. Try executing a command in the guild you want to update and try again.'});
+
+    // Check if there's a prefix query.
+    if (!req.body.prefix) return res.json({error: 'Prefix required.'});
+    // Check if prefix isn't default.
+    if (req.body.prefix === config.prefix) return res.json({error: 'Prefix is default prefix.'})
+    // Check if prefix is valid.
+    if (!/^[a-z0-0!!"£$%^&*()_+=-\[\];'#:@~<>?\/.,\\`¬]{1,30}$/i.test(req.body.prefix)) return res.json({error: 'Invalid prefix.'});
+    // Update prefix.
+    req.body.prefix = req.body.prefix.trim();
+
+    // Update database.
+    const guildUpdateDB = await db.updateGuild(req.params.id, {
+        prefix: req.body.prefix
+    });
+    // Check if update was successful.
+    if (!guildUpdateDB) return res.json({error: 'Cannot update database.'});
+
+    // Success.
+    return res.json({success: true});
 });
 
 module.exports = panel;
