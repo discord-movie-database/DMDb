@@ -46,7 +46,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     if (guild && guild.prefix) prefix = guild.prefix;
 
     let description = `__**Discord Movie Database Command List**__\n`;
-    description += `\n*Use \`${prefix}help [Command Name]\` to get a detailed description for a command.*\n`;
+    description += `\n*Use \`${prefix}help [Command Name]\` to get a detailed description for a command.*\n\`@DMDb guild\` to get current guild configuration.\n`;
 
     for (i in main.commands) {
         if (main.commands[i].settings.hidden) continue;

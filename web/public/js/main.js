@@ -21,7 +21,7 @@ $('.guild .arrow').click(function() {
 });
 
 $('.guild').submit(function(e) {
-    var response = $(this).find('.response');
+    var response = $(this).find('.settings').append('<p class="response"></p>').find('.response');
     response.text('Updating guild...');
 
     e.preventDefault();

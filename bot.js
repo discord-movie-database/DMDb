@@ -45,6 +45,7 @@ bot.on("messageCreate", async (msg) => {
     }
 
     if (guild && guild.prefix) prefix = guild.prefix;
+    if (msg.content.startsWith(`<@${bot.user.id}> `)) prefix = `<@${bot.user.id}> `
     if (!msg.content.startsWith(prefix)) return;
 
     let user = await handler.db.getUser(msg.author.id);
@@ -53,10 +54,12 @@ bot.on("messageCreate", async (msg) => {
         user = await handler.db.getUser(msg.author.id);
     }
 
-    let msgSplit = msg.content.split(' ');
-    let cmdName = msgSplit[0].toLowerCase().slice(prefix.length);
+    let cmdName = msg.content.toLowerCase().slice(prefix.length).split(' ')[0];
+    let msgSplit = msg.content.split(' ').slice(1);
+
     if (!main.commands[cmdName]) return;
     if (main.commands[cmdName].settings.restricted && msg.author.id !== config.botOwnerId) return;
+
     let cmdArgs = msgSplit.slice(1);
 
     try {

@@ -60,23 +60,33 @@ panel.post('/guild/:id/update', async (req, res) => {
     if (!permission) return res.json({error: 'No permission.'});
 
     // Get guild from database.
-    const guildDB = await db.getGuild(req.params.id);
+    let guildDB = null;
+    try {
+        guildDB = await db.getGuild(req.params.id);
+    } catch (err) {
+        console.log(err);
+    }
     // Check if guild is in database.
     if (!guildDB) return res.json({error: 'Guild not in database. Try executing a command in the guild you want to update and try again.'});
 
     // Check if there's a prefix query.
     if (!req.body.prefix) return res.json({error: 'Prefix required.'});
     // Check if prefix isn't default.
-    if (req.body.prefix === config.prefix) return res.json({error: 'Prefix is default prefix.'})
+    if (req.body.prefix === config.prefix) return res.json({error: 'Prefix is default prefix.'});
     // Check if prefix is valid.
-    if (!/^[a-z0-0!!"£$%^&*()_+=-\[\];'#:@~<>?\/.,\\`¬]{1,30}$/i.test(req.body.prefix)) return res.json({error: 'Invalid prefix.'});
+    if (!/^[a-z0-9!"£$%^&*()_+=-\[\];'#:@~<>?\/.,\\`¬]{1,30}$/i.test(req.body.prefix)) return res.json({error: 'Invalid prefix. Must be 1-30 characters long and only contain a-z 0-9 !"£$%^&*()_+=-[];\'#:@~<>?/.,\`¬'});
     // Update prefix.
     req.body.prefix = req.body.prefix.trim();
 
     // Update database.
-    const guildUpdateDB = await db.updateGuild(req.params.id, {
-        prefix: req.body.prefix
-    });
+    let guildUpdateDB = null;
+    try {
+        guildUpdateDB = await db.updateGuild(req.params.id, {
+            prefix: req.body.prefix
+        });
+    } catch (err) {
+        console.log(err);
+    };
     // Check if update was successful.
     if (!guildUpdateDB) return res.json({error: 'Cannot update database.'});
 
