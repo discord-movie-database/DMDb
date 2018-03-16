@@ -22,7 +22,7 @@ panel.get('/login', async (req, res) => {
     // Get user guild information.
     const { body: guilds } = await superagent.get(config.web.guildsUri).set('Authorization', req.session.token);
     // Filter guilds.
-    req.session.guilds = await guilds.filter((guild) => guild.owner);
+    req.session.guilds = guilds.filter((guild) => guild.owner);
 
     // Logged in.
     req.session.authenticated = true;
@@ -67,12 +67,10 @@ panel.post('/guild/:id/update', async (req, res) => {
         console.log(err);
     }
     // Check if guild is in database.
-    if (!guildDB) return res.json({error: 'Guild not in database. Try executing a command in the guild you want to update and try again.'});
+    if (!guildDB) return res.json({error: 'Guild not found in database. Try executing a command in the guild and try again.'});
 
     // Check if there's a prefix query.
     if (!req.body.prefix) return res.json({error: 'Prefix required.'});
-    // Check if prefix isn't default.
-    if (req.body.prefix === config.prefix) return res.json({error: 'Prefix is default prefix.'});
     // Check if prefix is valid.
     if (!/^[a-z0-9!"£$%^&*()_+=-\[\];'#:@~<>?\/.,\\`¬]{1,30}$/i.test(req.body.prefix)) return res.json({error: 'Invalid prefix. Must be 1-30 characters long and only contain a-z 0-9 !"£$%^&*()_+=-[];\'#:@~<>?/.,\`¬'});
     // Update prefix.

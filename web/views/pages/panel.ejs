@@ -7,14 +7,14 @@
 
         <div id="panel" class="panel page">
             <div class="hello">
-                <h1>Hello, <span class="username"><%= locals.session.user.username %></span> !</h1>
-                <p>In order to update a guild, you need to be owner and used a command atlesst one time for it to show. If there are no guilds and you think there's an error, log out and back in again.</p>
+                <h1>Hello, <img class="pp" src="https://cdn.discordapp.com/avatars/<%= locals.session.user.id %>/<%= locals.session.user.avatar %>.jpg?size=256"></img> <span class="username"><%= locals.session.user.username %></span>!</h1>
+                <p>Choose a guild you want to update to suit you and your guild. The panel shows all the guilds you're owner of. You won't be able to update a guild the bot isn't in.</p>
             </div>
             <div class="guilds">
                 <% for (var i = 0; i < locals.session.guilds.length; i++) { %>
                 <form class="guild <% if (locals.session.guilds.length === 1) { %>toggled<% } %>" id="<%= locals.session.guilds[i].id %>">
                     <div class="top">
-                        <img src="https://cdn.discordapp.com/icons/<%= locals.session.guilds[i].id %>/<%= locals.session.guilds[i].icon %>.jpg" alt="Icon" class="icon">
+                        <img src="https://cdn.discordapp.com/icons/<%= locals.session.guilds[i].id %>/<%= locals.session.guilds[i].icon %>.jpg?size=256" alt="Icon" class="icon">
                         <h2 class="name"><%= locals.session.guilds[i].name %></h2>
                         <a class="arrow" href="javascript:void(0);"><i class="fas fa-angle-down"></i></a>
                     </div>
@@ -23,8 +23,8 @@
                             <div class="input">
                                 <label for="prefix">Prefix: </label>
                                 <input type="text" name="prefix" value="!?" placeholder="Example: !?" id="prefix">
-                                <!--<input type="checkbox" name="prefixToggle" checked id="prefix-toggle">-->
                             </div>
+                            <p class="response"></p>
                         </div>
                         <div class="bottom">
                             <div class="btns">
