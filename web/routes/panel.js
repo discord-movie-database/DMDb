@@ -22,7 +22,22 @@ panel.get('/login', async (req, res) => {
     // Get user guild information.
     const { body: guilds } = await superagent.get(config.web.guildsUri).set('Authorization', req.session.token);
     // Filter guilds.
-    req.session.guilds = guilds.filter((guild) => guild.owner);
+    req.session.guilds = {};
+    for (let i = 0; i < guilds.length; i++) {
+        // Check if owner.
+        if (!guilds[i].owner) continue;
+
+        // Get guild from database.
+        const guildDB = await db.getGuild(guilds[i].id).catch((err) => console.log(err));
+        // Get if guild is in database.
+        if (!guildDB) continue;
+
+        // Merge user guild and guild database information.
+        guilds[i] = {...guilds[i], ...guildDB};
+
+        // Add guild to session.
+        req.session.guilds[guilds[i].id] = guilds[i];
+    }
 
     // Logged in.
     req.session.authenticated = true;
@@ -54,39 +69,29 @@ panel.get('/', (req, res) => {
 panel.post('/guild/:id/update', async (req, res) => {
     // Check if logged in.
     if (!req.session.authenticated) return res.json({error: 'Not logged in.'});
-    // Check if user is the owner.
-    var permission = false;
-    for (var i = 0; i < req.session.guilds.length; i++) if (req.session.guilds[i].id === req.params.id) permission = true;
-    if (!permission) return res.json({error: 'No permission.'});
+    // Check if guild is in session.
+    if (!req.session.guilds[req.params.id]) return res.json({error: 'Guild not in session.'});
 
-    // Get guild from database.
-    let guildDB = null;
-    try {
-        guildDB = await db.getGuild(req.params.id);
-    } catch (err) {
-        console.log(err);
-    }
-    // Check if guild is in database.
-    if (!guildDB) return res.json({error: 'Guild not found in database. Try executing a command in the guild and try again.'});
-
+    // *-- PREFIX --*
+    //
     // Check if there's a prefix query.
     if (!req.body.prefix) return res.json({error: 'Prefix required.'});
+    // Check if prefix is the same as current.
+    if (req.body.prefix === req.session.guilds[req.params.id].prefix) return res.json({error: 'New prefix same as current.'});
     // Check if prefix is valid.
     if (!/^[a-z0-9!"£$%^&*()_+=-\[\];'#:@~<>?\/.,\\`¬]{1,30}$/i.test(req.body.prefix)) return res.json({error: 'Invalid prefix. Must be 1-30 characters long and only contain a-z 0-9 !"£$%^&*()_+=-[];\'#:@~<>?/.,\`¬'});
     // Update prefix.
     req.body.prefix = req.body.prefix.trim();
 
     // Update database.
-    let guildUpdateDB = null;
-    try {
-        guildUpdateDB = await db.updateGuild(req.params.id, {
-            prefix: req.body.prefix
-        });
-    } catch (err) {
-        console.log(err);
-    };
+    const guildUpdateDB = await db.updateGuild(req.params.id, {
+        prefix: req.body.prefix
+    }).catch((err) => console.error(err));
     // Check if update was successful.
-    if (!guildUpdateDB) return res.json({error: 'Cannot update database.'});
+    if (!guildUpdateDB || guildUpdateDB.skipped) return res.json({error: 'Cannot update this guild.'});
+
+    // Update session settings.
+    req.session.guilds[req.params.id].prefix = req.body.prefix;
 
     // Success.
     return res.json({success: true});

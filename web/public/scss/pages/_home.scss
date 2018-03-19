@@ -42,6 +42,14 @@
         .btn-2 {
             background-color: $primary-yellow;
             color: $white;
+
+            .online {
+                display: none;
+                font-size: 12px;
+                font-weight: 600;
+                color: $really-light-grey;
+                margin-left: 3px;
+            }
         }
     }
 

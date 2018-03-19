@@ -46,11 +46,3 @@ e.list.carbon = async (count) => {
         'servercount': count
     }).catch((err) => { log.error(err, `Cannot post new server count to carbon.`) });
 }
-
-/* e.stats.update = async (bot) => {
-    
-}
-
-e.stats.get = async () => {
-
-} */

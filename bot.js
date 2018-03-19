@@ -24,8 +24,8 @@ bot.on("ready", () => {
 
     if (process.argv[2] !== "dev") handler.stats.list.all(bot);
 
-    console.log('DMDb Ready!');
-    if (main.dev) console.log('Development version.');
+    console.log(`DMDb ready! In ${bot.guilds.size} guilds.`);
+    if (main.dev) console.log('Dev version.');
 
     loaded = 1;
 });
@@ -45,7 +45,7 @@ bot.on("messageCreate", async (msg) => {
     }
 
     if (guild && guild.prefix) prefix = guild.prefix;
-    if (msg.content.startsWith(`<@${bot.user.id}> `)) prefix = `<@${bot.user.id}> `
+    if (msg.content.startsWith(`<@${bot.user.id}> `)) prefix = `<@${bot.user.id}>`;
     if (!msg.content.startsWith(prefix)) return;
 
     let user = await handler.db.getUser(msg.author.id);
@@ -54,8 +54,8 @@ bot.on("messageCreate", async (msg) => {
         user = await handler.db.getUser(msg.author.id);
     }
 
-    let cmdName = msg.content.toLowerCase().slice(prefix.length).split(' ')[0];
-    let msgSplit = msg.content.split(' ').slice(1);
+    let msgSplit = msg.content.slice(prefix.length).split(' ');
+    let cmdName = msgSplit[0].toLowerCase();
 
     if (!main.commands[cmdName]) return;
     if (main.commands[cmdName].settings.restricted && msg.author.id !== config.botOwnerId) return;

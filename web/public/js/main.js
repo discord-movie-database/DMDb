@@ -16,6 +16,12 @@ $(document).ready(function() {
 
 
 
+$.get('https://discordapp.com/api/guilds/394643227770093568/widget.json', function(resp) {
+    $('.online').text(resp.members.length + ' Online');
+});
+
+
+
 $('.guild .arrow').click(function() {
     $(this).parent().before().parent().toggleClass('toggled');
 });

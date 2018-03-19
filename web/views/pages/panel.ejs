@@ -8,32 +8,36 @@
         <div id="panel" class="panel page">
             <div class="hello">
                 <h1>Hello, <img class="pp" src="https://cdn.discordapp.com/avatars/<%= locals.session.user.id %>/<%= locals.session.user.avatar %>.jpg?size=256"></img> <span class="username"><%= locals.session.user.username %></span>!</h1>
-                <p>Choose a guild you want to update to suit you and your guild. The panel shows all the guilds you're owner of. You won't be able to update a guild the bot isn't in.</p>
+                <p>Change the settings for a guild to suit you. You can only change settings if you're the owner of the guild.</p>
             </div>
             <div class="guilds">
-                <% for (var i = 0; i < locals.session.guilds.length; i++) { %>
-                <form class="guild <% if (locals.session.guilds.length === 1) { %>toggled<% } %>" id="<%= locals.session.guilds[i].id %>">
-                    <div class="top">
-                        <img src="https://cdn.discordapp.com/icons/<%= locals.session.guilds[i].id %>/<%= locals.session.guilds[i].icon %>.jpg?size=256" alt="Icon" class="icon">
-                        <h2 class="name"><%= locals.session.guilds[i].name %></h2>
-                        <a class="arrow" href="javascript:void(0);"><i class="fas fa-angle-down"></i></a>
-                    </div>
-                    <div class="hidden">
-                        <div class="settings">
-                            <div class="input">
-                                <label for="prefix">Prefix: </label>
-                                <input type="text" name="prefix" value="!?" placeholder="Example: !?" id="prefix">
-                            </div>
-                            <p class="response"></p>
+                <% if (Object.keys(locals.session.guilds).length === 0) { %>
+                    <h2>There are no guilds available for you to edit. <a href="/invite">Invite</a> the bot to your guild.</h2>
+                <% } %>
+
+                <% for (i in locals.session.guilds) { %>
+                    <form class="guild <% if (Object.keys(locals.session.guilds).length === 1) { %>toggled<% } %>" id="<%= locals.session.guilds[i].id %>">
+                        <div class="top">
+                            <img src="https://cdn.discordapp.com/icons/<%= locals.session.guilds[i].id %>/<%= locals.session.guilds[i].icon %>.jpg?size=256" alt="Icon" class="icon">
+                            <h2 class="name"><%= locals.session.guilds[i].name %></h2>
+                            <a class="arrow" href="javascript:void(0);"><i class="fas fa-angle-down"></i></a>
                         </div>
-                        <div class="bottom">
-                            <div class="btns">
-                                <input type="submit" value="Cancel" name="cancel" class="btn btn-1" />
-                                <input type="submit" value="Save" name="save" class="btn btn-2" />
+                        <div class="hidden">
+                            <div class="settings">
+                                <div class="input">
+                                    <label for="prefix">Prefix: </label>
+                                    <input type="text" name="prefix" value="<%= locals.session.guilds[i].prefix || '!?' %>" placeholder="Example: !?" id="prefix">
+                                </div>
+                                <p class="response"></p>
+                            </div>
+                            <div class="bottom">
+                                <div class="btns">
+                                    <input type="submit" value="Cancel" name="cancel" class="btn btn-1" />
+                                    <input type="submit" value="Save" name="save" class="btn btn-2" />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
                 <% } %>
             </div>
         </div>

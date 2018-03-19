@@ -1,5 +1,7 @@
 global.config = require('../config.json');
 
+if (process.argv[2] && process.argv[2] === 'dev') config.web.redirectUri = 'http://lvh.me/panel/login';
+
 const express = require('express');
 const ejs = require('ejs');
 const session = require('express-session');

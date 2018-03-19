@@ -11,12 +11,22 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
 
     bot.createMessage(msg.channel.id, {
         embed: {
-            title: 'Guild Configuration',
-            description: 'You can change these settings at the web panel: <https://dmdb.me/panel>.',
+            title: msg.channel.guild.name,
+            description: 'Customize this guild (requires `manage server` permission): <https://dmdb.me/panel>',
             fields: [
                 {
+                    name: 'Premium',
+                    value: guild.premium ? 'True' : 'False',
+                    inline: true
+                },
+                {
+                    name: 'Commands Executed',
+                    value: guild.count || '-',
+                    inline: true
+                },
+                {
                     name: 'Prefix',
-                    value: guild.prefix || `${config.prefix} *(default)*`,
+                    value: guild.prefix || `${config.prefix} (Default)`,
                     inline: true
                 }
             ],
