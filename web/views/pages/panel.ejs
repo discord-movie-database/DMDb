@@ -8,11 +8,11 @@
         <div id="panel" class="panel page">
             <div class="hello">
                 <h1>Hello, <img class="pp" src="https://cdn.discordapp.com/avatars/<%= locals.session.user.id %>/<%= locals.session.user.avatar %>.jpg?size=256"></img> <span class="username"><%= locals.session.user.username %></span>!</h1>
-                <p>Change the settings for a guild to suit you. You can only change settings if you're the owner of the guild.</p>
+                <p>Change some settings to suit you and your guild. You can only do this if your the guild owner.</p>
             </div>
             <div class="guilds">
                 <% if (Object.keys(locals.session.guilds).length === 0) { %>
-                    <h2>There are no guilds available for you to edit. <a href="/invite">Invite</a> the bot to your guild.</h2>
+                    <h2>There are no guilds available that you can edit. <a href="/invite">Invite</a> the bot to your guild.</h2>
                 <% } %>
 
                 <% for (i in locals.session.guilds) { %>
