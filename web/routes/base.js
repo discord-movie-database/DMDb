@@ -17,8 +17,8 @@ base.get('/invite', (req, res) => {
 base.get('/guild', (req, res) => {
     res.redirect('https://discord.gg/fwAxQjV');
 });
-base.get('/github', (req, res) => {
-    res.redirect('https://github.com/dumplingsr/IMDb');
+base.get('/gitlab', (req, res) => {
+    res.redirect('https://gitlab.com/dumplings/DMDb');
 });
 base.get('/impulse', (req, res) => {
     res.redirect('https://discordapp.com/oauth2/authorize?client_id=409327998182096907&permissions=3148800&scope=bot');
