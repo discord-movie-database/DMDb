@@ -64,21 +64,21 @@ api.getPoster = async (name, year) => {
 
 api.getHDPoster = async (name) => {
     const errorMsg = 'Cannot get poster from the API.';
-    const errorMsg404 = 'Title doesn\'t exist or doesn\'t have a poster.';
-
-    const type = getType(name);
+    const invalidType = 'Must be a IMDb ID.';
 
     const poster = {};
-    try {
-        const raw = await superagent.get(`${omdbPoster}?i=${name}&h=600${omdbToken}`).buffer(true).parse(superagent.parse.image);
-        if (raw.statusCode != 200) poster.Error =  errorMsg;
-        if (raw.statusCode === 404) poster.Error = errorMsg404;
 
-        poster.data = raw.body;
-    } catch (err) {
-        log.error(err, errorMsg);
-        poster.Error = errorMsg;
+    const type = getType(name);
+    if (type !== 'i') {
+        poster.Error = invalidType;
+
+        return poster;
     }
+
+    const img = await superagent.get(`${omdbPoster}?i=${name}&h=600${omdbToken}`).catch((err) => {});
+    if (!img || img.statusCode != 200) poster.Error =  errorMsg;
+
+    if (img) poster.data = img.body;
 
     return poster;
 }

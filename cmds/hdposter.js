@@ -1,6 +1,6 @@
 const c = module.exports = {};
 c.settings = {
-    "restricted": true,
+    "restricted": false,
     "hidden": true,
     "usage": "IMDb ID",
     "description": "Get a poster based on IMDb ID. *(Slow)*",
@@ -16,10 +16,9 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     if (poster && poster.Error) return message.edit(`❌ ${poster.Error}`);
     if (!poster) return message.edit('❌ Unknown Error.');
 
-    message.edit({
-        "content": "",
-        "file": {
-            "file": poster
-        }
+    message.delete();
+    bot.createMessage(msg.channel.id, '', {
+        'file': poster.data,
+        'name': cmdArgs[0] + '.png'
     });
 }
