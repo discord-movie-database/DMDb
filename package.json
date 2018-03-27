@@ -1,0 +1,16 @@
+{
+    "name": "dmdb",
+    "description": "Discord Movie Database - A bot that retrieves information about movies from IMDb.",
+    "private": true,
+    "dependencies": {
+        "body-parser": "^1.18.2",
+        "chalk": "^2.3.2",
+        "cheerio": "^1.0.0-rc.2",
+        "ejs": "^2.5.8",
+        "eris": "^0.8.5",
+        "express": "^4.16.3",
+        "express-session": "^1.15.6",
+        "rethinkdbdash": "^2.3.31",
+        "superagent": "^3.8.2"
+    }
+}
