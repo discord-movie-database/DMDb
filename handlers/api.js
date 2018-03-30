@@ -3,99 +3,33 @@ const log = require('./log.js');
 
 const omdb = 'http://omdbapi.com/';
 const omdbPoster = 'http://img.omdbapi.com/';
-const omdbToken = `&apikey=${config.token.omdb}`;
 const bitly = 'https://api-ssl.bitly.com/v3/shorten';
 
 const api = module.exports = {};
 
 const getType = (name) => {
-    let type = 't';
-    if (name.startsWith('tt')) type = 'i';
-
-    return type;
+    return name.startsWith('tt') ? 'i' : 't';
 }
 
-api.getTitle = async (name, year) => {
-    const errorMsg = `Cannot get title ${name} from the API.`;
-
-    const type = getType(name);
-
-    let title = {};
-    try {
-        const raw = await superagent.get(`${omdb}?${type}=${name}&plot=short&r=json&y=${year}${omdbToken}`);
-        if (raw.statusCode != 200) title.Error = `${errorMsg} Try again later.`;
-
-        title = raw.body;
-    } catch (err) {
-        log.error(err, errorMsg);
-        title.Error = `${errorMsg} Try again later.`;
-    }
-
-    return title;
+api.get = async(request) => {
+    let error;
+    const { body: response } = await superagent.get(request).catch(e => error = e);
+    
+    if (error || !response) return {Error: error || 'There was an issue getting the information from the API. Try again later.'};
+    return response;
 }
 
-api.searchTitles = async (query, year, page) => {
-    const errorMsg = 'Cannot get search results from the API.';
+api.omdb = async (query) => await api.get(`${omdb}?${query}&apikey=${config.token.omdb}`);
+api.shortUrl = async (longUrl) => await api.get(`${bitly}?access_token=${config.token.bitly}&longUrl=${longUrl}&format=json`);
 
-    let search = {};
-    try {
-        const raw = await superagent.get(`${omdb}?s=${query}&y=${year}&page=${page}${omdbToken}`);
-        if (raw.statusCode != 200) search.Error = `${errorMsg} Try again later.`;
+api.getTitle = async (name, year) => await api.omdb(`${getType(name)}=${name}&y=${year}&plot=short&r=json`);
+api.searchTitles = async (query, year, page) => await api.omdb(`s=${query}&y=${year}&page=${page}`);
 
-        search = raw.body;
-    } catch (err) {
-        log.error(err, errorMsg);
-        search.Error = `${errorMsg} Try again later.`;
-    }
+api.getHDPoster = async (id) => {
+    if (getType(id) !== 'i') return {Error: 'Must be an IMDb ID.'};
 
-    return search;
-}
+    const image = await api.get(`${omdbPoster}?i=${id}&h=600&apikey=${config.token.omdb}`);
+    if (image.Error) return {Error: image.Error};
 
-api.getPoster = async (name, year) => {
-    const title = await api.getTitle(name, year);
-
-    const poster = {};
-    poster.Poster = title.Poster;
-    poster.Response = title.Response;
-    if (title.Error) poster.Error = title.Error;
-
-    return poster;
-}
-
-api.getHDPoster = async (name) => {
-    const errorMsg = 'Cannot get poster from the API.';
-    const invalidType = 'Must be a IMDb ID.';
-
-    const poster = {};
-
-    const type = getType(name);
-    if (type !== 'i') {
-        poster.Error = invalidType;
-
-        return poster;
-    }
-
-    const img = await superagent.get(`${omdbPoster}?i=${name}&h=600${omdbToken}`).catch((err) => {});
-    if (!img || img.statusCode != 200) poster.Error =  errorMsg;
-
-    if (img) poster.data = img.body;
-
-    return poster;
-}
-
-api.shortUrl = async (url) => {
-    const errorMsg = 'Cannot shorten URL.';
-
-    let data = {};
-    try {
-        data = await superagent.get(`${bitly}?access_token=${config.token.bitly}&longUrl=${url}&format=json`);
-        if (data.statusCode != 200) data.Error = errorMsg;
-
-        data = data.body.data;
-    } catch (err) {
-        log.error(err, errorMsg);
-        data.Error = errorMsg;
-    }
-
-    return data;
+    return image;
 }

@@ -13,22 +13,22 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let argsJoin = flags.args.join(' ');
 
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Title name or IMDb ID required.');
-    let message = await bot.createMessage(msg.channel.id, `ℹ Getting information for the title '**${argsJoin}**'...`);
+    const message = await bot.createMessage(msg.channel.id, `ℹ Getting information for the title '**${argsJoin}**'...`);
 
     const title = await u.api.getTitle(argsJoin, year);
-    if (title.Response && title.Response === 'False') return message.edit('❌ No results found.');
+    if (title.Response === 'False') return message.edit(`❌ ${title.Error}`);
     if (title.Error) return (`❌ ${title.Error}`);
 
-    let poster = title.Poster;
-    let boxOffice = title.BoxOffice || 'N/A';
+    const poster = title.Poster;
+    const boxOffice = title.BoxOffice || 'N/A';
     let website = title.Website || 'N/A';
     if (website !== 'N/A') {
         website = await u.api.shortUrl(website);
-        website = website.url;
+        if (!website.Error) website = website.data.url;
     }
-    if (title.Poster === 'N/A') poster = '';
-    
-    message.edit({embed: {
+    if (title.Poster === 'N/A') title.Poster = '';
+
+    u.embed.edit(message, {
         title: title.Title,
         description: title.Plot,
         fields: [{
@@ -100,14 +100,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
             value: title.imdbID,
             inline: true
         }],
-        color: 0xE6B91E,
         url: `http://www.imdb.com/title/${title.imdbID}/`,
-        thumbnail: {
-            url: poster
-        }
-    }, "content": ""}).catch((err) => {
-        message.edit('❌ There was an error with the embed. Try a different movie or try again later.');
-        
-        log.error(err);
+        thumbnail: poster
     });
 }

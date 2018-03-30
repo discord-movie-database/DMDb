@@ -13,18 +13,17 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     const argsJoin = flags.args.join(' ');
 
     if (!cmdArgs[0]) return bot.createMessage(msg.channel.id, '❌ Title name or IMDb ID required.');
-
     const message = await bot.createMessage(msg.channel.id, `ℹ Getting poster for the title '**${argsJoin}**'...`);
     
     const title = await u.api.getTitle(argsJoin, year);
-    if (title.Response && title.Response === 'False') return message.edit('❌ No results found.');
+    if (title.Response === 'False') return message.edit(`❌ ${title.Error}`);
     if (title.Error) return (`❌ ${title.Error}`);
 
     const posterRes = title.Poster;
     if (posterRes === 'N/A') return message.edit('❌ No poster available for this title.');
 
     const shortUrl = await u.api.shortUrl(posterRes);
-    if (shortUrl.Error) message.edit(`${posterRes} *There was an issue with the bit.ly API so we couldn't shorten the url for you.*`);
+    if (shortUrl.Error) return message.edit(posterRes);
 
-    message.edit(`${shortUrl.url}`);
+    message.edit(`${shortUrl.data.url}`);
 }

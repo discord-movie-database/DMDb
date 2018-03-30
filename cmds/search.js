@@ -32,15 +32,10 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     }
 
     if (year.length > 0) year = ` in the year **${year}**`;
-    
-    message.edit({embed: {
+
+    u.embed.edit(message, {
         title: argsJoin[0].toUpperCase() + argsJoin.slice(1),
-        description: `Showing **${search.Search.length}** results out of **${search.totalResults}** at page **${page}**${year}.\n*To learn how to change the page use the command \`!?help search\`.*`,
-        fields: fields,
-        color: 0xE6B91E
-    }, "content": ""}).catch((err) => {
-        message.edit('❌ There was an error with the embed. Try a different movie or try again later.');
-        
-        console.error(err);
+        desc: `Showing **${search.Search.length}** results out of **${search.totalResults}** at page **${page}**${year}.\n*To learn how to change the page use the command \`${guild.prefix || config.prefix}help search\`.*`,
+        fields: fields
     });
 }

@@ -10,9 +10,11 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     let argsJoin = cmdArgs.join(' ');
 
     try {
-        let evaled = eval(argsJoin);
+        let evaled = await eval(argsJoin);
+
+        if (typeof evaled === 'object') evaled = JSON.stringify(evaled);
         
-        bot.createMessage(msg.channel.id, evaled);
+        bot.createMessage(msg.channel.id, evaled || 'No content to return.');
     } catch (err) {
         bot.createMessage(msg.channel.id, `❌ ${err}`);
     }
