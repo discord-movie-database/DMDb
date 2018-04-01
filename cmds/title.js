@@ -19,14 +19,13 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
     if (title.Response === 'False') return message.edit(`❌ ${title.Error}`);
     if (title.Error) return (`❌ ${title.Error}`);
 
-    const poster = title.Poster;
-    const boxOffice = title.BoxOffice || 'N/A';
+    title.BoxOffice = title.BoxOffice || 'N/A';
+    if (title.Poster === 'N/A') title.Poster = '';
     let website = title.Website || 'N/A';
     if (website !== 'N/A') {
         website = await u.api.shortUrl(website);
         if (!website.Error) website = website.data.url;
     }
-    if (title.Poster === 'N/A') title.Poster = '';
 
     u.embed.edit(message, {
         title: title.Title,
@@ -81,7 +80,7 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
             inline: true
         }, {
             name: 'Box Office', // 13
-            value: boxOffice,
+            value: title.BoxOffice,
             inline: true
         }, {
             name: 'Rating', // 15
@@ -101,6 +100,6 @@ c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
             inline: true
         }],
         url: `http://www.imdb.com/title/${title.imdbID}/`,
-        thumbnail: poster
+        thumbnail: title.Poster
     });
 }

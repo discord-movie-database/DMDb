@@ -7,9 +7,7 @@ const bitly = 'https://api-ssl.bitly.com/v3/shorten';
 
 const api = module.exports = {};
 
-const getType = (name) => {
-    return name.startsWith('tt') ? 'i' : 't';
-}
+const getType = (name) => name.startsWith('tt') ? 'i' : 't';
 
 api.get = async(request) => {
     let error;
