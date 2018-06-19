@@ -5,6 +5,12 @@
     margin-top: 10px auto;
     
     .hello {
+        .pp {
+            border-radius: 50%;
+            width: 100px;
+            margin-bottom: 8px;
+        }
+
         h1 {
             font-size: 29px;
             color: $white;
@@ -14,20 +20,12 @@
 
             .username {
                 color: $primary-yellow-light;
-                margin-right: 5px;
-            }
-
-            .pp {
-                display: block;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                margin: 0 5px;
+                margin-left: 4px;
             }
         }
 
         p {
-            margin-top: 15px;
+            margin-top: 17px;
         }
     }
     

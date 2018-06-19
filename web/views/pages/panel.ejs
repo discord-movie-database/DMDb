@@ -7,8 +7,10 @@
 
         <div id="panel" class="panel page">
             <div class="hello">
-                <h1>Hello, <img class="pp" src="https://cdn.discordapp.com/avatars/<%= locals.session.user.id %>/<%= locals.session.user.avatar %>.jpg?size=256"></img> <span class="username"><%= locals.session.user.username %></span>!</h1>
-                <p>Change some settings to suit you and your guild. You can only do this if your the guild owner.</p>
+                <img class="pp" src="https://cdn.discordapp.com/avatars/<%= locals.session.user.id %>/<%= locals.session.user.avatar %>.jpg?size=256"></img>
+                <h1>Hello, <span class="username"><%= locals.session.user.username %></span></h1>
+
+                <p>Welcome to your web panel. Here you can customise the bot to suit you and your guild(s).</p>
             </div>
             <div class="guilds">
                 <% if (Object.keys(locals.session.guilds).length === 0) { %>
