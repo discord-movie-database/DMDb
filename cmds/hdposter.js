@@ -1,10 +1,10 @@
 const c = module.exports = {};
 c.settings = {
     "restricted": false,
-    "hidden": true,
+    "hidden": false,
     "usage": "IMDb ID",
-    "description": "Get a poster based on IMDb ID. *(Slow)*",
-    "large_description": "Get just the poster for a title in HD. You can only use the titles IMDb ID for this command."
+    "description": "Get a poster based on IMDb ID.",
+    "large_description": "Get just the poster for a title in **HD**. You can only use the title's IMDb ID for this command."
 };
 
 c.process = async (bot, msg, cmdArgs, guild, user, config, u) => {
