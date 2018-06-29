@@ -1,6 +1,6 @@
 {
     "name": "dmdb",
-    "description": "Discord Movie Database - A bot that retrieves information about movies from IMDb.",
+    "description": "Discord Movie Database",
     "private": true,
     "dependencies": {
         "body-parser": "^1.18.2",
