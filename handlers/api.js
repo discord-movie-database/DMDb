@@ -4,6 +4,7 @@ const log = require('./log.js');
 const omdb = 'http://omdbapi.com/';
 const omdbPoster = 'http://img.omdbapi.com/';
 const bitly = 'https://api-ssl.bitly.com/v3/shorten';
+const tmdb = 'https://api.themoviedb.org/3/';
 
 const api = module.exports = {};
 
@@ -30,4 +31,30 @@ api.getHDPoster = async (id) => {
     if (image.Error) return {Error: image.Error};
 
     return image;
+}
+
+
+
+
+api.tmdb = {};
+
+api.tmdb.getMovie = async (query) => {
+    const type = getType(query);
+    let movie;
+
+    if (type === 'i') {
+        movie = await api.get(`${tmdb}find/${query}?api_key=${config.token.tmdb}&language=en-US&external_source=imdb_id`);
+        return movie.Error ? movie : movie['movie_results'][0] ? movie['movie_results'][0] : {Error: 'No results found.'}; 
+    }
+
+    movie = await api.get(`${tmdb}search/movie?api_key=${config.token.tmdb}&language=en-US&query=${query}&page=1&include_adult=true`);
+    return movie.Error ? movie : movie.results[0] ? movie.results[0] : {Error: 'No results found.'}; 
+}
+
+api.tmdb.similar = async (query) => {
+    const movie = await api.tmdb.getMovie(query);
+    if (movie.Error) return movie;
+
+    const movies = await api.get(`${tmdb}movie/${movie.id}/similar?api_key=${config.token.tmdb}&language=en-US&page=1`);
+    return movies.results;
 }
