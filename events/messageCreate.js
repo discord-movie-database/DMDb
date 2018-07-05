@@ -7,7 +7,7 @@ class MsgEvent {
         this.process = this.process.bind(this);
     }
 
-    async process(message) {
+    process(message) {
         if (message.bot) return;
         if (!message.content.startsWith(this.client.prefix)) return;
 
@@ -16,13 +16,17 @@ class MsgEvent {
         message.arguments = messageSplit.slice(1);
 
         if (!this.client.commands[commandName]) return;
+        const command = this.client.commands[commandName];
+
+        if (command.info.restricted && this.client.config.options.bot.developers.indexOf(message.author.id) < 0)
+            return this.client.handlers.embed.error(message.channel.id, 'No Permission.');
 
         try {
-            await this.client.commands[commandName].process(message);
+            command.process(message);
         } catch (err) {
             this.client.handlers.log.error(err);
 
-            return await this.client.handlers.embed.error(message.channel.id, `Error executing command: ${commandName}`);
+            return this.client.handlers.embed.error(message.channel.id, `Error executing command: ${commandName}`);
         }
 
         this.client.handlers.log.info(`${message.author.id} executed command ${chalk.bold(commandName)} in ${message.channel.guild ? message.channel.guild.id : 'direct message'}.`);
