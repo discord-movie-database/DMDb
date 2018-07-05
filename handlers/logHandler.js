@@ -1,8 +1,8 @@
 const chalk = require('chalk');
 
 class LogHandler {
-    constructor(client) {
-        this.client = client;
+    constructor() {
+        this.error = this.error.bind(this);
     }
 
     _format(message) {
