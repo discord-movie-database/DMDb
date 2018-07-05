@@ -38,7 +38,7 @@ class LoadHandler {
 
         this.client.editStatus({ 'name': this.client.config.options.bot.status });
 
-        this.client.handlers.log.success('Bot Finished Loading.');
+        this.client.handlers.log.success('Bot Finished Loading.\n');
     }
 
     reload() {
