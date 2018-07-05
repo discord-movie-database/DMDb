@@ -24,7 +24,7 @@ class LogHandler {
     }
 
     error(err, message) {
-        console.log(this._format(`${chalk.black.bgRed(' ERROR ')} ${message || ''}\n${err}\n`));
+        console.log(this._format(`${chalk.black.bgRed(' ERROR ')} ${message || ''} ${err}.`));
     }
 }
 
