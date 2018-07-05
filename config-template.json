@@ -1,0 +1,34 @@
+{
+    "tokens": {
+        "discord": {
+            "main": "",
+            "dev": ""
+        },
+        "api": {
+            "omdb": "",
+            "tmdb": ""
+        },
+        "botlist": {
+            "dbl": "",
+            "dbots": ""
+        }
+    },
+    "options": {
+        "client": {
+            "autoreconnect": true,
+            "maxShards": 1,
+            "disableEveryone": true,
+            "disableEvents": {
+                "TYPING_START": true,
+                "PRESENCE_UPDATE": true
+            }
+        },
+        "bot": {
+            "prefix": "",
+            "status": "",
+            "embed": {
+                "color": ""
+            }
+        }
+    }
+}

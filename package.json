@@ -1,0 +1,12 @@
+{
+  "name": "dmdb",
+  "description": "Discord Movie Database (V2)",
+  "author": "Dumplings",
+  "main": "index.js",
+  "private": true,
+  "dependencies": {
+    "chalk": "^2.4.1",
+    "eris": "^0.8.6",
+    "needle": "^2.2.1"
+  }
+}
