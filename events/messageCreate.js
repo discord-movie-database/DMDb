@@ -1,3 +1,5 @@
+const chalk = require('chalk');
+
 class MsgEvent {
     constructor(client) {
         this.client = client;
@@ -9,11 +11,11 @@ class MsgEvent {
         if (message.bot) return;
         if (!message.content.startsWith(this.client.prefix)) return;
 
-        const messageSplit = message.content.slice(' ');
+        const messageSplit = message.content.split(' ');
         const commandName = messageSplit[0].slice(this.client.prefix.length);
         message.arguments = messageSplit.slice(1);
 
-        if (!commandName && this.client.commands[commandName]) return;
+        if (!this.client.commands[commandName]) return;
 
         try {
             await this.client.commands[commandName].process(message);
