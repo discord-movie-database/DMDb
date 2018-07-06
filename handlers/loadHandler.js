@@ -21,6 +21,8 @@ class LoadHandler {
     _delete(object, directory, name, type) {
         if (!this.client[object][name]) return false;
 
+        if (object === 'events') this.client.removeListener(name, this.client[object][name].process);
+
         delete this.client[object][name];
         delete require.cache[require.resolve(`${directory}${name}.${type}`)];
 
@@ -42,8 +44,18 @@ class LoadHandler {
     }
 
     reload() {
-        this.reloadEvents();
-        this.reloadCommands();
+        let success = true;
+
+        try {
+            this.reloadEvents();
+            this.reloadCommands();
+        } catch (err) {
+            success = false;
+
+            this.client.handlers.log.error(err);
+        }
+
+        return success;
     }
 
     // EVENTS //
@@ -53,6 +65,8 @@ class LoadHandler {
         this.client.events[eventName] = new Event(this.client);
         
         this.client.on(eventName, this.client.events[eventName].process);
+
+        this.client.handlers.log.info(`Loaded event: ${eventName}`);
     }
 
     loadEvents() {
@@ -71,8 +85,10 @@ class LoadHandler {
     }
 
     unloadEvents() {
-        for (eventName in this.client.events)
+        for (let eventName in this.client.events) {
+
             this.unloadEvent(eventName);
+        }
     }
 
     reloadEvents() {
@@ -85,6 +101,8 @@ class LoadHandler {
     loadCommand(commandName) {
         const Command = require(`${this.commandDirectory}${commandName}.js`);
         this.client.commands[commandName] = new Command(this.client);
+
+        this.client.handlers.log.info(`Loaded command: ${commandName}`);
     }
 
     loadCommands() {
@@ -103,7 +121,7 @@ class LoadHandler {
     }
 
     unloadCommands() {
-        for (commandName in this.client.commands)
+        for (let commandName in this.client.commands)
             this.unloadCommand(commandName);
     }
 
