@@ -12,13 +12,13 @@ class MsgEvent {
         if (!message.content.startsWith(this.client.prefix)) return;
 
         const messageSplit = message.content.split(' ');
-        const commandName = messageSplit[0].slice(this.client.prefix.length);
+        const commandName = messageSplit[0].toLowerCase().slice(this.client.prefix.length);
         message.arguments = messageSplit.slice(1);
 
         if (!this.client.commands[commandName]) return;
         const command = this.client.commands[commandName];
 
-        if (command.info.restricted && this.client.config.options.bot.developers.indexOf(message.author.id) < 0)
+        if (command.info.restricted && !this.client.config.options.bot.developers.includes(parseInt(message.author.id)))
             return this.client.handlers.embed.error(message.channel.id, 'No Permission.');
 
         try {
