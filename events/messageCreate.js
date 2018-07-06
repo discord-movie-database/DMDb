@@ -7,6 +7,11 @@ class MsgEvent {
         this.process = this.process.bind(this);
     }
 
+    _checkPermission(command, message) {
+        return command.info.restricted
+        && !this.client.config.options.bot.developers.includes(parseInt(message.author.id));
+    }
+
     process(message) {
         if (message.bot) return;
         if (!message.content.startsWith(this.client.prefix)) return;
@@ -18,7 +23,7 @@ class MsgEvent {
         if (!this.client.commands[commandName]) return;
         const command = this.client.commands[commandName];
 
-        if (command.info.restricted && !this.client.config.options.bot.developers.includes(parseInt(message.author.id)))
+        if (this._checkPermission(command, message))
             return this.client.handlers.embed.error(message.channel.id, 'No Permission.');
 
         try {
