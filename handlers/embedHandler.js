@@ -11,7 +11,7 @@ class EmbedHandler {
                 'title': embed.title || '',
                 'description': embed.description || '',
                 'fields': embed.fields || [],
-                'color': parseInt(this.client.config.options.bot.embed.color),
+                'color': embed.color || parseInt(this.client.config.options.bot.embed.color),
                 'url': embed.url || '',
                 'thumbnail': {
                     'url': embed.thumbnail
@@ -32,10 +32,19 @@ class EmbedHandler {
     }
 
     error(channelID, message) {
-        return this.client.createMessage(channelID, this._template({
-            title: 'Error',
-            description: message
-        })).catch(this.client.handlers.log.error);
+        return this.create(channelID, {
+            'title': 'Error',
+            'description': message,
+            'color': 0xFF3232
+        });
+    }
+
+    success(channelID, message) {
+        return this.create(channelID, {
+            'title': 'Success',
+            'description': message,
+            'color': 0x329932
+        });
     }
 }
 
