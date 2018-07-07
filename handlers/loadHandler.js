@@ -47,8 +47,12 @@ class LoadHandler {
         let success = true;
 
         try {
+            this.client.handlers.log.info('Reloading...');
+
             this.reloadEvents();
             this.reloadCommands();
+
+            this.client.handlers.log.success('Finished reloading.');
         } catch (err) {
             success = false;
 
