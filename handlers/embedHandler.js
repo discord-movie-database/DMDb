@@ -1,6 +1,10 @@
 class EmbedHandler {
     constructor(client) {
         this.client = client;
+
+        this.colors = {};
+        this.colors.red = 0xFF3232;
+        this.colors.green = 0x329932;
     }
 
     _template(embed) {
@@ -14,37 +18,50 @@ class EmbedHandler {
                 'color': embed.color || parseInt(this.client.config.options.bot.embed.color),
                 'url': embed.url || '',
                 'thumbnail': {
-                    'url': embed.thumbnail
+                    'url': embed.thumbnail || ''
+                },
+                'footer': {
+                    'text': embed.footer || ''
                 }
             },
             'content': embed.content || ''
         }
     }
 
-    edit(message, embed) {
-        return message.edit(this._template(embed))
-                    .catch(this.client.handlers.log.error);
+    _type(message, embed) {
+        if (['string', 'number'].indexOf(typeof message) > -1)
+            return this.create(message, embed);
+        return this.edit(message, embed);
     }
 
     create(channelID, embed) {
         return this.client.createMessage(channelID, this._template(embed))
-                    .catch(this.client.handlers.log.error);
+                          .catch(this.client.handlers.log.error);
     }
 
-    error(channelID, message) {
-        return this.create(channelID, {
+    edit(message, embed) {
+        return message.edit(this._template(embed))
+                      .catch(this.client.handlers.log.error);
+    }
+
+    error(message, content) {
+        const embed = {
             'title': 'Error',
-            'description': message,
-            'color': 0xFF3232
-        });
+            'description': content,
+            'color': this.colors.red
+        };
+
+        return this._type(message, embed);
     }
 
-    success(channelID, message) {
-        return this.create(channelID, {
+    success(message, content) {
+        const embed = {
             'title': 'Success',
-            'description': message,
-            'color': 0x329932
-        });
+            'description': content,
+            'color': this.colors.green
+        };
+
+        return this._type(message, embed);
     }
 }
 
