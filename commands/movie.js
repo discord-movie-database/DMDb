@@ -75,8 +75,7 @@ class TitleCommand extends Command {
             }, {
                 'name': 'TMDb ID',
                 'value': movie.id
-            }].map(field => ({ ...field, 'inline': typeof field.inline === 'boolean' ? field.inline : true })),
-            'footer': `Data sourced from The Movie Database`
+            }].map(field => ({ ...field, 'inline': typeof field.inline === 'boolean' ? field.inline : true }))
         });
     }
 }
