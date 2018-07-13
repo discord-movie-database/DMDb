@@ -11,18 +11,21 @@ class EvalCommand extends Command {
     }
 
     async process(message) {
+        // Check for arguments.
         if (!message.arguments[0])
             return this.client.handlers.embed.error(message.channel.id, 'No Arguments.');
 
-        const argumentsJoin = message.arguments.join(' ');
+        // Response content.
         let evaled;
 
+        // Try eval.
         try {
-            evaled = eval(argumentsJoin);
+            evaled = eval(message.arguments.join(' '));
         } catch (err) {
             evaled = err;
         }
 
+        // Response.
         this.client.handlers.embed.success(message.channel.id, evaled || 'Done.');
     }
 }

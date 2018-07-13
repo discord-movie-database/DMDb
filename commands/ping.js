@@ -11,6 +11,7 @@ class PingCommand extends Command {
     }
 
     async process(message) {
+        // PONG
         this.client.createMessage(message.channel.id, 'Pong!');
     }
 }

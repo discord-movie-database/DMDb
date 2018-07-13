@@ -14,9 +14,11 @@ class InfoCommand extends Command {
     }
 
     async process(message) {
+        // Response.
         this.client.handlers.embed.create(message.channel.id, {
             'title': 'DMDb Information',
-            'description': 'Invite Bot: <https://dmdb.me/invite> | Server: <https://dmdb.me/server>',
+            'description': 'Invite Bot: <https://dmdb.me/invite> | \
+Server: <https://dmdb.me/server>',
             'fields': [{
                 'name': 'Developer',
                 'value': 'Dumplings#7460'

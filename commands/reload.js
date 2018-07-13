@@ -11,10 +11,13 @@ class ReloadCommand extends Command {
     }
 
     async process(message) {
+        // Reload.
         const reload = this.client.handlers.load.reload();
 
-        if (reload) return this.client.handlers.embed.success(message.channel.id, 'Reloaded.');
-        this.client.handlers.embed.error(message.channel.id, 'Reloading.');
+        // Check if successful.
+        if (reload) // Success.
+            return this.client.handlers.embed.success(message.channel.id, 'Reloaded.');
+        this.client.handlers.embed.error(message.channel.id, 'Reloading.'); // Error.
     }
 }
 
