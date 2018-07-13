@@ -13,22 +13,37 @@ class TitleCommand extends Command {
     }
 
     async process(message) {
+        // Check for query.
         if (!message.arguments[0])
-            return this.client.handlers.embed.error(message.channel.id, `${this.info.usage} required.`);
-        const query = message.arguments.join(' ');
+            return this.client.handlers.embed.error(message.channel.id,
+                `${this.info.usage} required.`);
 
+        // Status of command response.                          
         const status = await this.client.handlers.embed.create(message.channel.id, {
             'title': 'Searching...'
         });
 
-        const movie = await this.client.handlers.api.title(query);
-        if (movie.error) return this.client.handlers.embed.error(status, movie.error);
+        // Get movie from API.
+        const movies = await this.client.handlers.api.search(message.arguments.join(' '));
+        if (movies.error) return this.client.handlers.embed.error(status, movies.error); // Error.
 
+        // Check for results.
+        if (!movies.results[0])
+            return this.client.handlers.embed.error(status, 'No movies found.');
+
+        const id = movies.results[0].id; // Movie ID.
+        const movie = await this.client.handlers.api._get(`movie/${id}`);
+        if (movie.error) return this.client.handlers.embed.error(status, movie.error); // Error.
+
+        // Response.
         this.client.handlers.embed.edit(status, {
-            'url': movie.imdb_id ? `https://www.imdb.com/title/${movie.imdb_id}` : `https://www.themoviedb.org/movie/${movie.id}`,
+            'url': movie.imdb_id
+                   ? `https://www.imdb.com/title/${movie.imdb_id}`
+                   : `https://www.themoviedb.org/movie/${movie.id}`,
             'title': movie.title,
             'description': movie.overview,
             'thumbnail': `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+
             'fields': [{
                 'name': 'Status',
                 'value': movie.status
@@ -75,7 +90,8 @@ class TitleCommand extends Command {
             }, {
                 'name': 'TMDb ID',
                 'value': movie.id
-            }].map(field => ({ ...field, 'inline': typeof field.inline === 'boolean' ? field.inline : true }))
+            }].map(field => ({ ...field, 'inline': typeof field.inline === 'boolean'
+                                                   ? field.inline : true }))
         });
     }
 }
