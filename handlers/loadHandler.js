@@ -21,7 +21,8 @@ class LoadHandler {
     _delete(object, directory, name, type) {
         if (!this.client[object][name]) return false;
 
-        if (object === 'events') this.client.removeListener(name, this.client[object][name].process);
+        if (object === 'events') this.client.removeListener(name, 
+            this.client[object][name].process);
 
         delete this.client[object][name];
         delete require.cache[require.resolve(`${directory}${name}.${type}`)];
@@ -38,7 +39,9 @@ class LoadHandler {
         this.loadCommands();
         this.loadEvents();
 
-        this.client.editStatus({ 'name': this.client.config.options.bot.status });
+        this.client.editStatus({
+            'name': this.client.config.options.bot.status
+        });
 
         this.client.handlers.log.success('Bot Finished Loading.\n');
     }
