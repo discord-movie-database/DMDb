@@ -12,19 +12,23 @@ class LogHandler {
     }
 
     success(message) {
-        console.log(this._format(`${chalk.black.bgGreen(' SUCCESS ')} ${chalk.bold(message)}`));
+        console.log(this._format(`${chalk.black.bgGreen(' SUCCESS ')} \
+${chalk.bold(message)}`));
     }
 
     info(message) {
-        console.log(this._format(`${chalk.black.bgCyan(' INFO ')} ${message}`));
+        console.log(this._format(`${chalk.black.bgCyan(' INFO ')} \
+${message}`));
     }
 
     warning(message) {
-        console.log(this._format(`${chalk.black.bgYellow(' WARNING ')} ${message}`));
+        console.log(this._format(`${chalk.black.bgYellow(' WARNING ')} \
+${message}`));
     }
 
     error(err, message) {
-        console.log(this._format(`${chalk.black.bgRed(' ERROR ')} ${message || ''} ${err}.`));
+        console.log(this._format(`${chalk.black.bgRed(' ERROR ')} \
+${message || ''} ${err}.`));
     }
 }
 

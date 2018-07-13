@@ -15,7 +15,8 @@ class EmbedHandler {
                 'title': embed.title || '',
                 'description': embed.description || '',
                 'fields': embed.fields || [],
-                'color': embed.color || parseInt(this.client.config.options.bot.embed.color),
+                'color': embed.color
+                    || parseInt(this.client.config.options.bot.embed.color),
                 'url': embed.url || '',
                 'thumbnail': {
                     'url': embed.thumbnail || ''
