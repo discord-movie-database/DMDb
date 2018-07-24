@@ -5,6 +5,7 @@ class SearchCommand extends Command {
         super(client, {
             'shortDescription': 'Search for multiple movies.',
             'longDescription': 'TODO',
+            'usage': 'Movie Name',
             'visible': true,
             'restricted': false
         });
