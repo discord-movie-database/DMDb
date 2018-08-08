@@ -16,6 +16,8 @@ class CommandHandler {
 
         this.embed = this.client.handlers.embed;
         this.api = this.client.handlers.api;
+
+        this.config = this.client.config.options.bot;
     }
 
     check(value) {
@@ -62,6 +64,10 @@ class CommandHandler {
 
     revenue(value) {
         return value ? `$${value.toLocaleString()}` : 'N/A';
+    }
+
+    popularity(value) {
+        return Math.round(value).toString();
     }
 
     voteAverage(value) {
