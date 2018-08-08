@@ -5,7 +5,7 @@ class SimilarCommand extends Command {
         super(client, {
             'shortDescription': 'Get similar movies.',
             'longDescription': 'Based on genres and keywords.',
-            'usage': 'Movie Name or IMDb / TMDb ID',
+            'usage': 'Movie Name or T/IMDb ID',
             'visible': true,
             'restricted': false,
             'weight': 999

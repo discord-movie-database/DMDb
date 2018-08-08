@@ -4,7 +4,7 @@ class UpcomingCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Most popular movies in theatres at the moment.',
-            'longDescription': 'TODO',
+            'longDescription': 'A list of upcoming movies in theatres.',
             'visible': true,
             'restricted': false
         });

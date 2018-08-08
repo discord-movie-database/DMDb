@@ -4,7 +4,7 @@ class SearchCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Search for multiple movies.',
-            'longDescription': 'TODO',
+            'longDescription': 'Advanced search to find specific movies.',
             'usage': 'Movie Name',
             'visible': true,
             'restricted': false
