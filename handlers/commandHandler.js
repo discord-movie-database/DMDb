@@ -24,7 +24,7 @@ class CommandHandler {
         return value ? value : 'N/A';
     }
 
-    url(imdb, tmdb) {
+    movieUrl(imdb, tmdb) {
         return imdb 
             ? `https://www.imdb.com/title/${imdb}`
             : `https://www.themoviedb.org/movie/${tmdb}`;
@@ -76,6 +76,32 @@ class CommandHandler {
 
     voteCount(value) {
         return value ? value.toString() : 'N/A';
+    }
+
+    birthday(value) {
+        return new Date(value).getFullYear();
+    }
+    
+    deathday(value) {
+        return value ? this.birthday(value) : 'N/A';
+    }
+
+    gender(value) {
+        return value === 2 ? 'Male' : 'Female';
+    }
+    
+    personUrl(imdb, tmdb) {
+        return imdb 
+            ? `https://www.imdb.com/name/${imdb}`
+            : `https://www.themoviedb.org/person/${tmdb}`;
+    }
+
+    knownFor(value) {
+        return value.map(movie => movie.title).slice(0, 1).join(', ');
+    }
+
+    TMDbID(value) {
+        return `t${value}`;
     }
 }
 
