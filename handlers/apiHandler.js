@@ -77,16 +77,33 @@ class APIHandler {
     }
 
     // Get multiple movies
-    async getMovies(query, page) {
+    async getMovies(query, page, details) {
         page = page ? page : 1;
 
         const movies = await this.get(`search/movie`,
             `?query=${query}&page=${page}&include_adult=true`);
-        
         if (movies.error) return movies;
         if (!movies.results[0]) return this.error('No results found.');
 
+        if (details) return movies;
         return movies.results;
+    }
+
+    async getSimilarMovies(query) {
+        const movieID = await this.getMovieID(query);
+        if (movieID.error) return movieID;
+
+        const movies = await this.get(`movie/${movieID}/similar`, '?page=1');
+        if (movies.error) return movies;
+
+        return movies.results.slice(0, 10);
+    }
+
+    async getUpcomingMovies() {
+        const movies = await this.get(`movie/upcoming`, '?page=1');
+        if (movies.error) return movies;
+
+        return movies.results.slice(0, 10);
     }
 }
 
