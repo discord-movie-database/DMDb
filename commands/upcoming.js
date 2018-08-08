@@ -11,31 +11,24 @@ class UpcomingCommand extends Command {
     }
 
     async process(message) {
-        // Status of command response.
-        const status = await this.client.handlers.embed.create(message.channel.id,
-            { 'title': 'Getting movies...' });
+        // Status of command response
+        const status = await this.embed.create(message.channel.id, {
+            'title': 'Getting movies...' });
 
-        // Get movies from API.
-        let movies = await this.client.handlers.api._get('movie/upcoming');
+        // Get movies from API
+        const movies = await this.api.getUpcomingMovies();
+        if (movies.error) return this.embed.error(movies); 
 
-        // Check for error.
-        if (movies.error) return this.client.handlers.embed.error(movies.error);
-        // Check for results.
-        if (!movies.results[0]) return this.client.handlers.embed.error('No results.');
-
-        movies = movies.results; // Movies.
-
-        // Response.
+        // Response
         this.client.handlers.embed.edit(status, {
             'title': 'Upcoming Movies',
             'description': this.info.shortDescription,
-            
-            'fields': movies.slice(0, 10).map((movie, index) => { return {
+            'fields': movies.map((movie, index) => { return {
                 'name': movie.title,
                 'value': `**${(index + 1)}** | \
-Release: ${new Date(movie.release_date).toDateString()} | \
-Vote Average: ${movie.vote_average} | \
-Popularity: ${Math.round(movie.popularity)}`
+Release: ${this.releaseDate(movie.release_date)} | \
+Vote Average: ${this.voteAverage(movie.vote_average)} | \
+Popularity: ${this.popularity(movie.popularity)}`
             }})
         })
     }

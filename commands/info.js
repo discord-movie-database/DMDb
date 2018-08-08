@@ -4,7 +4,7 @@ class InfoCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Information about the bot.',
-            'longDescription': 'TODO',
+            'longDescription': 'Developer, Library, Shards, Guilds, Channels, Users and more.',
             'visible': true,
             'restricted': false,
             'weight': -999
@@ -14,8 +14,8 @@ class InfoCommand extends Command {
     }
 
     async process(message) {
-        // Response.
-        this.client.handlers.embed.create(message.channel.id, {
+        // Response
+        this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
             'description': 'Invite Bot: <https://dmdb.me/invite> | \
 Server: <https://dmdb.me/server>',
