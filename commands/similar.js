@@ -5,10 +5,10 @@ class SimilarCommand extends Command {
         super(client, {
             'shortDescription': 'Get similar movies.',
             'longDescription': 'Based on genres and keywords.',
-            'usage': 'Movie Name or T/IMDb ID',
+            'usage': 'Movie Name or ID',
             'visible': true,
             'restricted': false,
-            'weight': 999
+            'weight': 30
         });
     }
 
@@ -26,7 +26,7 @@ class SimilarCommand extends Command {
         if (movies.error) return this.embed.error(status, movies); // Error
 
         // Response
-        this.client.handlers.embed.edit(status, {
+        this.embed.edit(status, {
             'title': 'Search Results',
             'description': `Showing 10 similar results.`,
             'fields': movies.map((movie, index) => { return {

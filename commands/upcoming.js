@@ -6,7 +6,8 @@ class UpcomingCommand extends Command {
             'shortDescription': 'Most popular movies in theatres at the moment.',
             'longDescription': 'A list of upcoming movies in theatres.',
             'visible': true,
-            'restricted': false
+            'restricted': false,
+            'weight': 10
         });
     }
 
@@ -20,7 +21,7 @@ class UpcomingCommand extends Command {
         if (movies.error) return this.embed.error(movies); 
 
         // Response
-        this.client.handlers.embed.edit(status, {
+        this.embed.edit(status, {
             'title': 'Upcoming Movies',
             'description': this.info.shortDescription,
             'fields': movies.map((movie, index) => { return {

@@ -32,7 +32,7 @@ to get more detailed information about a command.\n`,
             // Append commands to response
             embed.fields.push({
                 'name': `${this.config.prefix}${commandName} <${command.usage}>`,
-                'value': this.client.commands[commands[i]].info.shortDescription
+                'value': `- ${this.client.commands[commands[i]].info.shortDescription}`
             });
         }
 

@@ -5,10 +5,10 @@ class TrailerCommand extends Command {
         super(client, {
             'shortDescription': 'Get a trailer for a movie.',
             'longDescription': 'Get a trailer for a movie.',
-            'usage': 'Movie Name or T/IMDb ID',
+            'usage': 'Movie Name or ID',
             'visible': true,
             'restricted': false,
-            'weight': 999
+            'weight': 20
         });
     }
 
