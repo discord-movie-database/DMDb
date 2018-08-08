@@ -105,6 +105,17 @@ class APIHandler {
 
         return movies.results.slice(0, 10);
     }
+
+    async getTrailers(query) {
+        const movieID = await this.getMovieID(query);
+        if (movieID.error) return movieID;
+
+        const videos = await this.get(`movie/${movieID}/videos`);
+        if (videos.error) return videos;
+
+        return videos.results.filter(video =>
+            video.site === "YouTube" && video.type === "Trailer");
+    }
 }
 
 module.exports = APIHandler;
