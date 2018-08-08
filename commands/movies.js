@@ -1,11 +1,12 @@
 const Command = require('../handlers/commandHandler');
 
-class SearchCommand extends Command {
+class MoviesCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Search for multiple movies.',
+            'shortDescription': 'Search for movies.',
             'longDescription': 'Advanced search to find specific movies.',
             'usage': 'Movie Name',
+            'weight': 60,
             'visible': true,
             'restricted': false
         });
@@ -34,10 +35,11 @@ Page: ${movies.page}/${movies.total_pages}`,
                 'value': `**${(index + 1)}** | \
 Release: ${this.releaseDate(movie.release_date)} | \
 Vote Average: ${this.voteAverage(movie.vote_average)} | \
-Popularity: ${this.popularity(movie.popularity)}`
+Popularity: ${this.popularity(movie.popularity)} | \
+TMDb ID: ${this.TMDbID(movie.id)}`
             }})
         });
     }
 }
 
-module.exports = SearchCommand;
+module.exports = MoviesCommand;
