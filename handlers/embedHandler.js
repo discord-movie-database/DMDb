@@ -46,6 +46,8 @@ class EmbedHandler {
     }
 
     error(message, content) {
+        if (typeof content === 'object') content = content.error;
+
         const embed = {
             'title': 'Error',
             'description': content,
