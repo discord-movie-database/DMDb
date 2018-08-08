@@ -8,7 +8,10 @@ class EmbedHandler {
     }
 
     _template(embed) {
-        if (typeof embed === 'string') return embed;
+        if (typeof embed === 'string') return {
+            'embed': {},
+            'content': embed
+        };
 
         return {
             'embed': {
