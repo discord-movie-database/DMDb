@@ -7,6 +7,6 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "eris": "^0.8.6",
-    "needle": "^2.2.1"
+    "node-fetch": "^2.2.0"
   }
 }
