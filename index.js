@@ -20,7 +20,7 @@ class Client extends Eris {
         this.handlers.embed = new EmbedHandler(this);
         this.handlers.api = new APIHandler(this);
         this.handlers.load = new LoadHandler(this);
-        
+
         this.on('ready', () => this.handlers.load.start());
     }
 }
