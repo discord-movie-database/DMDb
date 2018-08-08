@@ -45,9 +45,9 @@ class APIHandler {
     async getMovieID(query) {
         const ID = this.ID(query);
 
-        if (this.ID === 'tmdb') return query.slice(1);
+        if (ID === 'tmdb') return query.slice(1);
 
-        if (this.ID === 'imdb') {
+        if (ID === 'imdb') {
             const movies = this.get(`find/${query}`);
             if (movies.error) return movies;
 
@@ -115,6 +115,51 @@ class APIHandler {
 
         return videos.results.filter(video =>
             video.site === "YouTube" && video.type === "Trailer");
+    }
+
+    async getPersonID(query) {
+        const ID = this.ID(query);
+
+        if (ID === 'tmdb') return query.slice(1);
+
+        if (ID === 'imdb') {
+            const people = this.get(`find/${query}`);
+            if (people.error) return people;
+
+            if (!people.person_results[0])
+                return this.error('No results found.');
+            const personID = people.person_results[0].id;
+
+            return personID;
+        }
+
+        const people = await this.getPeople(query);
+        if (people.error) return people;
+
+        return people[0].id;
+    }
+
+    async getPeople(query, page, details) {
+        page = page ? page : 1;
+
+        const people = await this.get(`search/person`,
+            `?query=${query}&page=${page}&include_adult=true`);
+        if (people.error) return people;
+        if (!people.results[0]) return this.error('No results found.');
+
+        if (details) return people;
+        return people.results
+    }
+
+    async getPerson(query) {
+        const personID = await this.getPersonID(query);
+        if (personID.error) return personID;
+
+        const person = await this.get(`person/${personID}`);
+        if (person.error) return person;
+        if (!person.id) return this.error('Invalid ID.');
+
+        return person;
     }
 }
 
