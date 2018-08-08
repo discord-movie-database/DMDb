@@ -7,7 +7,7 @@ class InfoCommand extends Command {
             'longDescription': 'Developer, Library, Shards, Guilds, Channels, Users and more.',
             'visible': true,
             'restricted': false,
-            'weight': -999
+            'weight': 0
         });
 
         this.package = require('../package.json');

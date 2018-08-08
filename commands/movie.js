@@ -5,10 +5,10 @@ class TitleCommand extends Command {
         super(client, {
             'shortDescription': 'Get information about a movie.',
             'longDescription': 'Get information about a movie with an IMDb ID, TMDb ID, or the name.',
-            'usage': 'Movie Name or T/IMDb ID',
+            'usage': 'Movie Name or ID',
             'visible': true,
             'restricted': false,
-            'weight': 999
+            'weight': 70
         });
     }
 
@@ -27,7 +27,7 @@ class TitleCommand extends Command {
 
         // Response
         this.embed.edit(status, {
-            'url': this.url(movie.imdb_id, movie.id),
+            'url': this.movieUrl(movie.imdb_id, movie.id),
             'title': movie.title,
             'description': movie.overview,
             'thumbnail': this.thumbnail(movie.poster_path),
