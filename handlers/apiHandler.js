@@ -55,7 +55,8 @@ class APIHandler {
         if (ID === 'tmdb') return query.slice(1);
 
         if (ID === 'imdb') {
-            const movies = await this.get(`find/${query}`, '?external_source=imdb_id');
+            const movies = await this.get(`find/${query}`,
+                '?external_source=imdb_id');
             if (movies.error) return movies;
 
             if (!movies.movie_results[0])
@@ -120,6 +121,9 @@ class APIHandler {
         const videos = await this.get(`movie/${movieID}/videos`);
         if (videos.error) return videos;
 
+        if (videos.results.length === 0)
+            return this.error('No trailers found.');
+
         return videos.results.filter(video =>
             video.site === "YouTube" && video.type === "Trailer");
     }
@@ -130,7 +134,8 @@ class APIHandler {
         if (ID === 'tmdb') return query.slice(1);
 
         if (ID === 'imdb') {
-            const people = await this.get(`find/${query}`, '?external_source=imdb_id');
+            const people = await this.get(`find/${query}`,
+                '?external_source=imdb_id');
             if (people.error) return people;
 
             if (!people.person_results[0])
