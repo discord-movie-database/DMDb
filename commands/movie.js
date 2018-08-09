@@ -44,7 +44,7 @@ class TitleCommand extends Command {
                 { 'name': 'Vote Average', 'value': this.voteAverage(movie.vote_average) },
                 { 'name': 'Vote Count', 'value': this.voteCount(movie.vote_count) },
                 { 'name': 'IMDb ID', 'value': this.check(movie.imdb_id) },
-                { 'name': 'TMDb ID', 'value': movie.id
+                { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id)
             }].map(field => ({ ...field, 'inline': typeof field.inline === 'boolean'
                                                    ? field.inline : true }))
         });
