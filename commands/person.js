@@ -29,7 +29,7 @@ class ActorCommand extends Command {
         this.embed.edit(status, {
             'url': this.personUrl(person.imdb_id, person.id),
             'title': person.name,
-            'description': person.biography,
+            'description': this.description(person.biography),
             'thumbnail': this.thumbnail(person.profile_path),
             'fields': [{ 'name': 'Known For', 'value': person.known_for_department },
                 { 'name': 'Birthday', 'value': this.birthday(person.birthday) },
@@ -38,7 +38,7 @@ class ActorCommand extends Command {
                 { 'name': 'Place of Birth', 'value': person.place_of_birth },
                 { 'name': 'Popularity', 'value': this.popularity(person.popularity) },
                 { 'name': 'IMDb ID', 'value': this.check(person.imdb_id) },
-                { 'name': 'TMDb ID', 'value': person.id
+                { 'name': 'TMDb ID', 'value': this.TMDbID(person.id)
             }].map(field => ({ ...field, 'inline': typeof field.inline === 'boolean'
                                                    ? field.inline : true }))
         });
