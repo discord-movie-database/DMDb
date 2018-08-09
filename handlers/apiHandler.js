@@ -35,7 +35,11 @@ class APIHandler {
 
             const headers = response.headers;
             const remaining = headers.get('X-RateLimit-Remaining');
-            if (remaining < 5) return this.error('Ratelimited. Try again in a few seconds.');
+            if (remaining < 4) {
+                this.client.handlers.log.info('Ratelimited.');
+
+                return this.error('Ratelimited. Try again in a few seconds.');
+            }
 
             response = await response.json();
             if (response && typeof response.success === 'undefined')
@@ -126,6 +130,22 @@ class APIHandler {
 
         return videos.results.filter(video =>
             video.site === "YouTube" && video.type === "Trailer");
+    }
+
+    async getPoster(query) {
+        const movies = await this.getMovies(query);
+        if (movies.error) return movies;
+
+        const movie = movies[0];
+        const posterPath = movie.poster_path;
+
+        try {
+            const image = await fetch(`https://image.tmdb.org/t/p/original${posterPath}`);
+            return image.buffer();
+        } catch (err) {
+            this.client.handlers.log.error(err);
+            return this.error('No poster.');
+        }
     }
 
     async getPersonID(query) {
