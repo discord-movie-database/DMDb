@@ -15,8 +15,11 @@ class APIHandler {
 
     // Check type of ID. IMDb, TMDb, or none
     ID(query) {
-        const type = query.match(/^t(t)?\d+/);
-        return type ? type[1] ? 'imdb' : 'tmdb' : false;
+        const type = query.match(/^(nm|tt|t)(\d+)/);
+
+        if (!type) return false;
+        if (type[1] === 'nm' || type[1] === 'tt') return 'imdb';
+        return 'tmdb';
     }
 
     // Get from the API
@@ -52,7 +55,7 @@ class APIHandler {
         if (ID === 'tmdb') return query.slice(1);
 
         if (ID === 'imdb') {
-            const movies = this.get(`find/${query}`);
+            const movies = await this.get(`find/${query}`, '?external_source=imdb_id');
             if (movies.error) return movies;
 
             if (!movies.movie_results[0])
@@ -127,7 +130,7 @@ class APIHandler {
         if (ID === 'tmdb') return query.slice(1);
 
         if (ID === 'imdb') {
-            const people = this.get(`find/${query}`);
+            const people = await this.get(`find/${query}`, '?external_source=imdb_id');
             if (people.error) return people;
 
             if (!people.person_results[0])
