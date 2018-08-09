@@ -103,6 +103,10 @@ class CommandHandler {
     TMDbID(value) {
         return `t${value}`;
     }
+
+    description(value) {
+        return value > 2048 ? value.substring(0, 2045) + '...' : value;
+    }
 }
 
 module.exports = CommandHandler;
