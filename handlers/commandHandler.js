@@ -105,7 +105,7 @@ class CommandHandler {
     }
 
     description(value) {
-        return value > 2048 ? value.substring(0, 2045) + '...' : value;
+        return value.length > 2048 ? value.substr(0, 2045) + '...' : value;
     }
 }
 
