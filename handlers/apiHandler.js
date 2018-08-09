@@ -29,8 +29,12 @@ class APIHandler {
 
         try {
             let response = await fetch(`${this.base}${endpoint}${query}${apiKey}`);
-            response = await response.json();
 
+            const headers = response.headers;
+            const remaining = headers.get('X-RateLimit-Remaining');
+            if (remaining < 5) return this.error('Ratelimited. Try again in a few seconds.');
+
+            response = await response.json();
             if (response && typeof response.success === 'undefined')
                 valid = response;
         } catch (err) {
