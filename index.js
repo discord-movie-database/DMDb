@@ -21,6 +21,7 @@ class Client extends Eris {
         this.handlers.api = new APIHandler(this);
         this.handlers.load = new LoadHandler(this);
 
+        this.loaded = false;
         this.on('ready', () => this.handlers.load.start());
     }
 }
