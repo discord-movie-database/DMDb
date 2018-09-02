@@ -31,7 +31,7 @@ class ActorCommand extends Command {
             'title': person.name,
             'description': this.description(person.biography),
             'thumbnail': this.thumbnail(person.profile_path),
-            'fields': [{ 'name': 'Known For', 'value': person.known_for_department },
+            'fields': this.parseEmbedFields([{ 'name': 'Known For', 'value': person.known_for_department },
                 { 'name': 'Birthday', 'value': this.birthday(person.birthday) },
                 { 'name': 'Deathday', 'value': this.deathday(person.deathday) },
                 { 'name': 'Gender', 'value': this.gender(person.gender) },
@@ -39,8 +39,7 @@ class ActorCommand extends Command {
                 { 'name': 'Popularity', 'value': this.popularity(person.popularity) },
                 { 'name': 'IMDb ID', 'value': this.check(person.imdb_id) },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(person.id)
-            }].map(field => ({ ...field, 'inline': typeof field.inline === 'boolean'
-                                                   ? field.inline : true }))
+            }])
         });
     }
 }

@@ -20,10 +20,6 @@ class CommandHandler {
         this.config = this.client.config.options.bot;
     }
 
-    check(value) {
-        return value ? value : 'N/A';
-    }
-
     movieUrl(imdb, tmdb) {
         return imdb 
             ? `https://www.imdb.com/title/${imdb}`
@@ -63,19 +59,27 @@ class CommandHandler {
     }
 
     revenue(value) {
-        return value ? `$${value.toLocaleString()}` : 'N/A';
+        return this.budget(value);
     }
 
     popularity(value) {
-        return Math.round(value).toString();
+        return Math.round(value);
     }
 
     voteAverage(value) {
-        return value ? value.toString() : 'N/A';
+        return value;
     }
 
     voteCount(value) {
-        return value ? value.toString() : 'N/A';
+        return value;
+    }
+
+    IMDbID(value) {
+        return value;
+    }
+
+    homepage(value) {
+        return value;
     }
 
     birthday(value) {
@@ -83,7 +87,7 @@ class CommandHandler {
     }
     
     deathday(value) {
-        return value ? this.birthday(value) : 'N/A';
+        return this.birthday(value);
     }
 
     gender(value) {
@@ -106,6 +110,20 @@ class CommandHandler {
 
     description(value) {
         return value.length > 2048 ? value.substr(0, 2045) + '...' : value;
+    }
+
+    check(value) {
+        return value ? value.toString() : 'N/A';
+    }
+
+    parseEmbedFields(fields) {
+        return fields.map(field => {
+            return {
+                'name': field.name,
+                'value': this.check(field.value),
+                'inline': typeof field.inline === 'boolean' ? field.inline : true
+            }
+        });
     }
 }
 
