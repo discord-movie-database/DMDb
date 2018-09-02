@@ -34,7 +34,7 @@ class MsgEvent {
             return this.client.handlers.embed.error(message.channel.id, `Error executing command: ${commandName}`);
         }
 
-        this.client.handlers.log.info(`${message.author.id} executed command ${chalk.bold(commandName)} in ${message.channel.guild ? message.channel.guild.id : 'direct message'}.`);
+        this.client.handlers.log.info(`Command: ${commandName} | User: ${message.author.id} | Chan: ${message.channel.guild ? message.channel.guild.id : 'DM'}${message.arguments[0] ? ` | Args: ${message.arguments.join('')}` : ''}`);
     }
 }
 
