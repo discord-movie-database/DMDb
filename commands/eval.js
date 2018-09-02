@@ -26,7 +26,7 @@ class EvalCommand extends Command {
         }
 
         // Response
-        this.embed.success(message.channel.id, evaled || 'Done.');
+        this.embed.success(message.channel.id, `${evaled}` || 'Done.');
     }
 }
 
