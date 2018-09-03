@@ -41,8 +41,8 @@ class TitleCommand extends Command {
                 { 'name': 'Budget', 'value': this.budget(movie.budget) },
                 { 'name': 'Revenue', 'value': this.revenue(movie.revenue) },
                 { 'name': 'Homepage', 'value': this.homepage(movie.homepage), 'inline': false },
-                { 'name': 'Vote Average', 'value': this.voteAverage(movie.vote_average) },
-                { 'name': 'Vote Count', 'value': this.voteCount(movie.vote_count) },
+                { 'name': 'Vote Average', 'value': `${this.voteAverage(movie.vote_average)} *(${this.voteCount(movie.vote_count)} Votes)*` },
+                { 'name': 'Popularity', 'value': this.popularity(movie.popularity) },
                 { 'name': 'IMDb ID', 'value': this.IMDbID(movie.imdb_id) },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id)
             }])
