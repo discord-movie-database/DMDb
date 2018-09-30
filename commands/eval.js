@@ -15,18 +15,16 @@ class EvalCommand extends Command {
         if (!message.arguments[0])
             return this.embed.error(message.channel.id, 'No Arguments.');
 
-        // Response content
+        // Eval content
         let evaled;
-
-        // Try eval
-        try {
-            evaled = eval(message.arguments.join(' '));
-        } catch (err) {
-            evaled = err;
-        }
+        // Eval
+        try { evaled = eval(message.arguments.join(' ')); }
+        catch (err) { evaled = err; }
 
         // Response
-        this.embed.success(message.channel.id, `${evaled}` || 'Done.');
+        const response = typeof evaled === 'object' ? JSON.stringify(evaled) :
+                         typeof evaled === 'undefined' ? 'No Content' : `${evaled}`;
+        this.embed.success(message.channel.id, response || 'Done.');
     }
 }
 
