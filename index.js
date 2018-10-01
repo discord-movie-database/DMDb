@@ -1,3 +1,5 @@
+const env = process.argv[2] || 'dev';
+
 const Eris = require('eris');
 
 const LoadHandler = require('./handlers/loadHandler');
@@ -8,10 +10,10 @@ const ListHandler = require('./handlers/listHandler');
 
 class Client extends Eris {
     constructor(config) {
-        super(config.tokens.discord[process.argv[2] || 'dev'],
-            config.options.client);
-        this.config = config;
+        super(config.tokens.discord[env], config.options.client);
 
+        this.env = env;
+        this.config = config;
         this.prefix = this.config.options.bot.prefix;
 
         this.commands = new Array();

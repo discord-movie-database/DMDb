@@ -33,7 +33,7 @@ class LoadHandler {
 
     // START / RELOAD //
 
-    start() {
+    async start() {
         if (this.client.loaded) return;
         
         this.client.handlers.log.info('Bot connnected to Discord.');
@@ -46,9 +46,12 @@ class LoadHandler {
         this.client.editStatus({
             'name': this.client.config.options.bot.status });
 
-        this.client.handlers.list.updateStats();
-
         this.client.handlers.log.success('Bot Finished Loading.\n');
+
+        if (this.client.env === 'main')
+            await this.client.handlers.list._listInterval();
+        
+        console.log('\n');
     }
 
     reload() {
