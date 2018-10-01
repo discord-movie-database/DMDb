@@ -3,10 +3,13 @@ const fetch = require('node-fetch');
 class ListHandler {
     constructor(client) {
         this.client = client;
+    }
 
-        this.listInterval = setInterval(() => {
-            if (this.client.loaded) this.updateStats();
-        }, 43200000);
+    _listInterval() {
+        this.updateStats();
+        
+        this.client.listInterval = setInterval(() => {
+            this.updateStats(); }, 43200000);
     }
 
     async _postStats(site, token) {
