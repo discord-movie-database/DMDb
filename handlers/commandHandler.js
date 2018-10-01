@@ -20,6 +20,10 @@ class CommandHandler {
         this.config = this.client.config.options.bot;
     }
 
+    yesno(value) {
+        return value ? 'Yes' : 'No';
+    }
+
     movieUrl(imdb, tmdb) {
         return imdb 
             ? `https://www.imdb.com/title/${imdb}`
@@ -39,7 +43,7 @@ class CommandHandler {
     }
 
     adult(value) {
-        return value ? 'Yes' : 'No'
+        return this.yesno(value);
     }
 
     genres(value) {
