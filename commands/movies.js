@@ -33,10 +33,10 @@ Page: ${movies.page}/${movies.total_pages}`,
             'fields': movies.results.slice(0, 10).map((movie, index) => { return {
                 'name': movie.title,
                 'value': `**${(index + 1)}** | \
-Release: ${this.releaseDate(movie.release_date)} | \
+${movie.release_date ? `Release: ${this.releaseDate(movie.release_date)} |`: ''} \
 Vote Average: ${this.voteAverage(movie.vote_average)} | \
-Popularity: ${this.popularity(movie.popularity)} | \
-TMDb ID: ${this.TMDbID(movie.id)}`
+Pop: ${this.popularity(movie.popularity)} | \
+${this.TMDbID(movie.id)}`
             }})
         });
     }

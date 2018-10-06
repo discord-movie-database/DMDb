@@ -26,10 +26,10 @@ class UpcomingCommand extends Command {
             'description': this.info.shortDescription,
             'fields': movies.map((movie, index) => { return {
                 'name': movie.title,
-                'value': `**${(index + 1)}** | \
+                'value': `**${(index + 1)}** | Pop: ${this.popularity(movie.popularity)} | \
 Release: ${this.releaseDate(movie.release_date)} | \
 Vote Average: ${this.voteAverage(movie.vote_average)} | \
-Popularity: ${this.popularity(movie.popularity)}`
+${this.TMDbID(movie.id)}`
             }})
         })
     }

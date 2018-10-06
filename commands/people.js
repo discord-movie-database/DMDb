@@ -34,8 +34,8 @@ Page: ${people.page}/${people.total_pages}`,
                 'name': person.name,
                 'value': `**${(index + 1)}** | \
 Known For: ${this.knownFor(person.known_for)} | \
-Popularity: ${this.popularity(person.popularity)} | \
-TMDb ID: ${this.TMDbID(person.id)}`
+Pop: ${this.popularity(person.popularity)} | \
+${this.TMDbID(person.id)}`
             }})
         });
     }
