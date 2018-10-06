@@ -18,6 +18,9 @@ class CommandHandler {
         this.api = this.client.handlers.api;
 
         this.config = this.client.config.options.bot;
+
+        this.months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
     }
 
     yesno(value) {
@@ -35,6 +38,24 @@ class CommandHandler {
     }
 
     releaseDate(value) {
+        if (value) return false;
+
+        const date = new Date(value);
+
+        let day = date.getDate();
+        let month = date.getUTCMonth();
+        let year = date.getFullYear();
+
+        day = month && day ? `${day} ` : '';
+        month = month ? `${this.months[month]} ` : '';
+        year = year ? year : '';
+
+        return day + month + year;
+    }
+
+    releaseDateYear(value) {
+        if (!value) return false;
+        
         return new Date(value).getFullYear();
     }
 

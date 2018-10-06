@@ -34,7 +34,8 @@ class SimilarCommand extends Command {
                 'value': `**${(index + 1)}** | \
 Release: ${this.releaseDate(movie.release_date)} | \
 Vote Average: ${this.voteAverage(movie.vote_average)} | \
-Popularity: ${this.popularity(movie.popularity)}`
+Pop: ${this.popularity(movie.popularity)} | \
+${this.TMDbID(movie.id)}`
             }})
         });
     }
