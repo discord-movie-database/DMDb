@@ -54,13 +54,11 @@ class CommandHandler {
     }
 
     releaseDateYear(value) {
-        if (!value) return false;
-        
-        return new Date(value).getFullYear();
+        return value ? new Date(value).getFullYear() : 'N/A';
     }
 
     runtime(value) {
-        return `${value} Minutes`;
+        return value ? `${value} Minutes` : 'N/A';
     }
 
     adult(value) {
@@ -108,7 +106,7 @@ class CommandHandler {
     }
 
     birthday(value) {
-        return new Date(value).getFullYear();
+        return value ? new Date(value).getFullYear() : 'N/A';
     }
     
     deathday(value) {
