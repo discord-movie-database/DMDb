@@ -193,6 +193,12 @@ class APIHandler {
 
         return person;
     }
+
+    async spooky() {
+        const movies = await this.get('discover/movie',
+            '?sort_by=popularity.desc&include_adult=true&with_genres=27');
+        return movies.results;
+    }
 }
 
 module.exports = APIHandler;
