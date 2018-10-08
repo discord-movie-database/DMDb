@@ -34,11 +34,11 @@ class CommandHandler {
     }
 
     thumbnail(value) {
-        return `https://image.tmdb.org/t/p/w500${value}`;
+        return value ? `https://image.tmdb.org/t/p/w500${value}` : 'https://via.placeholder.com/300x450?text=N/A';
     }
 
     releaseDate(value) {
-        if (value) return false;
+        if (!value) return 'N/A';
 
         const date = new Date(value);
 
@@ -66,15 +66,15 @@ class CommandHandler {
     }
 
     genres(value) {
-        return value.map(genre => genre.name).join(', ');
+        return value ? value.map(genre => genre.name).join(', ') : 'N/A';
     }
 
     countries(value) {
-        return value.map(country => country.name).join(', ');
+        return value ? value.map(country => country.name).join(', ') : 'N/A';
     }
 
     languages(value) {
-        return value.map(language => language.name).join(', ');
+        return value ? value.map(language => language.name).join(', ') : 'N/A';
     }
 
     budget(value) {
@@ -90,19 +90,19 @@ class CommandHandler {
     }
 
     voteAverage(value) {
-        return value;
+        return value || 'N/A';
     }
 
     voteCount(value) {
-        return value;
+        return value || 'N/A';
     }
 
     IMDbID(value) {
-        return value;
+        return value || 'N/A';
     }
 
     homepage(value) {
-        return value;
+        return value || 'N/A';
     }
 
     birthday(value) {
@@ -114,7 +114,11 @@ class CommandHandler {
     }
 
     gender(value) {
-        return value === 2 ? 'Male' : 'Female';
+        return value ? value === 2 ? 'Male' : 'Female' : 'N/A';
+    }
+
+    placeOfBirth(value) {
+        return value || 'N/A';
     }
     
     personUrl(imdb, tmdb) {
@@ -127,6 +131,10 @@ class CommandHandler {
         return value.map(movie => movie.title).slice(0, 1).join(', ');
     }
 
+    knownForDep(value) {
+        return value || 'N/A';
+    }
+
     TMDbID(value) {
         return `t${value}`;
     }
@@ -135,18 +143,16 @@ class CommandHandler {
         return value.length > 2048 ? value.substr(0, 2045) + '...' : value;
     }
 
-    check(value) {
+    available(value) {
         return value ? value.toString() : 'N/A';
     }
 
     parseEmbedFields(fields) {
-        return fields.map(field => {
-            return {
-                'name': field.name,
-                'value': this.check(field.value),
-                'inline': typeof field.inline === 'boolean' ? field.inline : true
-            }
-        });
+        return fields.map(field => ({
+            'name': field.name,
+            'value': this.available(field.value),
+            'inline': typeof field.inline === 'boolean' ? field.inline : true
+        }));
     }
 }
 
