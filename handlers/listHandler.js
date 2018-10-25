@@ -13,16 +13,18 @@ class ListHandler {
     }
 
     async _postStats(site, token) {
+        const guilds = this.client.guilds.size;
+
         const postData = {
             'method': 'POST',
-            'body': JSON.stringify({ 'server_count': this.client.guilds.size }),
+            'body': JSON.stringify({ 'server_count': guilds }),
             'headers': { 'Content-Type': 'application/json', 'Authorization': token } }
         const postResponse = await fetch(`${site}/api/bots/412006490132447249/stats`, postData);
 
         if (postResponse.error)
             return this.client.handlers.log.error(postResponse.error, `Error posting stats to ${site}`);
     
-        this.client.handlers.log.success(`Posted stats to ${site}`);
+        this.client.handlers.log.success(`Posted ${guilds} guilds to ${site}`);
     }
 
     updateStats() {
