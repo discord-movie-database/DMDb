@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { spawn } = require('child_process');
 
 class LoadHandler {
     constructor(client) {
@@ -25,6 +26,7 @@ class LoadHandler {
             this.client[object][name].process);
 
         delete this.client[object][name];
+        if (object === 'handlers') name += 'Handler';
         delete require.cache[require.resolve(`${directory}${name}.${type}`)];
 
         if (this.client[object][name]) return false;
@@ -53,16 +55,19 @@ class LoadHandler {
     }
 
     reload() {
+        this.client.loaded = false;
         let success = true;
 
         try {
             this.client.handlers.log.info('Reloading...');
 
+            this.reloadBotHandlers();
             this.reloadEvents();
             this.reloadCommands();
 
             this.client.handlers.log.success('Finished reloading.');
         } catch (err) {
+            this.client.loaded = true;
             success = false;
 
             this.client.handlers.log.error(err);
@@ -142,6 +147,30 @@ class LoadHandler {
         this.unloadCommands();
         this.loadCommands();
     }
+
+    // HANDLERS //
+
+    unloadBotHandler(handler) {
+        this._delete('handlers', this.handlerDirectory, `${handler}`, 'js');
+    }
+
+    loadBotHandler(handler) {
+        const Handler = require(`./${handler}Handler.js`);
+        this.client.handlers[handler] = new Handler(this.client);
+
+        if (this.client.handlers.log)
+            return this.client.handlers.log.info(`Loaded handler: ${handler}`);
+        console.log(`Loaded handler: ${handler}`);
+    }
+
+    reloadBotHandlers() {
+        for (let handler in this.client.handlers) {
+            this.unloadBotHandler(handler);
+            this.loadBotHandler(handler);
+        }
+    }
+
+    // TODO: new process function.
 }
 
 module.exports = LoadHandler;
