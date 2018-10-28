@@ -17,8 +17,9 @@ class InfoCommand extends Command {
         // Response
         this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
-            'description': 'Invite Bot: <https://bit.ly/2PXWYLR> | \
-Server: <https://discord.gg/fwAxQjV>',
+            'description': '[Invite Bot](https://bit.ly/2PXWYLR) | \
+[Support Server](https://discord.gg/fwAxQjV) | \
+[GitHub](https://github.com/Dumplingsr/DMDb)',
             'fields': [{
                 'name': 'Developer',
                 'value': 'Dumplings#7460'
