@@ -1,10 +1,20 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 class DBHandler {
     constructor(client) {
         this.client = client;
 
         this.dbURL = 'mongodb://localhost/dmdb';
+        this.guildSchema = {
+            id: String,
+            prefix: String,
+            disabledCommands: [ String ],
+            messages: {
+                commandNotFound: false,
+                commandDisabled: false
+            }
+        }
     }
 
     async connect() {
@@ -15,6 +25,8 @@ class DBHandler {
         
         await mongoose.connect(this.dbURL,  {
             useNewUrlParser: true });
+
+        mongoose.model('guild', this.guildSchema);
     }
 }
 
