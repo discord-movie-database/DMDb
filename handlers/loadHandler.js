@@ -8,6 +8,8 @@ class LoadHandler {
         this.eventDirectory = `${__dirname}/../events/`;
         this.commandDirectory = `${__dirname}/../commands/`;
         this.handlerDirectory = `${__dirname}/../handlers/`;
+
+        this.dbAttempt = 0;
     }
 
     // MISC //
@@ -35,10 +37,12 @@ class LoadHandler {
 
     // START / RELOAD //
 
-    start() {
+    async start() {
         if (this.client.loaded) return;
         
-        this.client.handlers.log.info('Bot connnected to Discord.');
+        this.client.handlers.log.success('Connected to Discord.');
+
+        await this.client.handlers.db.connect();
 
         this.loadCommands();
         this.loadEvents();
@@ -48,7 +52,7 @@ class LoadHandler {
         this.client.editStatus({
             'name': this.client.config.options.bot.status });
 
-        this.client.handlers.log.success('Bot Finished Loading.\n');
+        this.client.handlers.log.success('Finished Loading.\n');
 
         if (this.client.env === 'main')
             this.client.handlers.list._listInterval();
