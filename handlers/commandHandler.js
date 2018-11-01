@@ -154,6 +154,10 @@ class CommandHandler {
             'inline': typeof field.inline === 'boolean' ? field.inline : true
         }));
     }
+
+    capitaliseStart(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+    }
 }
 
 module.exports = CommandHandler;
