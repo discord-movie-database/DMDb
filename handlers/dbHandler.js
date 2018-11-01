@@ -19,12 +19,21 @@ class DBHandler {
 
     async connect() {
         this.client.db = mongoose;
+        
+        try {
+            await mongoose.connect(this.dbURL,  {
+                useNewUrlParser: true,
+                autoReconnect: true,
+                reconnectTries: 10,
+                reconnectInterval: 500 });
+        } catch (err) {
+            this.client.handlers.log.error('', err);
+
+            process.exit();
+        }
+
         this.client.db.connection.on('connected', () =>
             this.client.handlers.log.success('Connected to database.'));
-
-        
-        await mongoose.connect(this.dbURL,  {
-            useNewUrlParser: true });
 
         mongoose.model('guild', this.guildSchema);
     }
