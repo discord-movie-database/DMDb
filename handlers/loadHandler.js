@@ -42,8 +42,7 @@ class LoadHandler {
         
         this.client.handlers.log.success('Connected to Discord.');
 
-        await this.client.handlers.db.connect();
-
+        await this.dbConnect();
         this.loadCommands();
         this.loadEvents();
 
@@ -68,6 +67,7 @@ class LoadHandler {
             this.reloadBotHandlers();
             this.reloadEvents();
             this.reloadCommands();
+            this.dbNewConnection();
 
             this.client.handlers.log.success('Finished reloading.');
         } catch (err) {
@@ -174,7 +174,20 @@ class LoadHandler {
         }
     }
 
-    // TODO: new process function.
+    async dbConnect() {
+        await this.client.handlers.db.connect();
+    }
+
+    async dbDisconnect() {
+        await this.client.db.disconnect();
+    }
+
+    async dbNewConnection() {
+        await this.dbDisconnect();
+        await this.dbConnect();
+    }
+
+    // TODO: new process.
 }
 
 module.exports = LoadHandler;
