@@ -34,7 +34,10 @@ class DBHandler {
 
         this.client.db.connection.on('connected', () =>
             this.client.handlers.log.success('Connected to database.'));
-
+            
+        this.client.db.connection.on('disconnect', () =>
+            this.client.handlers.log.warn('Disconnected from database.'));
+        
         mongoose.model('guild', this.guildSchema);
     }
 }
