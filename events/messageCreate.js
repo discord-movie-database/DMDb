@@ -4,20 +4,27 @@ class MsgEvent {
     constructor(client) {
         this.client = client;
 
+        this.dbHandler = this.client.handlers.db;
+
         this.process = this.process.bind(this);
     }
 
     _checkPermission(command, message) {
         return command.info.restricted
-        && !this.client.config.options.bot.developers.includes(parseInt(message.author.id));
+            && !this.client.config.options.bot.developers.includes(parseInt(message.author.id));
     }
 
-    process(message) {
+    async process(message) {
         if (message.bot) return;
-        if (!message.content.startsWith(this.client.prefix)) return;
+
+        let guildDB;
+        if (message.channel.guild) guildDB = await this.dbHandler.getGuild(message.channel.guild.id);
+
+        const prefix = guildDB.prefix || this.client.prefix;
+        if (!message.content.startsWith(prefix)) return;
 
         const messageSplit = message.content.split(' ');
-        const commandName = messageSplit[0].toLowerCase().slice(this.client.prefix.length);
+        const commandName = messageSplit[0].toLowerCase().slice(prefix.length);
         message.arguments = messageSplit.slice(1);
 
         if (!this.client.commands[commandName]) return;
