@@ -67,7 +67,6 @@ class LoadHandler {
             this.reloadBotHandlers();
             this.reloadEvents();
             this.reloadCommands();
-            this.dbNewConnection();
 
             this.client.handlers.log.success('Finished reloading.');
         } catch (err) {
