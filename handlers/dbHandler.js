@@ -6,6 +6,7 @@ class DBHandler {
         this.client = client;
 
         this.dbURL = 'mongodb://localhost/dmdb';
+
         this.guildSchema = {
             id: String,
             prefix: String,
@@ -38,7 +39,19 @@ class DBHandler {
         this.client.db.connection.on('disconnect', () =>
             this.client.handlers.log.warn('Disconnected from database.'));
         
+        mongoose.set('useFindAndModify', false);
         mongoose.model('guild', this.guildSchema);
+    }
+
+    async updateGuild(guildId, newConfig) {
+        return await mongoose.model('guild').findOneAndUpdate({
+            'id': guildId }, { ...newConfig }, {
+            'upsert': true, 'setDefaultsOnInsert': true });
+    }
+
+    async getGuild(guildId) {
+        return await mongoose.model('guild').findOne({
+            'id': guildId });
     }
 }
 
