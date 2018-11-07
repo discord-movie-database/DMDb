@@ -18,7 +18,7 @@ class MsgEvent {
         if (message.bot) return;
 
         let guildDB;
-        if (message.channel.guild) guildDB = await this.dbHandler.getGuild(message.channel.guild.id);
+        if (message.channel.guild) guildDB = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id);
 
         message.prefix = guildDB.prefix || this.client.prefix;
         if (!message.content.startsWith(message.prefix)) return;
@@ -30,8 +30,9 @@ class MsgEvent {
         if (!this.client.commands[commandName]) return;
         const command = this.client.commands[commandName];
 
-        if (guildDB.disabledCommands
-            && guildDB.disabledCommands.indexOf(commandName) > -1) return;
+        if (guildDB.disabledCommands && guildDB.disabledCommands.indexOf(commandName) > -1)
+            return guildDB.messages && guildDB.messages.commandDisabled ?
+                this.client.handlers.embed.error(message.channel.id, 'This command is disabled.') : null;
 
         if (this._checkPermission(command, message))
             return this.client.handlers.embed.error(message.channel.id, 'No Permission.');

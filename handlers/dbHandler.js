@@ -9,11 +9,10 @@ class DBHandler {
 
         this.guildSchema = {
             id: String,
-            prefix: String,
+            prefix: { type: String, default: null },
             disabledCommands: [ String ],
             messages: {
-                commandNotFound: false,
-                commandDisabled: false
+                commandDisabled: { type: Boolean, default: true }
             }
         }
     }
@@ -43,15 +42,10 @@ class DBHandler {
         mongoose.model('guild', this.guildSchema);
     }
 
-    async updateGuild(guildId, newConfig) {
+    async getOrUpdateGuild(guildId, updates) {
         return await mongoose.model('guild').findOneAndUpdate({
-            'id': guildId }, { ...newConfig }, {
-            'upsert': true, 'setDefaultsOnInsert': true });
-    }
-
-    async getGuild(guildId) {
-        return await mongoose.model('guild').findOne({
-            'id': guildId });
+            'id': guildId }, updates || {}, {
+            'upsert': true, 'setDefaultsOnInsert': true, 'new': true });
     }
 }
 
