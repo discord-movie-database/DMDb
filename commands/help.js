@@ -42,7 +42,7 @@ class InfoCommand extends Command {
         // Embed template
         const embed = {
             'title': 'Discord Movie Database',
-            'description': `Use \`${this.config.prefix}help [Command Name]\` \
+            'description': `Use \`${message.prefix}help [Command Name]\` \
         to get more detailed information about a command.\n`,
             'fields': []
         };
@@ -59,7 +59,7 @@ class InfoCommand extends Command {
 
             // Append commands to response
             embed.fields.push({
-                'name': `${this.config.prefix}${commandName} ${command.usage ? `<${command.usage}>` : ''}`,
+                'name': `${message.prefix}${commandName} ${command.usage ? `<${command.usage}>` : ''}`,
                 'value': `- ${this.client.commands[commands[i]].info.shortDescription}`
             });
         }

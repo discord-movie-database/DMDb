@@ -20,11 +20,11 @@ class MsgEvent {
         let guildDB;
         if (message.channel.guild) guildDB = await this.dbHandler.getGuild(message.channel.guild.id);
 
-        const prefix = guildDB.prefix || this.client.prefix;
-        if (!message.content.startsWith(prefix)) return;
+        message.prefix = guildDB.prefix || this.client.prefix;
+        if (!message.content.startsWith(message.prefix)) return;
 
         const messageSplit = message.content.split(' ');
-        const commandName = messageSplit[0].toLowerCase().slice(prefix.length);
+        const commandName = messageSplit[0].toLowerCase().slice(message.prefix.length);
         message.arguments = messageSplit.slice(1);
 
         if (!this.client.commands[commandName]) return;
