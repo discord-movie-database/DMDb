@@ -30,6 +30,9 @@ class MsgEvent {
         if (!this.client.commands[commandName]) return;
         const command = this.client.commands[commandName];
 
+        if (guildDB.disabledCommands
+            && guildDB.disabledCommands.indexOf(commandName) > -1) return;
+
         if (this._checkPermission(command, message))
             return this.client.handlers.embed.error(message.channel.id, 'No Permission.');
 

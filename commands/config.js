@@ -17,10 +17,10 @@ class ConfigCommand extends Command {
                 'usage': '<new prefix>',
                 'process': this._optionPrefix.bind(this)
             },
-            'disableCommand': {
-                'description': 'Disable and hide any command.',
+            'togglecommand': {
+                'description': 'Disable/Enable and hide any command.',
                 'usage': '<command name>',
-                'process': this._optionDisableCommand
+                'process': this._optionToggleCommand.bind(this)
             }
         };
 
@@ -34,18 +34,34 @@ class ConfigCommand extends Command {
 
         const regex = /^[a-z0-9!"£$%^&*()_+=~#~@\';:.,<>?{}`|[\]\/\-]{1,16}$/i;
         if (!regex.test(prefix)) 
-            return this.embed.error(message.channel.id, `Invalid prefix. Regex: ${regex}`);
+            return this.embed.error(message.channel.id, `Invalid prefix. Regex: \`${regex}\``);
 
         const updatedGuild = await this.dbHandler.updateGuild(message.channel.guild.id, {
             'prefix': prefix });
 
         if (updatedGuild)
-            return this.embed.success(message.channel.id, `Updated prefix to ${prefix}`);
+            return this.embed.success(message.channel.id, `Updated prefix to \`${prefix}\``);
         this.embed.error(message.channel.id, 'Unable to update prefix.');
     }
 
-    _optionDisableCommand(message) {
+    async _optionToggleCommand(message) {
+        const command = message.arguments[0];
+        if (!command) return this.embed.error(message.channel.id, 'Command to toggle required.');
+
+        if (!this.client.commands[command])
+            return this.embed.error(message.channel.id, 'Command not found.');
+
+        const guild = await this.dbHandler.getGuild(message.channel.guild.id);
+
+        const toggle = guild.disabledCommands &&
+            guild.disabledCommands.indexOf(command) > -1 ? true : false;
+
+        const updatedGuild = await this.dbHandler.updateGuild(message.channel.guild.id, {
+            [toggle ? '$pull' : '$push']: { 'disabledCommands': command } });
+        if (updatedGuild) return this.embed.success(message.channel.id,
+            `${toggle ? 'Enabled' : 'Disabled'} command \`${command}\``);
         
+        this.embed.error(message.channel.id, 'Unable to disable command.');
     }
 
     optionList(message) {
@@ -74,8 +90,9 @@ class ConfigCommand extends Command {
             return this.embed.error(message.channel.id, 'You do not have the Manage Guild Permission.');
 
         // Check type of argument
-        const optionName = message.arguments[0];
+        let optionName = message.arguments[0];
         if (!optionName) return this.optionList(message);
+        optionName = optionName.toLowerCase();
 
         // Check if option exists
         if (!this.configOptions[optionName])
