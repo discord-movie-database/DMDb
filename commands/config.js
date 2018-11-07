@@ -13,14 +13,19 @@ class ConfigCommand extends Command {
 
         this.configOptions = {
             'prefix': {
-                'description': 'Change the prefix to a number, letter or symbol. Example: \`!?\`',
+                'description': 'Change the prefix to a number, letter or symbol. Examples: \`!?\`, `&`, `a!`',
                 'usage': '<new prefix>',
                 'process': this._optionPrefix.bind(this)
             },
             'togglecommand': {
-                'description': 'Disable/Enable and hide any command.',
+                'description': 'Disable/Enable and hide any command from help.',
                 'usage': '<command name>',
                 'process': this._optionToggleCommand.bind(this)
+            },
+            'togglemessage': {
+                'description': 'Disable/Enable error/success messages.',
+                'usage': '[message name]',
+                'process': this._optionToggleMessage.bind(this)
             }
         };
 
@@ -36,7 +41,7 @@ class ConfigCommand extends Command {
         if (!regex.test(prefix)) 
             return this.embed.error(message.channel.id, `Invalid prefix. Regex: \`${regex}\``);
 
-        const updatedGuild = await this.dbHandler.updateGuild(message.channel.guild.id, {
+        const updatedGuild = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id, {
             'prefix': prefix });
 
         if (updatedGuild)
@@ -51,23 +56,27 @@ class ConfigCommand extends Command {
         if (!this.client.commands[command])
             return this.embed.error(message.channel.id, 'Command not found.');
 
-        const guild = await this.dbHandler.getGuild(message.channel.guild.id);
+        const guild = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id);
 
         const toggle = guild.disabledCommands &&
             guild.disabledCommands.indexOf(command) > -1 ? true : false;
 
-        const updatedGuild = await this.dbHandler.updateGuild(message.channel.guild.id, {
+        const updatedGuild = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id, {
             [toggle ? '$pull' : '$push']: { 'disabledCommands': command } });
         if (updatedGuild) return this.embed.success(message.channel.id,
-            `${toggle ? 'Enabled' : 'Disabled'} command \`${command}\``);
+            `${toggle ? 'Enabled' : 'Disabled'} command \`${command}\`.`);
         
         this.embed.error(message.channel.id, 'Unable to disable command.');
+    }
+
+    async _optionToggleMessage(message) {
+        
     }
 
     optionList(message) {
         this.embed.create(message.channel.id, {
             'title': 'Guild Configuration',
-            'description': 'Customise the bot for this guild.',
+            'description': '<> = required, [] = optional\n_Do not include the brackets._',
 
             'fields': this.optionKeys.map((key) => {
                 const option = this.configOptions[key];
