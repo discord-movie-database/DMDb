@@ -12,7 +12,7 @@ class DBHandler {
             prefix: { type: String, default: null },
             disabledCommands: [ String ],
             messages: {
-                commandDisabled: { type: Boolean, default: true }
+                commanddisabled: { type: Boolean, default: true }
             }
         }
     }

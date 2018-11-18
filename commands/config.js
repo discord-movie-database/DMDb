@@ -15,17 +15,20 @@ class ConfigCommand extends Command {
             'prefix': {
                 'description': 'Change the prefix to a number, letter or symbol. Examples: \`!?\`, `&`, `a!`',
                 'usage': '<new prefix>',
-                'process': this._optionPrefix.bind(this)
+                'process': this.optionPrefix.bind(this)
             },
             'togglecommand': {
-                'description': 'Disable/Enable and hide any command from help.',
+                'description': 'Disable / enable and hide any command from help.',
                 'usage': '<command name>',
-                'process': this._optionToggleCommand.bind(this)
+                'process': this.optionToggleCommand.bind(this)
             },
             'togglemessage': {
-                'description': 'Disable/Enable error/success messages.',
+                'description': 'Disable / enable error or success messages.',
                 'usage': '[message name]',
-                'process': this._optionToggleMessage.bind(this)
+                'process': this.optionToggleMessage.bind(this),
+                'messages': {
+                    'commanddisabled': 'Toggle "command disabled" message.'
+                }
             }
         };
 
@@ -33,7 +36,8 @@ class ConfigCommand extends Command {
         this.optionKeys = Object.keys(this.configOptions);
     }
 
-    async _optionPrefix(message) {
+    // CHANGE PREFIX
+    async optionPrefix(message) {
         const prefix = message.arguments[0];
         if (!prefix) return this.embed.error(message.channel.id, 'New prefix required.');
 
@@ -49,7 +53,8 @@ class ConfigCommand extends Command {
         this.embed.error(message.channel.id, 'Unable to update prefix.');
     }
 
-    async _optionToggleCommand(message) {
+    // TOGGLE COMMANDS
+    async optionToggleCommand(message) {
         const command = message.arguments[0];
         if (!command) return this.embed.error(message.channel.id, 'Command to toggle required.');
 
@@ -66,19 +71,49 @@ class ConfigCommand extends Command {
         if (updatedGuild) return this.embed.success(message.channel.id,
             `${toggle ? 'Enabled' : 'Disabled'} command \`${command}\`.`);
         
-        this.embed.error(message.channel.id, 'Unable to disable command.');
+        this.embed.error(message.channel.id, 'Unable to toggle command.');
     }
 
-    async _optionToggleMessage(message) {
-        
+    // TOGGLE CONFIG MESSAGES
+    async optionToggleMessage(message) {
+        const argument = message.arguments[0];
+        const messageKeys = Object.keys(this.configOptions.togglemessage.messages);
+
+        if (!argument) return this.embed.create(message.channel.id, {
+            'title': 'Guild Configuration',
+            'description': 'Enable/Disable messages related to the configuration options.',
+
+            'fields': messageKeys.map(key => {
+                const messageDescription = this.configOptions.togglemessage.messages[key];
+
+                return {
+                    'name': this.capitaliseStart(key),
+                    'value': messageDescription,
+                    'inline': true
+                }
+            }) });
+        if (messageKeys.indexOf(argument) < 0) 
+            return this.embed.error(message.channel.id, 'Message name not found.');
+
+        const guild = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id);
+
+        const toggle = guild.messages && guild.messages[argument] ? false : true;
+
+        const updatedGuild = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id, {
+            'messages': { [argument]: toggle } });
+        if (updatedGuild) return this.embed.success(message.channel.id,
+            `**${toggle ? 'Enabled' : 'Disabled'}** the \`${this.capitaliseStart(argument)}\` message.`);
+
+        return this.embed.error(message.channel.id, 'Unable to toggle message.');
     }
 
+    // CONFIG OPTIONS EMBED
     optionList(message) {
         this.embed.create(message.channel.id, {
             'title': 'Guild Configuration',
             'description': '<> = required, [] = optional\n_Do not include the brackets._',
 
-            'fields': this.optionKeys.map((key) => {
+            'fields': this.optionKeys.map(key => {
                 const option = this.configOptions[key];
 
                 return {
