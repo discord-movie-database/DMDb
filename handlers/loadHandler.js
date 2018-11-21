@@ -37,7 +37,10 @@ class LoadHandler {
             'game': { 'name': this.client.config.options.bot.status } });
 
         // START BOT LIST STATS INTERVAL
-        if (this.client.env === 'main') this.client.handlers.list._listInterval();
+        if (this.client.env === 'main' && this.client.config.options.bot.postStats) {
+            this.client.handlers.list.updateStats();
+            this.client.handlers.list.listInterval();
+        }
 
         // DONE
         this.client.handlers.log.success('Finished loading');

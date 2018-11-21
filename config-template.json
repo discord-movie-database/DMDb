@@ -28,7 +28,8 @@
             "status": "",
             "embed": {
                 "color": ""
-            }
+            },
+            "postStats": true
         }
     },
     "db": { }
