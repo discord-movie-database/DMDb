@@ -5,11 +5,10 @@ class ListHandler {
         this.client = client;
     }
 
-    _listInterval() {
-        this.updateStats();
-        
-        this.client.listInterval = setInterval(() => {
-            this.updateStats(); }, 43200000);
+    listInterval() {
+        if (this.client.config.options.bot.postStats)
+            this.client.listInterval = setInterval(() => {
+                this.updateStats(); }, 43200000);
     }
 
     async _postStats(site, token) {
