@@ -13,11 +13,14 @@ class LoadHandler {
     }
 
     async start() {
+        if (this.client.loaded) return;
+
         // START
         this.client.handlers.log.info('Loading');
 
         // CONNECT TO DATABASE
         await this.databaseConnect();
+        this.client.handlers.log.info('Connected to database');
 
         // LOAD COMMANDS
         await this.loadCommands();
