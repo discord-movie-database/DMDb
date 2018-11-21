@@ -1,192 +1,204 @@
 const fs = require('fs');
-const { spawn } = require('child_process');
+const Util = require('../util.js');
 
 class LoadHandler {
     constructor(client) {
         this.client = client;
 
-        this.eventDirectory = `${__dirname}/../events/`;
-        this.commandDirectory = `${__dirname}/../commands/`;
-        this.handlerDirectory = `${__dirname}/../handlers/`;
+        this.util = new Util();
 
-        this.dbAttempt = 0;
+        this.commandDir = `${__dirname}/../commands`;
+        this.eventDir = `${__dirname}/../events`;
+        this.handlerDir = __dirname;
     }
-
-    // MISC //
-
-    _fileName(file, type) {
-        file = file.match(/(\w+)\.(\w+)/i);
-
-        if (file[2] === type) return file;
-        return false;
-    }
-
-    _delete(object, directory, name, type) {
-        if (!this.client[object][name]) return false;
-
-        if (object === 'events') this.client.removeListener(name, 
-            this.client[object][name].process);
-
-        delete this.client[object][name];
-        if (object === 'handlers') name += 'Handler';
-        delete require.cache[require.resolve(`${directory}${name}.${type}`)];
-
-        if (this.client[object][name]) return false;
-        return true;
-    }
-
-    // START / RELOAD //
 
     async start() {
-        if (this.client.loaded) return;
-        
-        this.client.handlers.log.success('Connected to Discord.');
+        // START
+        this.client.handlers.log.info('Loading');
 
-        await this.dbConnect();
-        this.loadCommands();
-        this.loadEvents();
+        // CONNECT TO DATABASE
+        await this.databaseConnect();
 
-        this.client.loaded = true;
+        // LOAD COMMANDS
+        await this.loadCommands();
+        const commandNames = this.getCommandNames();
+        this.client.handlers.log.info(`Loaded commands: ${this.util.list(commandNames)}`);
 
+        // LOAD EVENTS
+        await this.loadEvents();
+        const eventNames = Object.keys(this.client.events);
+        this.client.handlers.log.info(`Loaded events: ${this.util.list(eventNames)}`);
+
+        // UPDATE BOT STATUS
         this.client.editStatus({
-            'name': this.client.config.options.bot.status });
+            'game': { 'name': this.client.config.options.bot.status } });
 
-        this.client.handlers.log.success('Finished Loading.\n');
+        // START BOT LIST STATS INTERVAL
+        if (this.client.env === 'main') this.client.handlers.list._listInterval();
 
-        if (this.client.env === 'main')
-            this.client.handlers.list._listInterval();
+        // DONE
+        this.client.handlers.log.success('Finished loading');
     }
 
-    reload() {
-        this.client.loaded = false;
-        let success = true;
+    async reload() {
+        // START
+        this.client.handlers.log.info('Reloading');
 
-        try {
-            this.client.handlers.log.info('Reloading...');
+        // RELOAD HANDLERS
+        await this.reloadHandlers();
+        const handlerNames = this.getHandlerNames();
+        this.client.handlers.log.info(`Reloaded handlers: ${this.util.list(handlerNames)}`);
 
-            this.reloadBotHandlers();
-            this.reloadEvents();
-            this.reloadCommands();
+        // RELOAD EVENTS
+        await this.reloadEvents();
+        const eventNames = this.getEventNames();
+        this.client.handlers.log.info(`Reloaded events: ${this.util.list(eventNames)}`);
 
-            this.client.handlers.log.success('Finished reloading.');
-        } catch (err) {
-            this.client.loaded = true;
-            success = false;
+        // RELOAD COMMANDS
+        await this.reloadCommands();
+        const commandNames = this.getCommandNames();
+        this.client.handlers.log.info(`Reloaded commands: ${this.util.list(commandNames)}`);
 
-            this.client.handlers.log.error(err);
-        }
-
-        return success;
-    }
-
-    // EVENTS //
-
-    loadEvent(eventName) {
-        const Event = require(`${this.eventDirectory}${eventName}.js`);
-        this.client.events[eventName] = new Event(this.client);
-        
-        this.client.on(eventName, this.client.events[eventName].process);
-
-        this.client.handlers.log.info(`Loaded event: ${eventName}`);
-    }
-
-    loadEvents() {
-        const events = fs.readdirSync(this.eventDirectory);
-
-        for (let i = 0; i < events.length; i++) {
-            const eventName = this._fileName(events[i], 'js');
-            if (!eventName) continue;
-
-            this.loadEvent(eventName[1]);
-        }
-    }
-    
-    unloadEvent(eventName) {
-        return this._delete('events', this.eventDirectory, eventName, 'js');
-    }
-
-    unloadEvents() {
-        for (let eventName in this.client.events) {
-
-            this.unloadEvent(eventName);
-        }
-    }
-
-    reloadEvents() {
-        this.unloadEvents();
-        this.loadEvents();
+        // DONE
+        this.client.handlers.log.success('Finished reloading');
     }
 
     // COMMANDS //
 
-    loadCommand(commandName) {
-        const Command = require(`${this.commandDirectory}${commandName}.js`);
-        this.client.commands[commandName] = new Command(this.client);
-
-        this.client.handlers.log.info(`Loaded command: ${commandName}`);
+    getCommandNames() {
+        return Object.keys(this.client.commands);
     }
 
-    loadCommands() {
-        const commands = fs.readdirSync(this.commandDirectory);
-        
-        for (let i = 0; i < commands.length; i++) {
-            const commandName = this._fileName(commands[i], 'js');
-            if (!commandName) continue;
+    async loadCommand(commandName) {
+        try {
+            const Command = require(`${this.commandDir}/${commandName}`);
+            this.client.commands[commandName] = new Command(this.client);
 
-            this.loadCommand(commandName[1]);
+            if (this.client.commands[commandName].load)
+                this.client.commands[commandName].load();
+        } catch (err) {
+            this.client.handlers.log.error(`Loading command: ${commandName}`, err);
         }
     }
 
-    unloadCommand(commandName) {
-        this._delete('commands', this.commandDirectory, commandName, 'js');
+    async loadCommands() {
+        const commandDir = fs.readdirSync(this.commandDir);
+
+        for (let i = 0; i < commandDir.length; i++) {
+            const fileName = this.util.removeFileExtension(commandDir[i]);
+            await this.loadCommand(fileName);
+        }
     }
 
-    unloadCommands() {
-        for (let commandName in this.client.commands)
-            this.unloadCommand(commandName);
+    async unloadCommand(commandName) {
+        this.util.deleteRequireCache(`${this.commandDir}/${commandName}`);
+        delete this.client.commands[commandName];
     }
 
-    reloadCommands() {
+    async unloadCommands() {
+        const commandNames = this.getCommandNames();
+
+        for (let i = 0; i < commandNames.length; i++) {
+            const commandName = commandNames[i];
+            await this.unloadCommand(commandName);
+        }
+    }
+
+    async reloadCommands() {
         this.unloadCommands();
         this.loadCommands();
     }
 
-    // HANDLERS //
+    // EVENTS //
 
-    unloadBotHandler(handler) {
-        this._delete('handlers', this.handlerDirectory, `${handler}`, 'js');
+    getEventNames() {
+        return Object.keys(this.client.events);
     }
 
-    loadBotHandler(handler) {
-        const Handler = require(`./${handler}Handler.js`);
-        this.client.handlers[handler] = new Handler(this.client);
+    async loadEvent(eventName) {
+        try {
+            const Event = require(`${this.eventDir}/${eventName}`);
+            this.client.events[eventName] = new Event(this.client);
 
-        if (this.client.handlers.log)
-            return this.client.handlers.log.info(`Loaded handler: ${handler}`);
-        console.log(`Loaded handler: ${handler}`);
-    }
-
-    reloadBotHandlers() {
-        for (let handler in this.client.handlers) {
-            this.unloadBotHandler(handler);
-            this.loadBotHandler(handler);
+            this.client.on(eventName, this.client.events[eventName].process);
+        } catch (err) {
+            this.client.handlers.log.error(`Loading event: ${eventName}`, err);
         }
     }
 
-    async dbConnect() {
+    async loadEvents() {
+        const eventDir = fs.readdirSync(this.eventDir);
+
+        for (let i = 0 ; i < eventDir.length; i++) {
+            const eventName = this.util.removeFileExtension(eventDir[i]);
+            await this.loadEvent(eventName);
+        }
+    }
+
+    async unloadEvent(eventName) {
+        this.util.deleteRequireCache(`${this.eventDir}/${eventName}`);
+        this.client.removeListener(eventName, this.client.events[eventName].process);
+        delete this.client.events[eventName];
+    }
+    
+    async unloadEvents() {
+        const eventNames = this.getEventNames();
+
+        for (let i = 0; i < eventNames.length; i++) {
+            const eventName = eventNames[i];
+            await this.unloadEvent(eventName);
+        }
+    }
+
+    async reloadEvents() {
+        this.unloadEvents();
+        this.loadEvents();
+    }
+
+    // HANDLERS //
+
+    getHandlerNames() {
+        return Object.keys(this.client.handlers);
+    }
+
+    async loadHandler(handlerName) {
+        try {
+            const Handler = require(`${this.handlerDir}/${handlerName}`);
+            this.client.handlers[handlerName] = new Handler(this.client);
+        } catch (err) {
+            this.client.handlers.log.error(`Loading handler: ${handlerName}`, err);
+        }
+    }
+
+    async unloadHandler(handlerName) {
+        this.util.deleteRequireCache(`${this.handlerDir}/${handlerName}Handler`);
+        delete this.client.handlers[handlerName];
+    }
+
+    async reloadHandlers() {
+        const handlers = this.client.handlers;
+
+        for (let i = 0; i < handlers.length; i++) {
+            const handlerName = handlers[i];
+            await this.unloadHandler(handlerName);
+            await this.loadHandler(handlerName);
+        }
+    }
+
+    // DATABASE //
+
+    async databaseConnect() {
         await this.client.handlers.db.connect();
     }
 
-    async dbDisconnect() {
+    async databaseDisconnect() {
         await this.client.db.disconnect();
     }
 
-    async dbNewConnection() {
-        await this.dbDisconnect();
-        await this.dbConnect();
+    async databaseReconnect() {
+        await this.databaseDisconnect();
+        await this.databaseConnect();
     }
-
-    // TODO: new process.
 }
 
 module.exports = LoadHandler;
