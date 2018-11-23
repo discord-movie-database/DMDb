@@ -34,6 +34,10 @@ class InfoCommand extends Command {
                 'name': 'Restricted',
                 'value': this.yesno(command.restricted || false),
                 'inline': true
+            }, {
+                'name': 'Usage Count',
+                'value': `${command.usageCount}`,
+                'inline': true
             }]
         });
     }
