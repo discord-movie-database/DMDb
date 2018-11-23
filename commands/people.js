@@ -23,7 +23,7 @@ class PeopleCommand extends Command {
 
         // Get movies from API
         const people = await this.api.getPeople(message.arguments.join(' '), 1, true);
-        if (people.error) return this.embed.error(people.error); // Error
+        if (people.error) return this.embed.error(status, people.error); // Error
         
         // Response
         this.embed.edit(status, {
