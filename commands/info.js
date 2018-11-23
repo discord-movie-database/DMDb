@@ -4,7 +4,7 @@ class InfoCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Information about the bot.',
-            'longDescription': 'Developer, Library, Shards, Guilds, Channels, Users and more.',
+            'longDescription': 'Useful statistics to help the developer and satisfy curious users.',
             'visible': true,
             'restricted': false,
             'weight': 0

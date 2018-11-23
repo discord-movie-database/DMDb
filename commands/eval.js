@@ -3,8 +3,6 @@ const Command = require('../handlers/commandHandler');
 class EvalCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Testing',
-            'longDescription': 'Bot developer command only for testing.',
             'visible': false,
             'restricted': true
         });

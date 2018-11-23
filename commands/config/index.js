@@ -7,7 +7,7 @@ class ConfigCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Customise the bot for your guild.',
-            'longDescription': 'Add a custom prefix, disable commands from this command.',
+            'longDescription': 'Required the Manage Guild Permission. Customize common features which as prefix in this guild.',
             'visible': true,
             'restricted': false
         });

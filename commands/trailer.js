@@ -4,8 +4,8 @@ class TrailerCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Get a trailer for a movie.',
-            'longDescription': 'Get a trailer for a movie.',
-            'usage': 'Movie Name or ID',
+            'longDescription': 'Get a trailer for a movie. First video on the TMDb page will be used.',
+            'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,
             'weight': 20

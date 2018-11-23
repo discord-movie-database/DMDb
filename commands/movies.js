@@ -4,8 +4,8 @@ class MoviesCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Search for movies.',
-            'longDescription': 'Advanced search to find specific movies.',
-            'usage': 'Movie Name',
+            'longDescription': 'Multiple movies with the same name? Search for more than one movie. Use the IMDb ID or TMDb ID with the movie command to get more detailed information about it.',
+            'usage': '<Movie Name>',
             'weight': 60,
             'visible': true,
             'restricted': false

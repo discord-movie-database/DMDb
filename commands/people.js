@@ -4,8 +4,8 @@ class PeopleCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Search for people.',
-            'longDescription': 'Advanced search to find specific people.',
-            'usage': 'Person Name',
+            'longDescription': 'Multiple people with the same name? Search for more than one person. Use the IMDb ID or TMDb ID with the person command to get more detailed information about them.',
+            'usage': '<Person\'s Name>',
             'weight': 40,
             'visible': true,
             'restricted': false
