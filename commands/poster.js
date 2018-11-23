@@ -4,8 +4,8 @@ class PosterCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Get a movies poster.',
-            'longDescription': 'Get a movies poster.',
-            'usage': 'Movie Name or ID',
+            'longDescription': 'Get a large poster of a movie.',
+            'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,
             'weight': 35

@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class UpcomingCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Most popular movies in theatres at the moment.',
-            'longDescription': 'A list of upcoming movies in theatres.',
+            'shortDescription': 'Most popular movies at the moment.',
+            'longDescription': 'Top 10 most popular and upcoming movies in the theaters at the moment.',
             'visible': true,
             'restricted': false,
             'weight': 10

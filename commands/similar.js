@@ -4,8 +4,8 @@ class SimilarCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Get similar movies.',
-            'longDescription': 'Based on genres and keywords.',
-            'usage': 'Movie Name or ID',
+            'longDescription': 'Search for movies similar to another. Based on keywords and genres.',
+            'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,
             'weight': 30

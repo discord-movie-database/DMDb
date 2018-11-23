@@ -4,8 +4,8 @@ class TitleCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Get information about a movie.',
-            'longDescription': 'Get information about a movie with an IMDb ID, TMDb ID, or the name.',
-            'usage': 'Movie Name or ID',
+            'longDescription': 'Get information about a movie with an IMDb ID, TMDb ID, or the movie name.',
+            'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,
             'weight': 70
