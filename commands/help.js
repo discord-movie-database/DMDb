@@ -20,22 +20,24 @@ class InfoCommand extends Command {
             return this.embed.error(message.channel.id, 'Command not found.');
 
         // Command
-        const command = this.client.commands[commandName];
+        const command = this.client.commands[commandName].info;
 
         // Command information embed
         this.embed.create(message.channel.id, {
             'title': `Command: ${commandName.charAt(0).toUpperCase() + commandName.slice(1)}`,
-            'description': command.info.longDescription ||
-                           command.info.shortDescription ||
-                           'Description is currently unavailable.',
+            'description': command.longDescription ||
+                           command.shortDescription ||
+                           'No description for this command.',
             'fields': [{
                 'name': 'Visible',
-                'value': this.yesno(command.info.visible || false),
+                'value': this.yesno(command.visible || false),
                 'inline': true
             }, {
                 'name': 'Restricted',
-                'value': this.yesno(command.info.restricted || false),
-                'inline': true }] });
+                'value': this.yesno(command.restricted || false),
+                'inline': true
+            }]
+        });
     }
 
     commandList(message) {
@@ -48,9 +50,9 @@ class InfoCommand extends Command {
         };
 
         // Filter commands. Hidden / Restricted
-        const commands = Object.keys(this.client.commands).sort((a, b) =>
-            this.client.commands[b].info.weight - this.client.commands[a].info.weight)
-                .filter((commandName) => this.client.commands[commandName].info.visible);
+        const commands = Object.keys(this.client.commands).filter((commandName) =>
+            this.client.commands[commandName].info.visible).sort((a, b) =>
+                this.client.commands[b].info.weight - this.client.commands[a].info.weight);
 
         // Filtered commands
         for (let i = 0; i < commands.length; i++) {
@@ -59,8 +61,8 @@ class InfoCommand extends Command {
 
             // Append commands to response
             embed.fields.push({
-                'name': `${message.prefix}${commandName} ${command.usage ? `<${command.usage}>` : ''}`,
-                'value': `- ${this.client.commands[commands[i]].info.shortDescription}`
+                'name': `${message.prefix}${commandName} ${command.usage || ''}`,
+                'value': `- ${command.shortDescription}`
             });
         }
 

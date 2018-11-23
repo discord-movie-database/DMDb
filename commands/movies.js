@@ -23,7 +23,7 @@ class MoviesCommand extends Command {
 
         // Get movies from API
         let movies = await this.api.getMovies(message.arguments.join(' '), 1, true);
-        if (movies.error) return this.embed.error(movies.error); // Error
+        if (movies.error) return this.embed.error(status, movies.error); // Error
         
         // Response
         this.embed.edit(status, {

@@ -39,7 +39,7 @@ class optionToggleMessage extends template {
         const updatedGuild = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id, {
             'messages': { [argument]: toggle } });
         if (updatedGuild) return this.embed.success(message.channel.id,
-            `**${toggle ? 'Enabled' : 'Disabled'}** the \`${this.capitaliseStart(argument)}\` message.`);
+            `${toggle ? 'Enabled' : 'Disabled'} the \`${this.capitaliseStart(argument)}\` message.`);
 
         return this.embed.error(message.channel.id, 'Unable to toggle message.');
     }
