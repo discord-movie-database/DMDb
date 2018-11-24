@@ -34,7 +34,7 @@ class LoadHandler {
 
         // UPDATE BOT STATUS
         this.client.editStatus({
-            'game': { 'name': this.client.config.options.bot.status } });
+            'name': this.client.config.options.bot.status });
 
         // START BOT LIST STATS INTERVAL
         if (this.client.env === 'main' && this.client.config.options.bot.postStats) {
