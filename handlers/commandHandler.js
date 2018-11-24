@@ -1,3 +1,5 @@
+const Util = require('../util');
+
 class CommandHandler {
     constructor(client, info) {
         this.client = client;
@@ -15,6 +17,8 @@ class CommandHandler {
                 ? info.restricted : true; 
             this.info.weight = info.weight || 0;
         }
+
+        this.util = new Util();
 
         this.embed = this.client.handlers.embed;
         this.api = this.client.handlers.api;
