@@ -1,11 +1,10 @@
 const fs = require('fs');
-const Util = require('../util.js');
 
 class LoadHandler {
     constructor(client) {
         this.client = client;
-
-        this.util = new Util();
+        
+        this.util = this.client.handlers.util;
 
         this.commandDir = `${__dirname}/../commands`;
         this.eventDir = `${__dirname}/../events`;
