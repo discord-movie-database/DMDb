@@ -8,6 +8,7 @@ const EmbedHandler = require('./handlers/embedHandler');
 const APIHandler = require('./handlers/apiHandler');
 const ListHandler = require('./handlers/listHandler');
 const DBHandler = require('./handlers/dbHandler');
+const UtilHandler = require('./handlers/utilHandler');
 
 class Client extends Eris {
     constructor(config) {
@@ -22,6 +23,7 @@ class Client extends Eris {
         this.events = new Array();
         this.handlers = new Object();
         
+        this.handlers.util = new UtilHandler(this);
         this.handlers.log = new LogHandler(this);
         this.handlers.embed = new EmbedHandler(this);
         this.handlers.api = new APIHandler(this);

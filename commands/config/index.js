@@ -1,7 +1,6 @@
 const fs = require('fs');
 
 const Command = require('../../handlers/commandHandler');
-const Util = require('../../util'); 
 
 class ConfigCommand extends Command {
     constructor(client) {
@@ -11,8 +10,6 @@ class ConfigCommand extends Command {
             'visible': true,
             'restricted': false
         });
-
-        this.util = new Util();
 
         this.options = {};
         this.optionKeys = [];
