@@ -48,7 +48,7 @@ class InfoCommand extends Command {
         // Embed template
         const embed = {
             'title': 'Discord Movie Database',
-            'description': `Use \`${message.prefix}help [Page Number]\` for more commands. ` +
+            'description': `Use \`${message.prefix}help [Page Number]\` for more commands.\n` +
                 `Or \`${message.prefix}help [Command Name]\` ` +
                 `to get more detailed information about a command.\n`,
             'fields': []
@@ -59,7 +59,7 @@ class InfoCommand extends Command {
             this.client.commands[commandName].info.visible).sort((a, b) =>
                 this.client.commands[b].info.weight - this.client.commands[a].info.weight);
         
-        const pages = this.util.chunkArray(commands, 5);
+        const pages = this.util.chunkArray(commands, 10);
         const page = pages[pagePosition - 1];
 
         if (page.length === 0)
