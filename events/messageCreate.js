@@ -17,7 +17,7 @@ class MsgEvent {
     async process(message) {
         if (message.bot) return;
 
-        let guildDB;
+        let guildDB = {};
         if (message.channel.guild) guildDB = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id);
 
         message.prefix = guildDB.prefix || this.client.prefix;
