@@ -14,6 +14,9 @@ class InfoCommand extends Command {
     }
 
     async process(message) {
+        const shardId = message.channel.guild ?
+            ` (${message.channel.guild.shard.id})` : '';
+
         // Response
         this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
@@ -28,7 +31,7 @@ class InfoCommand extends Command {
                 'value': `Eris ${this.package.dependencies.eris}`
             }, {
                 'name': 'Shards',
-                'value': `${this.client.shards.size}`
+                'value': `${this.client.shards.size}${shardId}`
             }, {
                 'name': 'Guilds',
                 'value': `${this.client.guilds.size}`
