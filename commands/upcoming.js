@@ -17,8 +17,10 @@ class UpcomingCommand extends Command {
             'title': 'Getting movies...' });
 
         // Get movies from API
-        const movies = await this.api.getUpcomingMovies();
-        if (movies.error) return this.embed.error(movies); 
+        let movies = await this.api.getUpcomingMovies();
+        if (movies.error) return this.embed.error(movies);
+
+        movies = movies.results.slice(0, 10);
 
         // Response
         this.embed.edit(status, {

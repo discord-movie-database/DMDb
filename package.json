@@ -4,7 +4,7 @@
   "author": "Dumplings",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js dev",
+    "test": "node index.js dev --trace-warnings",
     "start": "node index.js main"
   },
   "private": true,
