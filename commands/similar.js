@@ -25,6 +25,8 @@ class SimilarCommand extends Command {
         let movies = await this.api.getSimilarMovies(message.arguments.join(' '));
         if (movies.error) return this.embed.error(status, movies); // Error
 
+        movies = movies.results.slice(0, 10);
+
         // Response
         this.embed.edit(status, {
             'title': 'Search Results',
