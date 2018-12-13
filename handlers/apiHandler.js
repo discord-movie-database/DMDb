@@ -19,13 +19,14 @@ class apiHandler {
 
     /**
      * Toggle TMDb ID prefix "T"
-     * for example, IMDb uses "tt"
      * 
-     * @param {(boolean|string)} id Old ID
+     * @param {(boolean|string)} ID Old ID
      * @returns {string} Updated ID
      */
-    updateID(ID) {
-        if (ID.startsWith('T')) return ID.slice(1);
+    formatTMDbID(ID) {
+        ID = ID.toString();
+
+        if (ID.startsWith('t')) return ID.slice(1);
         return `T${ID}`;
     }
 
@@ -36,7 +37,7 @@ class apiHandler {
      * @returns {(string|boolean)} probably 'imdb or 'tmdb'
      */
     IDType(ID) {
-        let type = ID.match(/^(nm|tt|T)(\d+)/);
+        let type = ID.match(/^(nm|tt|t)(\d+)/);
         if (!type) return false;
         
         type = type[1];
@@ -44,7 +45,7 @@ class apiHandler {
         if (type === 'nm') return 'imdb';
         if (type === 'tt') return 'imdb';
 
-        if (type === 'T') return 'tmdb';
+        if (type === 't') return 'tmdb';
     }
 
     /**
@@ -61,16 +62,18 @@ class apiHandler {
         if (API === 'tmdb') return query.slice(1);
 
         if (API === 'imdb') {
-            const results = this.get(`find/${query}`, {
+            const results = await this.get(`find/${query}`, {
                 'external_source': 'imdb_id' });
             if (results.error) return results;
 
             if (results.movie_results[0])
-                return this.formatID(results.movie_results[0].id);
+                return results.movie_results[0].id;
 
             if (results.person_results[0])
-                return this.formatID(results.person_results[0].id);
+                return results.person_results[0].id;
         }
+
+        return this.error('No API found for this ID.');
     }
 
     /**
