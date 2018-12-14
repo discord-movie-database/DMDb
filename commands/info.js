@@ -15,7 +15,7 @@ class InfoCommand extends Command {
 
     async process(message) {
         const shardId = message.channel.guild ?
-            ` (${message.channel.guild.shard.id})` : '';
+            ` (Current: ${message.channel.guild.shard.id})` : '';
 
         // Response
         this.embed.create(message.channel.id, {
@@ -41,6 +41,9 @@ class InfoCommand extends Command {
             }, {
                 'name': 'Users',
                 'value': `${this.client.users.size}`
+            }, {
+                'name': 'Commands Executed',
+                'value': this.client.stats.totalUsageCount + 1
             }].map((field) => ({ ...field, 'inline': true })),
             'footer': 'Data sourced from The Movie Database'
         });
