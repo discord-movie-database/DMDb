@@ -46,6 +46,7 @@ class MsgEvent {
         }
 
         this.client.commands[commandName].info.usageCount++;
+        this.client.stats.totalUsageCount++;
 
         this.client.handlers.log.info(`Command: ${commandName} | User: ${message.author.id} | \
 Guild: ${message.channel.guild ? message.channel.guild.id : 'DM'}${message.arguments[0] ? ` | \

@@ -14,10 +14,15 @@ class Client extends Eris {
     constructor(config) {
         super(config.tokens.discord[env], config.options.client);
 
+        this.loaded = false;
+
         this.env = env;
         this.config = config;
         this.prefix = this.config.options.bot.prefix;
         this.db;
+
+        this.stats = {};
+        this.stats.totalUsageCount = 0;
 
         this.commands = new Array();
         this.events = new Array();
@@ -31,7 +36,7 @@ class Client extends Eris {
         this.handlers.load = new LoadHandler(this);
         this.handlers.list = new ListHandler(this);
 
-        this.loaded = false;
+        this.handlers.log.info('Connecting to Discord');
         this.on('ready', () => this.handlers.load.start());
     }
 }
