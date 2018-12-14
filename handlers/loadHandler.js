@@ -12,14 +12,16 @@ class LoadHandler {
     }
 
     async start() {
+        this.client.handlers.log.success('Connected to Discord');
         if (this.client.loaded) return;
 
         // START
-        this.client.handlers.log.info('Loading');
+        this.client.handlers.log.info('Loading bot');
 
         // CONNECT TO DATABASE
+        this.client.handlers.log.info('Connecting to database');
         await this.databaseConnect();
-        this.client.handlers.log.info('Connected to database');
+        this.client.handlers.log.success('Connected to database');
 
         // LOAD COMMANDS
         await this.loadCommands();
@@ -42,12 +44,12 @@ class LoadHandler {
         }
 
         // DONE
-        this.client.handlers.log.success('Finished loading');
+        this.client.handlers.log.success('Finished loading bot');
     }
 
     async reload() {
         // START
-        this.client.handlers.log.info('Reloading');
+        this.client.handlers.log.info('Reloading bot');
 
         // RELOAD HANDLERS
         await this.reloadHandlers();
@@ -65,7 +67,7 @@ class LoadHandler {
         this.client.handlers.log.info(`Reloaded commands: ${this.util.list(commandNames)}`);
 
         // DONE
-        this.client.handlers.log.success('Finished reloading');
+        this.client.handlers.log.success('Finished reloading bot');
     }
 
     // COMMANDS //

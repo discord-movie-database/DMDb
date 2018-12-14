@@ -96,7 +96,8 @@ class apiHandler {
             response = await request.get(requestURL);
         } catch (err) { console.log(err); }
 
-        if (response.statusCode === 429) return this.error('Ratelimited. Try again later.');
+        if (response && response.statusCode === 429)
+            return this.error('Ratelimited. Try again later.');
         if (!response || response.statusCode !== 200) return this.error('API Error.');
 
         return response.body;
