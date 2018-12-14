@@ -45,7 +45,9 @@ class TitleCommand extends Command {
                 { 'name': 'Votes', 'value': this.voteCount(movie.vote_count) },
                 { 'name': 'IMDb ID', 'value': this.IMDbID(movie.imdb_id) },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id)
-            }])
+            }]),
+
+            'footer': `Not the movie you wanted? Try searching for it using the ${message.prefix}movies command.`
         });
     }
 }
