@@ -14,17 +14,14 @@ class TrailerCommand extends Command {
 
     async process(message) {
         // Check for query
-        if (!message.arguments[0])
-            return this.embed.error(message.channel.id, `${this.info.usage} required.`);
+        if (!message.arguments[0]) return this.usageMessage();
 
         // Status of command response
-        const status = await this.embed.create(message.channel.id, {
-            'title': 'Searching...' });
+        const status = await this.searchingMessage(message);
 
         // Get movie from API
         const trailers = await this.api.getTrailers(message.arguments.join(' '));
         if (trailers.error) return this.embed.error(status, trailers); // Error
-
         const trailer = trailers[0];
 
         // Response

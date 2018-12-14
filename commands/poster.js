@@ -14,19 +14,19 @@ class PosterCommand extends Command {
 
     async process(message) {
         // Check for query
-        if (!message.arguments[0]) return this.embed.error(message.channel.id,
-            `${this.info.usage} required.`);
+        if (!message.arguments[0]) return this.usageMessage();
 
         // Status of command response
-        const status = await this.embed.create(message.channel.id, {
-            'title': 'Searching...' });
+        const status = await this.searchingMessage(message);
 
         // Get poster from API
         const poster = await this.api.getPoster(message.arguments.join(' '));
         if (poster.error) return this.embed.error(status, poster); // Error
 
-        // Response
+        // Remove status message
         await status.delete();
+
+        // Response
         this.client.createMessage(message.channel.id, '', {
             'file': poster,
             'name': 'poster.jpg'

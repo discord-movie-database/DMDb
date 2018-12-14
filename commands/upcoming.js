@@ -13,27 +13,25 @@ class UpcomingCommand extends Command {
 
     async process(message) {
         // Status of command response
-        const status = await this.embed.create(message.channel.id, {
-            'title': 'Getting movies...' });
+        const status = await this.searchingMessage(message);
 
         // Get movies from API
-        let movies = await this.api.getUpcomingMovies();
+        const movies = await this.api.getUpcomingMovies();
         if (movies.error) return this.embed.error(movies);
-
-        movies = movies.results.slice(0, 10);
 
         // Response
         this.embed.edit(status, {
             'title': 'Upcoming Movies',
             'description': this.info.shortDescription,
-            'fields': movies.map((movie, index) => { return {
+
+            'fields': movies.map((movie, index) => ({
                 'name': movie.title,
-                'value': `**${(index + 1)}** | Pop: ${this.popularity(movie.popularity)} | \
-Release: ${this.releaseDate(movie.release_date)} | \
-Vote Average: ${this.voteAverage(movie.vote_average)} | \
-${this.TMDbID(movie.id)}`
-            }})
-        })
+                'value': `**${(index + 1)}** **|** ` +
+                    `Release: ${this.releaseDate(movie.release_date)} **|** ` +
+                    `Vote Average: ${this.voteAverage(movie.vote_average)} **|** ` +
+                    `${this.TMDbID(movie.id)}`
+            }))
+        });
     }
 }
 

@@ -95,7 +95,9 @@ class apiHandler {
         try {
             response = await request.get(requestURL);
         } catch (err) { console.log(err); }
-        if (!response || response.statusCode !== 200) return this.error('API Error. Try again later.');
+
+        if (response.statusCode === 429) return this.error('Ratelimited. Try again later.');
+        if (!response || response.statusCode !== 200) return this.error('API Error.');
 
         return response.body;
     }
@@ -115,6 +117,7 @@ class apiHandler {
             return this.error('No results found.');
 
         // TODO: Handle pages
+        results.results = results.results.slice(0, 10);
 
         return results;
     }

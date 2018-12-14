@@ -161,6 +161,16 @@ class CommandHandler {
     capitaliseStart(value) {
         return value.charAt(0).toUpperCase() + value.slice(1);
     }
+
+    async searchingMessage(message) {
+        return await this.embed.create(message.channel.id, {
+            'title': 'Searching...' });
+    }
+
+    async usageMessage(message) {
+        return this.embed.error(message.channel.id,
+            `Command usage: \`${this.info.usage}\``);
+    }
 }
 
 module.exports = CommandHandler;
