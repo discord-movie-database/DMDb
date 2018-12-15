@@ -21,7 +21,7 @@ class MoviesCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Get movies from API
-        let movies = await this.api.getMovies(message.arguments.join(' '));
+        const movies = await this.api.getMovies(message.arguments.join(' '));
         if (movies.error) return this.embed.error(status, movies.error); // Error
 
         // Response
@@ -34,8 +34,8 @@ class MoviesCommand extends Command {
             'fields': movies.results.map((movie, index) => ({
                 'name': movie.title,
                 'value': `**${(index + 1)}** **|** ` +
-                    `Release: ${this.releaseDate(movie.release_date)} **|** ` +
                     `Vote Average: ${this.voteAverage(movie.vote_average)} **|** ` +
+                    `Release: ${this.releaseDate(movie.release_date)} **|** ` +
                     `${this.TMDbID(movie.id)}`
             }))
         });
