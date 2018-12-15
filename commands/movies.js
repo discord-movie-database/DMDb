@@ -15,7 +15,7 @@ class MoviesCommand extends Command {
 
     async process(message) {
         // Check for query
-        if (!message.arguments[0]) return this.usageMessage();
+        if (!message.arguments[0]) return this.usageMessage(message);
 
         // Status of command response
         const status = await this.searchingMessage(message);
