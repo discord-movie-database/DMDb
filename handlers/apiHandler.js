@@ -42,18 +42,15 @@ class apiHandler {
         
         type = type[1];
 
-        if (type === 'nm') return 'imdb';
-        if (type === 'tt') return 'imdb';
-
+        if (type === 'nm' || type === 'tt') return 'imdb';
         if (type === 't') return 'tmdb';
     }
 
     /**
      * Convert IMDb ID into TMDb ID.
-     * > USES API
      *
-     * @param {string} query Possible ID to convert
-     * @returns {(string|boolean)} Error or TMDb ID
+     * @param {string} query ID to convert
+     * @returns {(string|boolean)} Error or results
      */
     async convertExternalID(query) {
         const API = this.IDType(query);
@@ -61,19 +58,8 @@ class apiHandler {
 
         if (API === 'tmdb') return query.slice(1);
 
-        if (API === 'imdb') {
-            const results = await this.get(`find/${query}`, {
-                'external_source': 'imdb_id' });
-            if (results.error) return results;
-
-            if (results.movie_results[0])
-                return results.movie_results[0].id;
-
-            if (results.person_results[0])
-                return results.person_results[0].id;
-        }
-
-        return this.error('No API found for this ID.');
+        return await this.get(`find/${query}`, {
+            'external_source': 'imdb_id' });
     }
 
     /**
@@ -137,14 +123,15 @@ class apiHandler {
     }
 
     /**
-     * Get a movies TMDb ID with a query or external ID (IMDb)
+     * Get a movie's TMDb ID with a query or external ID (IMDb)
      * 
      * @param {string} query Movie name
      * @returns {string} Error or ID
      */
     async getMovieID(query) {
-        let movieID = await this.convertExternalID(query);
-        if (!movieID.error) return movieID;
+        const movieID = await this.convertExternalID(query);
+        if (!movieID.error && movieID.movie_results[0])
+            return movieID.movie_results[0].id;
 
         const movies = await this.getMovies(query);
         if (movies.error) return movies;
@@ -180,14 +167,15 @@ class apiHandler {
     }
 
     /**
-     * Get a movies TMDb ID with a query or external ID (IMDb)
+     * Get a movie's TMDb ID with a query or external ID (IMDb)
      * 
      * @param {string} query Movie name
      * @returns {string} Error or ID
      */
     async getPersonID(query) {
-        let personID = await this.convertExternalID(query);
-        if (!personID.error) return personID;
+        const personID = await this.convertExternalID(query);
+        if (!personID.error && personID.person_results[0])
+            return personID.person_results[0].id;
 
         const people = await this.getPeople(query);
         if (people.error) return people;
@@ -196,7 +184,7 @@ class apiHandler {
     }
 
     /**
-     * Get detailed data about a person with an ID or name
+     * Get detailed data about a person with an ID or query
      * 
      * @param {string} query Person name
      * @returns {object} Error or person data
@@ -207,6 +195,50 @@ class apiHandler {
 
         const person = this.get(`person/${personID}`);
         return person;
+    }
+
+    /**
+     * Get simple data about TV shows with a query
+     * 
+     * @param {string} query TV show name
+     * @returns {object} Error or TV shows
+     */
+    async getTVShows(query) {
+        const TVShows = await this.getResults('search/tv', {
+            'query': query });
+
+        return TVShows;
+    }
+
+    /**
+     * Get a TV show's TMDb ID with a query or external ID (IMDb)
+     * 
+     * @param {string} query TV show name
+     * @returns {string} Error or ID
+     */
+    async getTVShowID(query) {
+        const TVShowID = await this.convertExternalID(query);
+        if (!TVShowID.error && TVShowID.tv_results[0])
+            return TVShowID.tv_results[0].id;
+
+        const TVShows = await this.getTVShows(query);
+        if (TVShows.error) return TVShows;
+
+        return TVShows.results[0].id;
+    }
+
+    /**
+     * Get detailed data about a TV show with an ID or query
+     * 
+     * @param {string} query TV show name
+     * @returns {object} Error or TV show data
+     */
+    async getTVShow(query) {
+        const TVShowID = await this.getTVShowID(query);
+        if (TVShowID.error) return TVShowID;
+
+        const TVShow = this.get(`tv/${TVShowID}`);
+        return TVShow;
     }
 
     /**
