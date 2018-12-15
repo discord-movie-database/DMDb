@@ -21,7 +21,7 @@ class TitleCommand extends Command {
 
         // Get movie from API
         const movie = await this.api.getMovie(message.arguments.join(' '));
-        if (movie.error) return this.embed.error(status, movie); // Error
+        if (movie.error) return this.embed.error(status, movie.error); // Error
 
         // Response
         this.embed.edit(status, {

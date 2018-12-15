@@ -19,13 +19,13 @@ class ShowHandler extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
-        // Get movie from API
+        // Get TV show from API
         const TVShow = await this.api.getTVShow(message.arguments.join(' '));
-        if (TVShow.error) return this.embed.error(status, TVShow); // Error
+        if (TVShow.error) return this.embed.error(status, TVShow.error); // Error
 
         // Response
         this.embed.edit(status, {
-            'url': this.movieUrl(TVShow.imdb_id, TVShow.id),
+            'url': this.tmdbUrl(TVShow.id),
             'title': TVShow.name,
             'description': TVShow.overview,
             'thumbnail': this.thumbnail(TVShow.poster_path),
@@ -37,11 +37,13 @@ class ShowHandler extends Command {
                 { 'name': 'In Production', 'value': this.yesno(TVShow.in_production) },
                 { 'name': 'First Air Date', 'value': this.releaseDate(TVShow.first_air_date) },
                 { 'name': 'Last Air Date', 'value': this.releaseDate(TVShow.last_air_date) },
+                { 'name': 'Created By', 'value': this.createdBy(TVShow.created_by) },
                 { 'name': 'Genres', 'value': this.genres(TVShow.genres), 'inline': false },
                 { 'name': 'Homepage', 'value': this.homepage(TVShow.homepage), 'inline': false },
                 { 'name': 'Vote Average', 'value': this.voteAverage(TVShow.vote_average) },
                 { 'name': 'Votes', 'value': this.voteCount(TVShow.vote_count) },
-                { 'name': 'IMDb ID', 'value': this.IMDbID(TVShow.imdb_id) },
+                { 'name': 'Season Count', 'value':
+                    `${this.seasonCount(TVShow.seasons)} (${this.episodeCount(TVShow.seasons)} Episodes)` },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(TVShow.id)
             }]),
 

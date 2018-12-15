@@ -130,6 +130,8 @@ class apiHandler {
      */
     async getMovieID(query) {
         const movieID = await this.convertExternalID(query);
+        if (typeof movieID === 'string') return movieID;
+
         if (!movieID.error && movieID.movie_results[0])
             return movieID.movie_results[0].id;
 
@@ -174,6 +176,8 @@ class apiHandler {
      */
     async getPersonID(query) {
         const personID = await this.convertExternalID(query);
+        if (typeof personID === 'string') return personID;
+
         if (!personID.error && personID.person_results[0])
             return personID.person_results[0].id;
 
@@ -218,6 +222,8 @@ class apiHandler {
      */
     async getTVShowID(query) {
         const TVShowID = await this.convertExternalID(query);
+        if (typeof TVShowID === 'string') return TVShowID;
+
         if (!TVShowID.error && TVShowID.tv_results[0])
             return TVShowID.tv_results[0].id;
 

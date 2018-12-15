@@ -30,10 +30,16 @@ class CommandHandler {
         return value ? 'Yes' : 'No';
     }
 
+    imdbUrl(ID) {
+        return `https://www.imdb.com/title/${ID}`;
+    }
+
+    tmdbUrl(ID) {
+        return `https://www.themoviedb.org/movie/${ID}`;
+    }
+
     movieUrl(imdb, tmdb) {
-        return imdb 
-            ? `https://www.imdb.com/title/${imdb}`
-            : `https://www.themoviedb.org/movie/${tmdb}`;
+        return imdb ? this.imdbUrl(imdb) : this.tmdbUrl(tmdb);
     }
 
     thumbnail(value) {
@@ -70,6 +76,20 @@ class CommandHandler {
 
     type(value) {
         return value || 'N/A';
+    }
+
+    createdBy(value) {
+        return value ?
+            value.map(person => `${person.name} (t${person.id})`) .join(', ') : 'N/A';
+    }
+
+    seasonCount(value) {
+        return value ? value.length : 'N/A';
+    }
+
+    episodeCount(value) {
+        return value ?
+            value.map(season => season.episode_count).reduce((a, b) => a + b) || 'N/A' : 'N/A';
     }
 
     adult(value) {

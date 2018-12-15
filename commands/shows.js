@@ -20,7 +20,7 @@ class ShowsCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
-        // Get movies from API
+        // Get TV shows from API
         const TVShows = await this.api.getTVShows(message.arguments.join(' '));
         if (TVShows.error) return this.embed.error(status, TVShows.error); // Error
 
