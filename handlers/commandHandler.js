@@ -64,6 +64,14 @@ class CommandHandler {
         return value ? `${value} Minutes` : 'N/A';
     }
 
+    epRuntime(value) {
+        return this.runtime(value[0] || '');
+    }
+
+    type(value) {
+        return value || 'N/A';
+    }
+
     adult(value) {
         return this.yesno(value);
     }

@@ -32,7 +32,7 @@ class TitleCommand extends Command {
 
             'fields': this.parseEmbedFields([
                 { 'name': 'Status', 'value': movie.status },
-                { 'name': 'Release Year', 'value': this.releaseDate(movie.release_date) },
+                { 'name': 'Release Date', 'value': this.releaseDate(movie.release_date) },
                 { 'name': 'Runtime', 'value': this.runtime(movie.runtime) },
                 { 'name': 'Adult', 'value': this.adult(movie.adult) },
                 { 'name': 'Genres', 'value': this.genres(movie.genres), 'inline': false },
@@ -41,7 +41,7 @@ class TitleCommand extends Command {
                 { 'name': 'Budget', 'value': this.budget(movie.budget) },
                 { 'name': 'Revenue', 'value': this.revenue(movie.revenue) },
                 { 'name': 'Homepage', 'value': this.homepage(movie.homepage), 'inline': false },
-                { 'name': 'Vote Average', 'value': `${this.voteAverage(movie.vote_average)}` },
+                { 'name': 'Vote Average', 'value': this.voteAverage(movie.vote_average) },
                 { 'name': 'Votes', 'value': this.voteCount(movie.vote_count) },
                 { 'name': 'IMDb ID', 'value': this.IMDbID(movie.imdb_id) },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id)
