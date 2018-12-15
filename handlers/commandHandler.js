@@ -143,6 +143,7 @@ class CommandHandler {
     }
 
     description(value) {
+        value = value.split('\n')[0];
         return value.length > 2048 ? value.substr(0, 2045) + '...' : value;
     }
 
