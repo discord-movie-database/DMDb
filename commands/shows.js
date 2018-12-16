@@ -31,9 +31,9 @@ class ShowsCommand extends Command {
                 ` Total Pages: ${TVShows.total_pages} **|**` + 
                 ` Total Results: ${TVShows.total_results}`,
             
-            'fields': TVShows.results.map((TVShow, index) => ({
+            'fields': TVShows.results.map(TVShow => ({
                 'name': TVShow.name,
-                'value': `**${(index + 1)}** **|** ` +
+                'value': `**${TVShow.index}** **|** ` +
                     `Vote Average: ${this.voteAverage(TVShow.vote_average)} **|** ` +
                     `First Air Date: ${this.releaseDate(TVShow.first_air_date)} **|** ` +
                     `${this.TMDbID(TVShow.id)}`
