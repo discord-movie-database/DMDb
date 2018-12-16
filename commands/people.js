@@ -31,9 +31,9 @@ class PeopleCommand extends Command {
                 `Total Pages: ${people.total_pages} **|** ` +
                 `Total Results: ${people.total_results}`,
 
-            'fields': people.results.map((person, index) => ({
+            'fields': people.results.map(person => ({
                 'name': person.name,
-                'value': `**${(index + 1)}** **|** ` +
+                'value': `**${person.index}** **|** ` +
                     `Known For: ${this.knownFor(person.known_for)} **|** ` +
                     `${this.TMDbID(person.id)}`
             }))

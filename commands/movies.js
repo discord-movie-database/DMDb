@@ -31,9 +31,9 @@ class MoviesCommand extends Command {
                 ` Total Pages: ${movies.total_pages} **|**` + 
                 ` Total Results: ${movies.total_results}`,
             
-            'fields': movies.results.map((movie, index) => ({
+            'fields': movies.results.map(movie => ({
                 'name': movie.title,
-                'value': `**${(index + 1)}** **|** ` +
+                'value': `**${movie.index}** **|** ` +
                     `Vote Average: ${this.voteAverage(movie.vote_average)} **|** ` +
                     `Release: ${this.releaseDate(movie.release_date)} **|** ` +
                     `${this.TMDbID(movie.id)}`

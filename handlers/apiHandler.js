@@ -4,6 +4,8 @@ class apiHandler {
     constructor(client) {
         this.client = client;
 
+        this.util = this.client.handlers.util;
+
         this.base = `https://api.themoviedb.org/3/`;
     }
 
@@ -97,15 +99,29 @@ class apiHandler {
      * @returns {object} Array of results
      */
     async getResults(endpoint, params) {
+        if (!params.query) return this.error('Query required.');
+
+        const page = params.page && params.page > 0 ? params.page : 1;
+        params.page = Math.ceil(page / 4);
+
+        if (params.page > 1000)
+            return this.error('Page must be less then or equal to 4000.');
+
         const results = await this.get(endpoint, params);
         if (results.error) return results;
 
-        if (results.total_results === 0)
+        results.page = page;
+        results.total_pages = Math.ceil(results.total_results / 5);
+
+        if (results.total_results === 0 || page > results.total_pages)
             return this.error('No results found.');
 
-        // TODO: Handle pages
-        results.results = results.results.slice(0, 10);
+        const subPage = (page - 1) % 4;
+        const pagePosition = subPage * 5;
 
+        results.results = results.results.slice(pagePosition, pagePosition + 5)
+            .map((result, index) => ({ ...result,
+                'index': ((params.page - 1) * 20) + pagePosition + index + 1 }));
         return results;
     }
 
@@ -116,9 +132,11 @@ class apiHandler {
      * @returns {object} Error or movies
      */
     async getMovies(query) {
+        const flags = this.util.flags(query);
+
         const movies = await this.getResults('search/movie', {
-            'query': query });
-        
+            'query': flags.query, 'page': flags.page });
+
         return movies;
     }
 
@@ -162,8 +180,10 @@ class apiHandler {
      * @returns {object} Error or people
      */
     async getPeople(query) {
+        const flags = this.util.flags(query);
+
         const people = await this.getResults('search/person', {
-            'query': query });
+            'query': flags.query, 'page': flags.page });
 
         return people;
     }
@@ -208,8 +228,10 @@ class apiHandler {
      * @returns {object} Error or TV shows
      */
     async getTVShows(query) {
+        const flags = this.util.flags(query);
+
         const TVShows = await this.getResults('search/tv', {
-            'query': query });
+            'query': flags.query, 'page': flags.page });
 
         return TVShows;
     }
