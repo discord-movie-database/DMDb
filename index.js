@@ -6,7 +6,7 @@ const LoadHandler = require('./handlers/loadHandler');
 const LogHandler = require('./handlers/logHandler');
 const EmbedHandler = require('./handlers/embedHandler');
 const APIHandler = require('./handlers/apiHandler');
-const ListHandler = require('./handlers/listHandler');
+const BotlistHandler = require('./handlers/BotlistHandler');
 const DBHandler = require('./handlers/dbHandler');
 const UtilHandler = require('./handlers/utilHandler');
 
@@ -34,7 +34,7 @@ class Client extends Eris {
         this.handlers.api = new APIHandler(this);
         this.handlers.db = new DBHandler(this);
         this.handlers.load = new LoadHandler(this);
-        this.handlers.list = new ListHandler(this);
+        this.handlers.botlist = new BotlistHandler(this);
 
         this.handlers.log.info('Connecting to Discord');
         this.on('ready', () => this.handlers.load.start());
