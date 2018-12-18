@@ -31,7 +31,7 @@ class Util {
         for (let i = 0; i < words.length; i++) {
             const word = words[i];
             
-            if (word.startsWith('--')) {
+            if (word && word.startsWith('--')) {
                 const flagName = word.slice(2);
                 const flagValue = words[i + 1];
 

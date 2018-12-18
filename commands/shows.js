@@ -6,8 +6,8 @@ class ShowsCommand extends Command {
             'shortDescription': 'Search for TV shows.',
             'longDescription': 'Multiple TV shows with the same name? Search for more than one TV show.\n' +
                 'Use the **IMDb ID** or **TMDb** ID with the `show` command to get more detailed information about it.\n\n' +
-                'Use **flags** to get even more and accurate results.\nAvailable flags for this command: `page`.\n\n' +
-                'Examples:\n`prefix#shows Black Mirror --page 2`',
+                'Use **flags** to get even more and accurate results.\nAvailable flags for this command: `page`, `year`.\n\n' +
+                'Examples:\n`prefix#shows Black Mirror --page 2`\n`prefix#shows Black Mirror --year 2011`',
             'usage': '<TV Show Name>',
             'weight': 36,
             'visible': true,
@@ -23,8 +23,15 @@ class ShowsCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
+        // Advanced search
+        const flags = this.util.flags(query);
+        query = flags.query;
+
+        const year = flags.year && /^\d{4}$/.test(flags.year)
+            ? flags.year : 'All';
+
         // Get TV shows from API
-        const TVShows = await this.api.getTVShows(query);
+        const TVShows = await this.api.getTVShows(flags);
         if (TVShows.error) return this.embed.error(status, TVShows.error); // Error
 
         // Response
@@ -32,7 +39,8 @@ class ShowsCommand extends Command {
             'title': 'Search Results',
             'description': `Current Page: **${TVShows.page}** **|**` +
                 ` Total Pages: ${TVShows.total_pages} **|**` + 
-                ` Total Results: ${TVShows.total_results}`,
+                ` Total Results: ${TVShows.total_results} **|**` +
+                ` Year: ${year}`,
             
             'fields': TVShows.results.map(TVShow => ({
                 'name': TVShow.name,
@@ -42,7 +50,7 @@ class ShowsCommand extends Command {
                     `${this.TMDbID(TVShow.id)}`
             })),
 
-            'footer': `TIP: Use flags (--page) to get more and accurate results.`
+            'footer': `TIP: Use flags (--year, --page) to get more and accurate results.`
         });
     }
 }
