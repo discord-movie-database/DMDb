@@ -4,8 +4,10 @@ class ShowsCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Search for TV shows.',
-            'longDescription': 'Multiple TV shows with the same name? Search for more than one TV show.' +
-                'Use the IMDb ID or TMDb ID with the show command to get more detailed information about it.',
+            'longDescription': 'Multiple TV shows with the same name? Search for more than one TV show.\n' +
+                'Use the **IMDb ID** or **TMDb** ID with the `show` command to get more detailed information about it.\n\n' +
+                'Use **flags** to get even more and accurate results.\nAvailable flags for this command: `page`.\n\n' +
+                'Examples:\n`prefix#shows Black Mirror --page 2`',
             'usage': '<TV Show Name>',
             'weight': 36,
             'visible': true,
@@ -38,7 +40,9 @@ class ShowsCommand extends Command {
                     `Vote Average: ${this.voteAverage(TVShow.vote_average)} **|** ` +
                     `First Air Date: ${this.releaseDate(TVShow.first_air_date)} **|** ` +
                     `${this.TMDbID(TVShow.id)}`
-            }))
+            })),
+
+            'footer': `TIP: Use flags (--page) to get more and accurate results.`
         });
     }
 }

@@ -40,7 +40,9 @@ class ActorCommand extends Command {
                 { 'name': 'Popularity', 'value': this.popularity(person.popularity) },
                 { 'name': 'IMDb ID', 'value': this.IMDbID(person.imdb_id) },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(person.id)
-            }])
+            }]),
+
+            'footer': `TIP: Not the person you wanted? Try searching for it using the ${message.prefix}people command.`
         });
     }
 }
