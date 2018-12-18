@@ -229,11 +229,12 @@ class apiHandler {
      * @param {string} query TV show name
      * @returns {object} Error or TV shows
      */
-    async getTVShows(query) {
-        const flags = this.util.flags(query);
-
+    async getTVShows(flags) {
         const TVShows = await this.getResults('search/tv', {
-            'query': flags.query, 'page': flags.page });
+            'query': flags.query || flags,
+            'page': flags.page,
+            'first_air_date_year': flags.year
+        });
 
         return TVShows;
     }
