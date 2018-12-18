@@ -48,7 +48,7 @@ class ShowHandler extends Command {
                 { 'name': 'TMDb ID', 'value': this.TMDbID(TVShow.id)
             }]),
 
-            'footer': `Not the TV show you wanted? Try searching for it using the ${message.prefix}shows command.`
+            'footer': `TIP: Not the TV show you wanted? Try searching for it using the ${message.prefix}shows command.`
         });
     }
 }

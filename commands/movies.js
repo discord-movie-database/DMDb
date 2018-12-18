@@ -4,8 +4,10 @@ class MoviesCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Search for movies.',
-            'longDescription': 'Multiple movies with the same name? Search for more than one movie.' +
-                'Use the IMDb ID or TMDb ID with the movie command to get more detailed information about it.',
+            'longDescription': 'Multiple movies with the same name? Search for more than one movie.\n' +
+                'Use the **IMDb ID** or **TMDb ID** with the `movie` command to get more detailed information about it.\n\n' +
+                'Use **flags** to get even more and accurate results.\nAvailable flags for this command: `page`, `year`.\n\n' +
+                'Examples:\n`prefix#movies Thor --page 2`\n`prefix#movies Thor --page 3 --year 2015`',
             'usage': '<Movie Name>',
             'weight': 60,
             'visible': true,
@@ -48,7 +50,7 @@ class MoviesCommand extends Command {
                     `${this.TMDbID(movie.id)}`
             })),
 
-            'footer': 'TIP: ' //TODO: DOCUMENT FLAGS
+            'footer': 'TIP: Use flags (--year, --page) to get more and accurate results.'
         });
     }
 }
