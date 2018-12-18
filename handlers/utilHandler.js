@@ -39,6 +39,7 @@ class Util {
                     response[flagName] = flagValue;
 
                 words.splice(i, 2);
+                i = i - 2;
             }
         }
 
