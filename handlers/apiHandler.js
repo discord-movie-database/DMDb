@@ -136,7 +136,7 @@ class apiHandler {
         const movies = await this.getResults('search/movie', {
             'query': flags.query || flags,
             'page': flags.page,
-            'year': flags.year
+            'primary_release_year': flags.year
         });
 
         return movies;
