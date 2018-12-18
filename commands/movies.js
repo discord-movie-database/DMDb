@@ -25,6 +25,9 @@ class MoviesCommand extends Command {
         const flags = this.util.flags(query);
         query = flags.query;
 
+        const year = flags.year && /^\d{4}$/.test(flags.year)
+            ? flags.year : 'All';
+
         // Get movies from API
         const movies = await this.api.getMovies(flags);
         if (movies.error) return this.embed.error(status, movies.error); // Error
@@ -34,7 +37,8 @@ class MoviesCommand extends Command {
             'title': 'Search Results',
             'description': `Current Page: **${movies.page}** **|**` +
                 ` Total Pages: ${movies.total_pages} **|**` + 
-                ` Total Results: ${movies.total_results}`,
+                ` Total Results: ${movies.total_results} **|**` +
+                ` Year: ${year}`,
             
             'fields': movies.results.map(movie => ({
                 'name': movie.title,
@@ -44,7 +48,7 @@ class MoviesCommand extends Command {
                     `${this.TMDbID(movie.id)}`
             })),
 
-            'footer': 'TIP: ' //TODO: DOCUMENT FLAGS AND ADD YEAR FLAG
+            'footer': 'TIP: ' //TODO: DOCUMENT FLAGS
         });
     }
 }
