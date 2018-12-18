@@ -134,7 +134,10 @@ class apiHandler {
      */
     async getMovies(flags) {
         const movies = await this.getResults('search/movie', {
-            'query': flags.query || flags, 'page': flags.page });
+            'query': flags.query || flags,
+            'page': flags.page,
+            'year': flags.year
+        });
 
         return movies;
     }
@@ -180,7 +183,9 @@ class apiHandler {
      */
     async getPeople(flags) {
         const people = await this.getResults('search/person', {
-            'query': flags.query || flags, 'page': flags.page });
+            'query': flags.query || flags,
+            'page': flags.page
+        });
 
         return people;
     }
