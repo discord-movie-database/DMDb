@@ -16,12 +16,17 @@ class PeopleCommand extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(mesage);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
+        // Advanced search
+        const flags = this.util.flags(query);
+        query = flags.query;
+
         // Get movies from API
-        const people = await this.api.getPeople(message.arguments.join(' '));
+        const people = await this.api.getPeople(flags);
         if (people.error) return this.embed.error(status, people.error); // Error
         
         // Response

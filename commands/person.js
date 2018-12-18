@@ -15,12 +15,13 @@ class ActorCommand extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
         // Get movie from API
-        const person = await this.api.getPerson(message.arguments.join(' '));
+        const person = await this.api.getPerson(query);
         if (person.error) return this.embed.error(status, person); // Error
 
         // Response

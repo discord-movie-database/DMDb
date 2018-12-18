@@ -15,12 +15,13 @@ class SimilarCommand extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
         // Get movie from API
-        const movies = await this.api.getSimilarMovies(message.arguments.join(' '));
+        const movies = await this.api.getSimilarMovies(query);
         if (movies.error) return this.embed.error(status, movies); // Error
 
         // Response

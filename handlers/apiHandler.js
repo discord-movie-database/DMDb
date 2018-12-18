@@ -99,7 +99,8 @@ class apiHandler {
      * @returns {object} Array of results
      */
     async getResults(endpoint, params) {
-        if (!params.query) return this.error('Query required.');
+        if (endpoint.includes('search') && !params.query)
+            return this.error('Query required.');
 
         const page = params.page && params.page > 0 ? params.page : 1;
         params.page = Math.ceil(page / 4);
@@ -128,14 +129,12 @@ class apiHandler {
     /**
      * Get simple data about multiple movies with a query
      * 
-     * @param {string} query Movie name
+     * @param {string} flags Movie name & parameters
      * @returns {object} Error or movies
      */
-    async getMovies(query) {
-        const flags = this.util.flags(query);
-
+    async getMovies(flags) {
         const movies = await this.getResults('search/movie', {
-            'query': flags.query, 'page': flags.page });
+            'query': flags.query || flags, 'page': flags.page });
 
         return movies;
     }
@@ -176,14 +175,12 @@ class apiHandler {
     /**
      * Get simple data about people with a query
      * 
-     * @param {string} query Person name
+     * @param {string} flags Person name & parameters
      * @returns {object} Error or people
      */
-    async getPeople(query) {
-        const flags = this.util.flags(query);
-
+    async getPeople(flags) {
         const people = await this.getResults('search/person', {
-            'query': flags.query, 'page': flags.page });
+            'query': flags.query || flags, 'page': flags.page });
 
         return people;
     }

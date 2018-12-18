@@ -15,12 +15,13 @@ class PosterCommand extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
         // Get poster from API
-        const poster = await this.api.getPoster(message.arguments.join(' '));
+        const poster = await this.api.getPoster(query);
         if (poster.error) return this.embed.error(status, poster); // Error
 
         // Remove status message

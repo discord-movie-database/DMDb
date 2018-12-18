@@ -15,12 +15,13 @@ class TitleCommand extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
         // Get movie from API
-        const movie = await this.api.getMovie(message.arguments.join(' '));
+        const movie = await this.api.getMovie(query);
         if (movie.error) return this.embed.error(status, movie.error); // Error
 
         // Response
@@ -47,7 +48,7 @@ class TitleCommand extends Command {
                 { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id)
             }]),
 
-            'footer': `Not the movie you wanted? Try searching for it using the ${message.prefix}movies command.`
+            'footer': `TIP: Not the movie you wanted? Try searching for it using the ${message.prefix}movies command.`
         });
     }
 }

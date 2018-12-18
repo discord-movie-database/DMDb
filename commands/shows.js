@@ -16,12 +16,13 @@ class ShowsCommand extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
         // Get TV shows from API
-        const TVShows = await this.api.getTVShows(message.arguments.join(' '));
+        const TVShows = await this.api.getTVShows(query);
         if (TVShows.error) return this.embed.error(status, TVShows.error); // Error
 
         // Response
