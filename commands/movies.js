@@ -16,12 +16,17 @@ class MoviesCommand extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
+        // Advanced search
+        const flags = this.util.flags(query);
+        query = flags.query;
+
         // Get movies from API
-        const movies = await this.api.getMovies(message.arguments.join(' '));
+        const movies = await this.api.getMovies(flags);
         if (movies.error) return this.embed.error(status, movies.error); // Error
 
         // Response
@@ -37,7 +42,9 @@ class MoviesCommand extends Command {
                     `Vote Average: ${this.voteAverage(movie.vote_average)} **|** ` +
                     `Release: ${this.releaseDate(movie.release_date)} **|** ` +
                     `${this.TMDbID(movie.id)}`
-            }))
+            })),
+
+            'footer': 'TIP: ' //TODO: DOCUMENT FLAGS AND ADD YEAR FLAG
         });
     }
 }

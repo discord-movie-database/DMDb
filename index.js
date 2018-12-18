@@ -6,7 +6,7 @@ const LoadHandler = require('./handlers/loadHandler');
 const LogHandler = require('./handlers/logHandler');
 const EmbedHandler = require('./handlers/embedHandler');
 const APIHandler = require('./handlers/apiHandler');
-const BotlistHandler = require('./handlers/BotlistHandler');
+const BotlistHandler = require('./handlers/botlistHandler');
 const DBHandler = require('./handlers/dbHandler');
 const UtilHandler = require('./handlers/utilHandler');
 

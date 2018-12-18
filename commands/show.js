@@ -15,12 +15,13 @@ class ShowHandler extends Command {
     async process(message) {
         // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
         // Get TV show from API
-        const TVShow = await this.api.getTVShow(message.arguments.join(' '));
+        const TVShow = await this.api.getTVShow(query);
         if (TVShow.error) return this.embed.error(status, TVShow.error); // Error
 
         // Response
