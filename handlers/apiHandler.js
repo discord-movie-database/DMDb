@@ -99,6 +99,8 @@ class apiHandler {
      * @returns {object} Array of results
      */
     async getResults(endpoint, params) {
+        params = params ? params : {};
+
         if (endpoint.includes('search') && !params.query)
             return this.error('Query required.');
 
