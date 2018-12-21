@@ -28,7 +28,7 @@ class TitleCommand extends Command {
         this.embed.edit(status, {
             'url': this.movieUrl(movie.imdb_id, movie.id),
             'title': movie.title,
-            'description': movie.overview,
+            'description': this.description(movie.overview),
             'thumbnail': this.thumbnail(movie.poster_path),
 
             'fields': this.parseEmbedFields([
