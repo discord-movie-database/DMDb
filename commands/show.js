@@ -26,9 +26,9 @@ class ShowHandler extends Command {
 
         // Response
         this.embed.edit(status, {
-            'url': this.tmdbUrl(TVShow.id),
+            'url': this.tmdbShowURL(TVShow.id),
             'title': TVShow.name,
-            'description': TVShow.overview,
+            'description': this.description(TVShow.overview),
             'thumbnail': this.thumbnail(TVShow.poster_path),
 
             'fields': this.parseEmbedFields([
@@ -38,8 +38,9 @@ class ShowHandler extends Command {
                 { 'name': 'In Production', 'value': this.yesno(TVShow.in_production) },
                 { 'name': 'First Air Date', 'value': this.releaseDate(TVShow.first_air_date) },
                 { 'name': 'Last Air Date', 'value': this.releaseDate(TVShow.last_air_date) },
-                { 'name': 'Created By', 'value': this.createdBy(TVShow.created_by) },
                 { 'name': 'Genres', 'value': this.genres(TVShow.genres), 'inline': false },
+                { 'name': 'Created By', 'value': this.createdBy(TVShow.created_by) },
+                { 'name': 'Networks', 'value': this.networks(TVShow.networks) },
                 { 'name': 'Homepage', 'value': this.homepage(TVShow.homepage), 'inline': false },
                 { 'name': 'Vote Average', 'value': this.voteAverage(TVShow.vote_average) },
                 { 'name': 'Votes', 'value': this.voteCount(TVShow.vote_count) },
