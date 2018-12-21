@@ -37,7 +37,7 @@ class ActorCommand extends Command {
                 { 'name': 'Deathday', 'value': this.deathday(person.deathday) },
                 { 'name': 'Gender', 'value': this.gender(person.gender) },
                 { 'name': 'Place of Birth', 'value': this.placeOfBirth(person.place_of_birth) },
-                { 'name': 'Popularity', 'value': this.popularity(person.popularity) },
+                { 'name': 'Homepage', 'value': this.homepage(person.homepage), 'inline': false },
                 { 'name': 'IMDb ID', 'value': this.IMDbID(person.imdb_id) },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(person.id)
             }]),
