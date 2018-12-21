@@ -27,9 +27,9 @@ class SimilarCommand extends Command {
         // Response
         this.embed.edit(status, {
             'title': 'Search Results',
-            'description': 'Showing 10 similar results.',
+            'description': `Showing similar results for \`${query}\` based on keywords and genres.`,
 
-            'fields': movies.map((movie, index) => ({
+            'fields': movies.results.map((movie, index) => ({
                 'name': movie.title,
                 'value': `**${(index + 1)}** **|** ` +
                     `Release: ${this.releaseDate(movie.release_date)} **|** ` +
