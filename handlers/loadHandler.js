@@ -34,8 +34,21 @@ class LoadHandler {
         this.client.handlers.log.info(`Loaded events: ${this.util.list(eventNames)}`);
 
         // UPDATE BOT STATUS
-        this.client.editStatus({
-            'name': this.client.config.options.bot.status });
+        this.client.status.values = [
+            this.client.config.options.bot.status,
+            `${this.client.guilds.size} Guilds`,
+            `${this.client.users.size} Users`
+        ];
+
+        this.client.status.position = 0;
+        this.client.status.interval = setInterval(() => {
+            this.client.editStatus({
+                'name': `${this.client.prefix}Help | ` +
+                    `${this.client.status.values[this.client.status.position]}` });
+
+            this.client.status.position !== this.client.status.values.length - 1
+                ? this.client.status.position++ : this.client.status.position = 0;
+        }, 30000);
 
         // START BOT LIST STATS INTERVAL
         if (this.client.env === 'main' && this.client.config.options.bot.postStats) {
