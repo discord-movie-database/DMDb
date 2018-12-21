@@ -21,6 +21,8 @@ class Client extends Eris {
         this.prefix = this.config.options.bot.prefix;
         this.db;
 
+        this.status = {};
+
         this.stats = {};
         this.stats.totalUsageCount = 0;
 
