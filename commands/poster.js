@@ -21,13 +21,14 @@ class PosterCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Get poster from API
-        const poster = await this.api.getPoster(query);
+        const poster = await this.api.getPoster(query, 3);
         if (poster.error) return this.embed.error(status, poster); // Error
 
         // Remove status message
         await status.delete();
 
         // Response
+        // TODO: 'Vote for the bot every 48 hours for high quality posters and to remove this message.'
         this.client.createMessage(message.channel.id, '', {
             'file': poster,
             'name': 'poster.jpg'
