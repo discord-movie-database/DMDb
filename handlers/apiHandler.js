@@ -7,6 +7,7 @@ class apiHandler {
         this.util = this.client.handlers.util;
 
         this.base = `https://api.themoviedb.org/3/`;
+        this.posterSizes = [92, 154, 185, 342, 500, 780];
     }
 
     /**
@@ -325,14 +326,16 @@ class apiHandler {
      * @param {string} query Movie name or ID
      * @returns {object} Error or buffer
      */
-    async getPoster(query) {
+    async getPoster(query, size) {
         const movie = await this.getMovie(query);
         if (movie.error) return movie;
 
         const posterPath = movie.poster_path;
         if (!posterPath) return this.error('No poster for this movie.');
 
-        const posterURL = `https://image.tmdb.org/t/p/w500${posterPath}`;
+        size = this.posterSizes[size] || this.posterSizes[2];
+
+        const posterURL = `https://image.tmdb.org/t/p/w${size}${posterPath}`;
         try {
             const image = await request(posterURL);
             return image.body;
