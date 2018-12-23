@@ -11,6 +11,24 @@ class LoadHandler {
         this.handlerDir = __dirname;
     }
 
+    _status() {
+        this.client.status.values = [
+            () => this.client.config.options.bot.status,
+            () => `${this.client.guilds.size} Guilds`,
+            () => `${this.client.users.size} Users`
+        ];
+
+        this.client.status.position = 0;
+        this.client.status.interval = setInterval(() => {
+            this.client.editStatus({
+                'name': `${this.client.prefix}Help | ` +
+                    `${this.client.status.values[this.client.status.position]()}` });
+
+            this.client.status.position !== this.client.status.values.length - 1
+                ? this.client.status.position++ : this.client.status.position = 0;
+        }, 30000);
+    }
+
     async start() {
         this.client.handlers.log.success('Connected to Discord');
         if (this.client.loaded) return;
@@ -34,21 +52,7 @@ class LoadHandler {
         this.client.handlers.log.info(`Loaded events: ${this.util.list(eventNames)}`);
 
         // UPDATE BOT STATUS
-        this.client.status.values = [
-            this.client.config.options.bot.status,
-            `${this.client.guilds.size} Guilds`,
-            `${this.client.users.size} Users`
-        ];
-
-        this.client.status.position = 0;
-        this.client.status.interval = setInterval(() => {
-            this.client.editStatus({
-                'name': `${this.client.prefix}Help | ` +
-                    `${this.client.status.values[this.client.status.position]}` });
-
-            this.client.status.position !== this.client.status.values.length - 1
-                ? this.client.status.position++ : this.client.status.position = 0;
-        }, 30000);
+        this._status();
 
         // START BOT LIST STATS INTERVAL
         if (this.client.env === 'main' && this.client.config.options.bot.postStats) {
