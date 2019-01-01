@@ -29,11 +29,22 @@
             "embed": {
                 "color": ""
             },
-            "developers": [],
-            "postStats": true
+            "developers": [ "148899081304014848" ],
+            "postStats": false
         }
     },
     "db": {
-        "port": 0
+        "url": "mongodb://localhost/dmdb",
+        "port": 0,
+        "options": {
+            "useNewUrlParser": true,
+            "autoReconnect": true,
+            "reconnectTries": 25,
+            "reconnectInterval": 250
+        }
+    },
+    "vote": {
+        "port": 0,
+        "auth": ""
     }
 }
