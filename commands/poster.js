@@ -11,7 +11,7 @@ class PosterCommand extends Command {
             'weight': 35
         });
 
-        this.voteMessage = 'Vote for the bot every 72 hours to remove this message and ' +
+        this.voteMessage = 'Vote for the bot every week to remove this message and ' +
             'get posters in high resolution.\n**<https://discordbots.org/bot/412006490132447249/vote>**';
     }
 
@@ -29,7 +29,7 @@ class PosterCommand extends Command {
 
         // Check if user has voted in the last 72 hours
         const voteTimeframe = userDB && userDB.voted ?
-            userDB.voted.getTime() + (1000 * 60 * 60 * 24 * 3) : false;
+            userDB.voted.getTime() + (1000 * 60 * 60 * 24 * 7) : false;
         if (voteTimeframe && voteTimeframe > new Date().getTime()) voted = true;
 
         // Get poster from API
