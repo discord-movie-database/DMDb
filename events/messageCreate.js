@@ -3,34 +3,25 @@ const chalk = require('chalk');
 class MsgEvent {
     constructor(client) {
         this.client = client;
-
-        this.dbHandler = this.client.handlers.db;
-
         this.process = this.process.bind(this);
-    }
 
-    _checkPermission(command, message) {
-        return command.info.restricted
-            && !this.client.config.options.bot.developers.includes(parseInt(message.author.id));
+        this.db = this.client.handlers.db;
+        this.developers = this.client.config.options.bot.developers;
     }
 
     async process(message) {
-        // Check if not a bot
-        if (message.bot) return;
+        if (message.bot) return; // Check if not a bot
 
-        // Get guild information from database
-        let guildDB = {};
-        if (message.channel.guild)
-            guildDB = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id);
-        message.db = guildDB;
+        if (message.channel.guild) // Get guild information from database
+            message.db = await this.db.getOrUpdateGuild(message.channel.guild.id);
 
         // Get guild prefix
-        message.prefix = message.db.prefix || this.client.prefix;
-        if (!message.content.startsWith(message.prefix)) return;
+        if (!message.db.prefix) message.db.prefix = this.client.config.options.bot.prefix;
+        if (!message.content.startsWith(message.db.prefix)) return; // Check prefix
 
-        // Command information
+        // Command name & arguments
         const messageSplit = message.content.split(' ');
-        const commandName = messageSplit[0].toLowerCase().slice(message.prefix.length);
+        const commandName = messageSplit[0].toLowerCase().slice(message.db.prefix.length);
         message.arguments = messageSplit.slice(1);
 
         // Check if command exists
@@ -38,37 +29,34 @@ class MsgEvent {
         const command = this.client.commands[commandName];
 
         // Check if command is disabled in guild
-        if (guildDB.disabledCommands && guildDB.disabledCommands.indexOf(commandName) > -1)
-            return guildDB.messages && guildDB.messages.commanddisabled ?
-                this.client.handlers.embed.error(message.channel.id, 
-                    'This command is disabled.') : null;
+        if (message.db.disabledCommands && message.db.disabledCommands.indexOf(commandName) > -1)
+            return message.db.messages && message.db.messages.commanddisabled ?
+                this.client.handlers.embed.error(message.channel.id, 'This command is disabled.') : false;
 
         // Check if user has developer permission
-        if (this._checkPermission(command, message))
+        if (command.info.restricted && !this.developers.includes(message.author.id))
             return this.client.handlers.embed.error(message.channel.id, 'No Permission.');
 
-        // Execute command
-        try {
+        try { // Execute command
             command.process(message);
-        } catch (err) {
+        } catch (err) { // Error
             this.client.handlers.log.error(err);
-
             return this.client.handlers.embed.error(message.channel.id,
-                `Error executing command: ${commandName}`);
+                `There was an error executing this command. Try again later.`);
         }
 
-        // Memory stats
+        // Store stats in memory
         this.client.commands[commandName].info.usageCount++;
         this.client.stats.totalUsageCount++;
         
-        // Database stats
-        if (guildDB) await this.dbHandler.getOrUpdateGuild(message.channel.guild.id, {
-            'usageCount': guildDB.usageCount + 1 });
+        // Store stats in database
+        if (message.db) await this.db.getOrUpdateGuild(message.channel.guild.id, {
+            'usageCount': message.db.usageCount + 1 });
 
-        // Success log
-        this.client.handlers.log.info(`Command: ${commandName} | User: ${message.author.id} | \
-Guild: ${message.channel.guild ? message.channel.guild.id : 'DM'}${message.arguments[0] ? ` | \
-Args: ${message.arguments.join(' ')}` : ''}`);
+        // Command execution log
+        this.client.handlers.log.info(`Command: ${commandName} | User: ${message.author.id} | ` +
+            `Guild: ${message.db ? message.channel.guild.id : 'DM'}` +
+            `${message.arguments[0] ? ` | Args: ${message.arguments.join(' ')}` : ''}`);
     }
 }
 

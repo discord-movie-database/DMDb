@@ -14,11 +14,10 @@ class Client extends Eris {
     constructor(config) {
         super(config.tokens.discord[env], config.options.client);
 
-        this.loaded = false;
-
         this.env = env;
         this.config = config;
-        this.prefix = this.config.options.bot.prefix;
+        this.loaded = false;
+
         this.db;
 
         this.status = {};

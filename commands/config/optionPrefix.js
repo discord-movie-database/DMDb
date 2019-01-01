@@ -7,6 +7,8 @@ class optionPrefix extends template {
             'description': 'Change the prefix to a number, letter or symbol.',
             'usage': '<new prefix or "reset">'
         });
+
+        this.defaultPrefix = this.client.config.options.bot.prefix;
     }
 
     async process(message) {
@@ -14,7 +16,7 @@ class optionPrefix extends template {
         if (!prefix) return this.embed.error(message.channel.id, 'New prefix required.');
 
         const reset = prefix === 'reset' ||
-            prefix === this.client.prefix ? true : false;
+            prefix === this.defaultPrefix ? true : false;
         if (reset) prefix = undefined;
 
         const regex = /^[a-z0-9!"£$%^&*()_+=~#~@\';:.,<>?{}`|[\]\/\-]{1,16}$/i;
@@ -25,7 +27,7 @@ class optionPrefix extends template {
             'prefix': prefix });
 
         if (updatedGuild) return this.embed.success(message.channel.id,
-            `Updated prefix to \`${prefix || this.client.prefix}\``);
+            `Updated prefix to \`${prefix || this.defaultPrefix}\``);
         this.embed.error(message.channel.id, 'Unable to update prefix.');
     }
 }
