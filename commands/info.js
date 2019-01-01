@@ -7,7 +7,7 @@ class InfoCommand extends Command {
             'longDescription': 'Useful statistics to help the developer and satisfy curious users.',
             'visible': true,
             'restricted': false,
-            'weight': 0
+            'weight': 5
         });
 
         this.package = require('../package.json');
