@@ -199,6 +199,31 @@ class CommandHandler {
         return value.charAt(0).toUpperCase() + value.slice(1);
     }
 
+    plural(amount) {
+        return amount > 1 ? 's' : '';
+    }
+
+    uptime() {
+        let uptimeString = '';
+        const uptime = new Date(this.client.uptime);
+
+        const years = uptime.getUTCFullYear() - 1970;
+        const months = uptime.getUTCMonth();
+        const days = uptime.getUTCDate() - 1;
+        const hours = uptime.getUTCHours();
+        const minutes = uptime.getUTCMinutes();
+        const seconds = uptime.getUTCSeconds();
+
+        if (years) uptimeString += `${years} Year${this.plural(years)}, `;
+        if (months) uptimeString += `${months} Month${this.plural(months)}, `;
+        if (days) uptimeString += `${days} Day${this.plural(days)}, `;
+        if (hours) uptimeString += `${hours} Hour${this.plural(hours)}, `;
+        if (minutes) uptimeString += `${minutes} Minute${this.plural(minutes)}, `;
+        if (seconds) uptimeString += `${seconds} Second${this.plural(seconds)}`;
+
+        return uptimeString;
+    }
+
     async searchingMessage(message) {
         return await this.embed.create(message.channel.id, {
             'title': 'Searching...' });

@@ -20,9 +20,10 @@ class InfoCommand extends Command {
         // Response
         this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
-            'description': '[Invite Bot](https://bit.ly/2PXWYLR) | \
-[Support Server](https://discord.gg/fwAxQjV) | \
-[GitHub](https://github.com/Dumplingsr/DMDb)',
+            'description': '[Invite Bot](https://bit.ly/2PXWYLR) | ' +
+                '[Support Server](https://discord.gg/fwAxQjV) | ' +
+                '[Source Code](https://github.com/Dumplingsr/DMDb) | ' +
+                '[Vote](https://discordbots.org/bot/412006490132447249/vote)',
             'fields': [{
                 'name': 'Developer',
                 'value': 'Dumplings#7460'
@@ -42,10 +43,13 @@ class InfoCommand extends Command {
                 'name': 'Users',
                 'value': `${this.client.users.size}`
             }, {
+                'name': 'Uptime',
+                'value': this.uptime()
+            }, {
                 'name': 'Commands Executed',
                 'value': this.client.stats.totalUsageCount + 1
             }].map((field) => ({ ...field, 'inline': true })),
-            'footer': 'Data sourced from The Movie Database'
+            'footer': 'Data provided by The Movie Database (TMDb)'
         });
     }
 }
