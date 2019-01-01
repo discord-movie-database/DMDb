@@ -10,6 +10,9 @@ class PosterCommand extends Command {
             'restricted': false,
             'weight': 35
         });
+
+        this.voteMessage = 'Vote for the bot every 72 hours to remove this message and ' +
+            'get posters in high resolution.\n**<https://discordbots.org/bot/412006490132447249/vote>**';
     }
 
     async process(message) {
@@ -20,19 +23,25 @@ class PosterCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
+        // Get user vote status
+        let voted = false;
+        const userDB = await this.client.handlers.db.getOrUpdateUser(message.author.id);
+
+        // Check if user has voted in the last 72 hours
+        const voteTimeframe = userDB && userDB.voted ?
+            userDB.voted.getTime() + (1000 * 60 * 60 * 24 * 3) : false;
+        if (voteTimeframe && voteTimeframe > new Date().getTime()) voted = true;
+
         // Get poster from API
-        const poster = await this.api.getPoster(query, 3);
+        const poster = await this.api.getPoster(query, voted ? 4 : 1);
         if (poster.error) return this.embed.error(status, poster); // Error
 
-        // Remove status message
-        await status.delete();
-
         // Response
-        // TODO: 'Vote for the bot every 48 hours for high quality posters and to remove this message.'
-        this.client.createMessage(message.channel.id, '', {
-            'file': poster,
-            'name': 'poster.jpg'
-        });
+        await this.client.createMessage(message.channel.id, voted ? '' : this.voteMessage, {
+            'file': poster, 'name': 'poster.jpg' });
+
+        // Remove status message
+        status.delete();
     }
 }
 

@@ -5,8 +5,6 @@ class DBHandler {
     constructor(client) {
         this.client = client;
 
-        this.dbURL = 'mongodb://localhost/dmdb';
-
         this.guildSchema = {
             id: String,
             prefix: { type: String, default: null },
@@ -28,11 +26,8 @@ class DBHandler {
         this.client.db = mongoose;
         
         try {
-            await mongoose.connect(this.dbURL,  {
-                useNewUrlParser: true,
-                autoReconnect: true,
-                reconnectTries: 10,
-                reconnectInterval: 500 });
+            await mongoose.connect(this.client.config.db.url,
+                this.client.config.db.options);
         } catch (err) {
             this.client.handlers.log.error('', err);
 
