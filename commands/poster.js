@@ -11,8 +11,8 @@ class PosterCommand extends Command {
             'weight': 35
         });
 
-        this.voteMessage = 'Vote for the bot every week to remove this message and ' +
-            'get posters in high resolution.\n**<https://discordbots.org/bot/412006490132447249/vote>**';
+        this.voteMessage = '**<https://vote.dmdb.xyz/>** - Vote for the bot just once a month ' +
+            'to remove this message and get posters in higher resolution.';
     }
 
     async process(message) {
@@ -25,15 +25,17 @@ class PosterCommand extends Command {
 
         // Get user vote status
         let voted = false;
-        const userDB = await this.client.handlers.db.getOrUpdateUser(message.author.id);
+        const userInfo = await this.client.handlers.db.getOrUpdateUser(message.author.id);
 
-        // Check if user has voted in the last 72 hours
-        const voteTimeframe = userDB && userDB.voted ?
-            userDB.voted.getTime() + (1000 * 60 * 60 * 24 * 7) : false;
-        if (voteTimeframe && voteTimeframe > new Date().getTime()) voted = true;
+        // Check if user has voted this month
+        const voteMonth = userInfo.voted ? userInfo.voted.getUTCMonth() : false;
+        const currentMonth = new Date().getUTCMonth();
+        if (userInfo.voted && voteMonth === currentMonth) voted = true;
+
+        console.log(voteMonth);
 
         // Get poster from API
-        const poster = await this.api.getPoster(query, voted ? 4 : 1);
+        const poster = await this.api.getPoster(query, voted ? 3 : 1);
         if (poster.error) return this.embed.error(status, poster); // Error
 
         // Response
