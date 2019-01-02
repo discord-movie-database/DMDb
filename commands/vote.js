@@ -13,7 +13,7 @@ class VoteCommand extends Command {
     async process(message) {
         this.embed.create(message.channel.id, {
             title: 'Vote',
-            description: '[Click here to vote for the bot!](https://discordbots.org/bot/412006490132447249/vote)'
+            description: '[Click here to vote for the bot!](https://vote.dmdb.xyz/)'
         });
     }
 }
