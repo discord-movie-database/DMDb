@@ -9,10 +9,12 @@ class PingCommand extends Command {
     }
 
     async process(message) {
+        const shardId = message.channel.guild ?
+            ` | ID: \`${message.channel.guild.shard.id}\`` : '';
         const latency = message.channel.guild ?
-            `Shard latency: \`${message.channel.guild.shard.latency}\`` : '';
-        // PONG
-        this.client.createMessage(message.channel.id, `**PONG!** ${latency}`);
+            ` | Latency: \`${message.channel.guild.shard.latency}\`` : '';
+
+        this.client.createMessage(message.channel.id, `**PONG!**${latency}${shardId}`);
     }
 }
 
