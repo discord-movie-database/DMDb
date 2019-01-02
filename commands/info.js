@@ -44,11 +44,13 @@ class InfoCommand extends Command {
                 'value': `${this.client.users.size}`
             }, {
                 'name': 'Uptime',
-                'value': this.uptime()
+                'value': this.uptime(),
+                'inline': false
             }, {
                 'name': 'Commands Executed',
                 'value': this.client.stats.totalUsageCount + 1
-            }].map((field) => ({ ...field, 'inline': true })),
+            }].map((field) => ({ ...field,
+                'inline': typeof field.inline === 'boolean' ? field.inline : true })),
             'footer': 'Data provided by The Movie Database (TMDb)'
         });
     }
