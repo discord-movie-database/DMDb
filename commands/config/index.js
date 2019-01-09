@@ -6,7 +6,8 @@ class ConfigCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Customise the bot for your guild.',
-            'longDescription': 'Required the Manage Guild Permission. Customize common features which as prefix in this guild.',
+            'longDescription': 'Requires the Manage Guild Permission. ' +
+                'Customize common features such as the prefix.',
             'visible': true,
             'restricted': false
         });
@@ -39,7 +40,7 @@ class ConfigCommand extends Command {
             'fields': this.optionKeys.map(key => ({
                 'name': key,
                 'value': this.options[key].info.description +
-                `\nUsage: \`${message.prefix}config ${key} ${this.options[key].info.usage}\``
+                `\nUsage: \`${message.db.guild.prefix}config ${key} ${this.options[key].info.usage}\``
             }))
         });
     }

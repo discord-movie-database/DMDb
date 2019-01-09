@@ -48,7 +48,8 @@ class TitleCommand extends Command {
                 { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id)
             }]),
 
-            'footer': `TIP: Not the movie you wanted? Try searching for it using the ${message.prefix}movies command.`
+            'footer': 'TIP: Not the movie you wanted?' +
+                ` Try searching for it using the ${message.db.guild.prefix}movies command.`
         });
     }
 }
