@@ -47,10 +47,10 @@ class InfoCommand extends Command {
 
         // Embed template
         const embed = {
-            'title': 'Discord Movie Database',
-            'description': `Use \`${message.db.prefix}help [Page Number]\` for more commands.\n` +
-                `Or \`${message.db.prefix}help [Command Name]\` ` +
-                'to get more detailed information about a command.',
+            'title': 'DMDb - Discord Movie Database',
+            'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
+                `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more detailed information about a command.\n` +
+                '\n**<>** = Argument is required. **[]** = Argument is optional.',
             'fields': []
         };
 
@@ -72,12 +72,13 @@ class InfoCommand extends Command {
 
             // Append commands to response
             embed.fields.push({
-                'name': `${message.db.prefix}${commandName} ${command.usage || ''}`,
+                'name': `${message.db.guild.prefix}${commandName} ${command.usage || ''}`,
                 'value': `- ${command.shortDescription}`
             });
         }
 
-        embed.footer = `Page: ${(pagePosition)}/${pages.length} | Total Commands: ${commands.length}`;
+        // Page information
+        embed.footer = `Page: ${(pagePosition)}/${pages.length} | Total Commands: ${commands.length} | Data from The Movie Database (TMDb)`;
 
         // Response
         this.embed.create(message.channel.id, embed);

@@ -20,10 +20,10 @@ class InfoCommand extends Command {
         // Response
         this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
-            'description': '[Invite Bot](https://bit.ly/2PXWYLR) | ' +
+            'description': '**[Vote](https://discordbots.org/bot/412006490132447249/vote)** | ' +
+                '[Invite Bot](https://bit.ly/2PXWYLR) | ' +
                 '[Support Server](https://discord.gg/fwAxQjV) | ' +
-                '[Source Code](https://github.com/Dumplingsr/DMDb) | ' +
-                '[Vote](https://discordbots.org/bot/412006490132447249/vote)',
+                '[Source Code](https://github.com/Dumplingsr/DMDb)',
             'fields': [{
                 'name': 'Developer',
                 'value': 'Dumplings#7460'
@@ -51,7 +51,8 @@ class InfoCommand extends Command {
                 'value': this.client.stats.totalUsageCount + 1
             }].map((field) => ({ ...field,
                 'inline': typeof field.inline === 'boolean' ? field.inline : true })),
-            'footer': 'Data provided by The Movie Database (TMDb)'
+            'footer': `Total Commands: ${Object.keys(this.client.commands).length} | ` +
+                'Data from The Movie Database (TMDb)'
         });
     }
 }
