@@ -14,7 +14,7 @@ class LoadHandler {
     _status() {
         this.client.status.values = [
             () => this.client.config.options.bot.status,
-            () => `${this.client.guilds.size} Guilds`,
+            () => `${this.client.guilds.size} Servers`,
             () => `${this.client.users.size} Users`
         ];
 
