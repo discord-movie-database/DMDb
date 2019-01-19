@@ -23,7 +23,7 @@ class InfoCommand extends Command {
             'description': '**[Vote](https://discordbots.org/bot/412006490132447249/vote)** | ' +
                 '[Invite Bot](https://bit.ly/2PXWYLR) | ' +
                 '[Support Server](https://discord.gg/fwAxQjV) | ' +
-                '[Source Code](https://github.com/Dumplingsr/DMDb)',
+                '[Source Code](https://github.com/Dumblings/DMDb)',
             'fields': [{
                 'name': 'Developer',
                 'value': 'Dumplings#7460'
