@@ -31,8 +31,8 @@ class InfoCommand extends Command {
                 'name': 'Library',
                 'value': `Eris ${this.package.dependencies.eris}`
             }, {
-                'name': 'Shards',
-                'value': `${this.client.shards.size}${shardId}`
+                'name': 'Node Version',
+                'value': `${process.versions.node}`
             }, {
                 'name': 'Guilds',
                 'value': `${this.client.guilds.size}`
@@ -45,10 +45,12 @@ class InfoCommand extends Command {
             }, {
                 'name': 'Uptime',
                 'value': this.uptime(),
-                'inline': false
             }, {
                 'name': 'Commands Executed',
                 'value': this.client.stats.totalUsageCount + 1
+            }, {
+                'name': 'Shards',
+                'value': `${this.client.shards.size}${shardId}`
             }].map((field) => ({ ...field,
                 'inline': typeof field.inline === 'boolean' ? field.inline : true })),
             'footer': `Total Commands: ${Object.keys(this.client.commands).length} | ` +
