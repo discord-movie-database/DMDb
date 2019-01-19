@@ -21,7 +21,7 @@ class SimilarCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Get movie from API
-        const movies = await this.api.getSimilarMovies(query);
+        const movies = await this.api.dmdb.getSimilarMovies(query);
         if (movies.error) return this.embed.error(status, movies); // Error
 
         // Response

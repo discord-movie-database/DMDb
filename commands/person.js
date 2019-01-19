@@ -21,7 +21,7 @@ class ActorCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Get movie from API
-        const person = await this.api.getPerson(query);
+        const person = await this.api.dmdb.getPerson(query);
         if (person.error) return this.embed.error(status, person); // Error
 
         // Response

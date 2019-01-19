@@ -31,7 +31,7 @@ class ShowsCommand extends Command {
             ? flags.year : 'All';
 
         // Get TV shows from API
-        const TVShows = await this.api.getTVShows(flags);
+        const TVShows = await this.api.dmdb.getTVShows(flags);
         if (TVShows.error) return this.embed.error(status, TVShows.error); // Error
 
         // Response

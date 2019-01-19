@@ -21,7 +21,7 @@ class TrailerCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Get movie from API
-        const trailers = await this.api.getTrailers(query);
+        const trailers = await this.api.dmdb.getTrailers(query);
         if (trailers.error) return this.embed.error(status, trailers); // Error
         const trailer = trailers[0];
 

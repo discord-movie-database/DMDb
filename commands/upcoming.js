@@ -16,7 +16,7 @@ class UpcomingCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Get movies from API
-        const movies = await this.api.getUpcomingMovies();
+        const movies = await this.api.dmdb.getUpcomingMovies();
         if (movies.error) return this.embed.error(movies);
 
         // Response
