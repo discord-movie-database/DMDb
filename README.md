@@ -1,6 +1,4 @@
 # V2 - DMDb (Discord Movie Database)
-The Discord Movie Database bot gives you quick and detailed information about movies from IMDb.
+A Discord bot to get information about movies and actors. It's perfect for servers with a movie channel.
 
-- Website: [https://dmdb.me/](https://dmdb.me/)
-- Invite Bot: [https://dmdb.me/invite](https://dmdb.me/invite)
-- Join Guild: [https://dmdb.me/guild](https://dmdb.me/guild)
+[![Discord Bots](https://discordbots.org/api/widget/412006490132447249.svg)](https://discordbots.org/bot/412006490132447249/vote)
