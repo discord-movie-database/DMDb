@@ -21,7 +21,7 @@ class TitleCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Get movie from API
-        const movie = await this.api.getMovie(query);
+        const movie = await this.api.dmdb.getMovie(query);
         if (movie.error) return this.embed.error(status, movie.error); // Error
 
         // Response

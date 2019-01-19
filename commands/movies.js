@@ -31,7 +31,7 @@ class MoviesCommand extends Command {
             ? flags.year : 'All';
 
         // Get movies from API
-        const movies = await this.api.getMovies(flags);
+        const movies = await this.api.dmdb.getMovies(flags);
         if (movies.error) return this.embed.error(status, movies.error); // Error
 
         // Response

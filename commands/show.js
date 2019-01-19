@@ -21,7 +21,7 @@ class ShowHandler extends Command {
         const status = await this.searchingMessage(message);
 
         // Get TV show from API
-        const TVShow = await this.api.getTVShow(query);
+        const TVShow = await this.api.dmdb.getTVShow(query);
         if (TVShow.error) return this.embed.error(status, TVShow.error); // Error
 
         // Response

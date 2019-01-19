@@ -1,23 +1,11 @@
-const request = require('superagent'); 
+const APITemplate = require('./template');
 
-class apiHandler {
+class DMDb extends APITemplate {
     constructor(client) {
-        this.client = client;
+        super(client);
 
-        this.util = this.client.handlers.util;
-
-        this.base = `https://api.themoviedb.org/3/`;
+        this.base = 'https://api.themoviedb.org/3/';
         this.posterSizes = [92, 154, 185, 342, 500, 780];
-    }
-
-    /**
-     * Convert error message string into a object
-     * 
-     * @param {string} message error message
-     * @returns {object} error object
-     */
-    error(message) {
-        return { 'error': message };
     }
 
     /**
@@ -66,30 +54,15 @@ class apiHandler {
     }
 
     /**
-     * Get data from API with endpoint and parameters
+     * Get data from DMDb API with endpoint and parameters
      * 
      * @param {string} endpoint location to retrieve data from API
      * @param {object} params Object of (url) parameters
      * @returns {object} API response
      */
     async get(endpoint, params) {
-        params = params || {};
-
-        let parsedParams = `?api_key=${this.client.config.tokens.api.tmdb}`;
-        for (let param in params) parsedParams += `&${param}=${params[param]}`;
-
-        const requestURL = this.base + endpoint + parsedParams;
-
-        let response;
-        try {
-            response = await request.get(requestURL);
-        } catch (err) { console.log(err); }
-
-        if (response && response.statusCode === 429)
-            return this.error('Ratelimited. Try again later.');
-        if (!response || response.statusCode !== 200) return this.error('API Error.');
-
-        return response.body;
+        return await this._get(this.base, endpoint, {
+            ...params, 'api_key': this.client.config.tokens.api.tmdb });
     }
 
     /**
@@ -337,7 +310,7 @@ class apiHandler {
 
         const posterURL = `https://image.tmdb.org/t/p/w${size}${posterPath}`;
         try {
-            const image = await request(posterURL);
+            const image = await this.request(posterURL);
             return image.body;
         } catch (err) {
             console.log(err);
@@ -346,4 +319,4 @@ class apiHandler {
     }
 }
 
-module.exports = apiHandler;
+module.exports = DMDb;

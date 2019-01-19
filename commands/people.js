@@ -28,7 +28,7 @@ class PeopleCommand extends Command {
         query = flags.query;
 
         // Get movies from API
-        const people = await this.api.getPeople(flags);
+        const people = await this.api.dmdb.getPeople(flags);
         if (people.error) return this.embed.error(status, people.error); // Error
         
         // Response

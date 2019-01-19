@@ -12,7 +12,8 @@ class DBHandler {
             messages: {
                 commanddisabled: { type: Boolean, default: true }
             },
-            usageCount: { type: Number, default: 0 }
+            usageCount: { type: Number, default: 0 },
+            anime: { type: Boolean, default: false }
         }
 
         this.userSchema = {
