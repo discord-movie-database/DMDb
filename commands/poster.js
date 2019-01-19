@@ -3,16 +3,13 @@ const Command = require('../handlers/commandHandler');
 class PosterCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get a movies poster.',
+            'shortDescription': 'Get a movies poster. [Vote just once a fortnight for higher resolution posters.](https://vote.dmdb.xyz/)',
             'longDescription': 'Get a large poster of a movie.',
             'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,
             'weight': 35
         });
-
-        this.voteMessage = '**<https://vote.dmdb.xyz/>** - Vote for the bot just once a month ' +
-            'to remove this message and get posters in higher resolution.';
     }
 
     async process(message) {
@@ -23,23 +20,16 @@ class PosterCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
-        // Get user vote status
-        let voted = false;
-        const userInfo = await this.client.handlers.db.getOrUpdateUser(message.author.id);
-
-        // Check if user has voted this month
-        const voteMonth = userInfo.voted ? userInfo.voted.getUTCMonth() : false;
-        const currentMonth = new Date().getUTCMonth();
-        if (userInfo.voted && voteMonth === currentMonth) voted = true;
-
-        console.log(voteMonth);
+        // Vote status
+        const voted = message.db.user.voted &&
+            message.db.user.voted > (new Date() - (1000 * 60 * 60 * 24 * 14)) ? true : false;
 
         // Get poster from API
-        const poster = await this.api.getPoster(query, voted ? 3 : 1);
+        const poster = await this.api.dmdb.getPoster(query, voted ? 5 : 2);
         if (poster.error) return this.embed.error(status, poster); // Error
 
         // Response
-        await this.client.createMessage(message.channel.id, voted ? '' : this.voteMessage, {
+        await this.client.createMessage(message.channel.id, `${voted}`, {
             'file': poster, 'name': 'poster.jpg' });
 
         // Remove status message

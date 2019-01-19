@@ -4,7 +4,7 @@ class VoteCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Vote and access more features.',
-            'visible': true,
+            'visible': false,
             'restricted': false,
             'weight': 0
         });
