@@ -29,7 +29,7 @@ class PosterCommand extends Command {
         if (poster.error) return this.embed.error(status, poster); // Error
 
         // Response
-        await this.client.createMessage(message.channel.id, `${voted}`, {
+        await this.client.createMessage(message.channel.id, '', {
             'file': poster, 'name': 'poster.jpg' });
 
         // Remove status message
