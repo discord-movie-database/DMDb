@@ -167,7 +167,7 @@ class CommandHandler {
     }
 
     knownFor(value) {
-        return value.map(movie => movie.title).slice(0, 1).join(', ');
+        return value ? value.map(movie => movie.title).slice(0, 1).join(', ') : 'N/A';
     }
 
     knownForDep(value) {
