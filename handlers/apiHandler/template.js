@@ -1,10 +1,8 @@
-const request = require('superagent');
-
 class APITemplate {
     constructor(client) {
         this.client = client;
 
-        this.request = request;
+        this.request = require('superagent');
         this.util = this.client.handlers.util;
     }
 
@@ -31,9 +29,9 @@ class APITemplate {
 
         let paramNames = Object.keys(params);
         let parsedParams = '';
-        for (let i = 0; i < paramNames.length; i++) {
-            parsedParams += `${i === 0 ? '?' : '&'}${paramNames[i]}=${params[paramNames[i]]}`;
-        }
+        for (let i = 0; i < paramNames.length; i++)
+            parsedParams += `${i === 0 ? '?' : '&'}${paramNames[i]}=` +
+                `${escape(params[paramNames[i]])}`;
 
         const requestURL = base + endpoint + parsedParams;
 
