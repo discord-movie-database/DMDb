@@ -7,7 +7,8 @@ class ConfigCommand extends Command {
         super(client, {
             'shortDescription': 'Customise the bot for your guild.',
             'longDescription': 'Requires the Manage Guild Permission. ' +
-                'Customize common features such as the prefix.',
+                'Customize common features such as the prefix or toggle commands.',
+            'usage': '[Option]',
             'visible': true,
             'restricted': false
         });
