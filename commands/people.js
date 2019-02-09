@@ -45,7 +45,8 @@ class PeopleCommand extends Command {
                     `${this.TMDbID(person.id)}`
             })),
 
-            'footer': 'TIP: Use flags (--page) to get more and accurate results.'
+            'footer': message.db.guild.tips ?
+                'TIP: Use flags (--page) to get more and accurate results.' : ''
         });
     }
 }

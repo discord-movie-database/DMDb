@@ -50,7 +50,8 @@ class MoviesCommand extends Command {
                     `${this.TMDbID(movie.id)}`
             })),
 
-            'footer': 'TIP: Use flags (--year, --page) to get more and accurate results.'
+            'footer': message.db.guild.tips ?
+                'TIP: Use flags (--year, --page) to get more and accurate results.' : ''
         });
     }
 }
