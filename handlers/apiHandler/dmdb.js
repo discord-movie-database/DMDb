@@ -314,6 +314,23 @@ class DMDb extends APITemplate {
     }
 
     /**
+     * Get the user reviews for a movie
+     * 
+     * @param {string} query Movie name or ID
+     * @returns {object} Error or reviews
+     */
+    async getMovieReviews(flags) {
+        const movie = await this.getMovieID(flags.query, true);
+        if (movie.error) return movie;
+
+        const reviews = await this.getResults(`movie/${movie.id}/reviews`, {
+            page: flags.page });
+        if (reviews.error) return reviews;
+        
+        return {...reviews, ...movie};
+    }
+
+    /**
      * Get a movie poster with an ID or name
      * 
      * @param {string} query Movie name or ID

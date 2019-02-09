@@ -183,6 +183,10 @@ class CommandHandler {
         return value.length > 2048 ? value.substr(0, 2045) + '...' : value;
     }
 
+    review(value) {
+        return value.length > 125 ? value.substr(0, 125) + '...' : value;
+    }
+
     available(value) {
         return value ? value.toString() : 'N/A';
     }
