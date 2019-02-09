@@ -122,19 +122,20 @@ class DMDb extends APITemplate {
      * Get a movie's TMDb ID with a query or external ID (IMDb)
      * 
      * @param {string} query Movie name
-     * @returns {string} Error or ID
+     * @param {boolean} details More information
+     * @returns {string|object} Error or ID
      */
-    async getMovieID(query) {
+    async getMovieID(query, details) {
         const movieID = await this.convertExternalID(query);
         if (typeof movieID === 'string') return movieID;
 
-        if (!movieID.error && movieID.movie_results[0])
-            return movieID.movie_results[0].id;
+        if (!movieID.error && movieID.movie_results[0]) return details
+            ? movieID.movie_results[0] : movieID.movie_results[0].id;
 
         const movies = await this.getMovies(query);
         if (movies.error) return movies;
 
-        return movies.results[0].id;
+        return details ? movies.results[0] : movies.results[0].id;
     }
 
     /**
@@ -291,6 +292,25 @@ class DMDb extends APITemplate {
 
         return videos.results.filter(video =>
             video.site === "YouTube" && video.type === "Trailer");
+    }
+
+    /**
+     * Get the cast and crew for a movie
+     * 
+     * @param {string} query Movie name or ID
+     * @returns {object} Error or credits
+     */
+    async getCredits(query) {
+        const movie = await this.getMovieID(query, true);
+        if (movie.error) return movie;
+
+        const credits = await this.get(`movie/${movie.id}/credits`);
+        if (credits.error) return credits;
+
+        if (credits.cast.length === 0)
+            return this.error('No cast or crew found.');
+        
+        return {...credits, ...movie};
     }
 
     /**
