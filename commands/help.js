@@ -50,7 +50,7 @@ class InfoCommand extends Command {
             'title': 'DMDb - Discord Movie Database',
             'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
                 `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more detailed information about a command.\n` +
-                '\n**<>** = Argument is required. **[]** = Argument is optional.',
+                '\n**<>** = Argument is required. **[]** = Argument is optional. *Do not include the brackets.*',
             'fields': []
         };
 
@@ -62,8 +62,7 @@ class InfoCommand extends Command {
         const pages = this.util.chunkArray(commands, 7);
         const page = pages[pagePosition - 1];
 
-        if (page.length === 0)
-            return this.embed.error(message.channel.id, 'Page not found.');
+        if (!page) return this.embed.error(message.channel.id, 'Page not found.');
 
         // Filtered commands
         for (let i = 0; i < page.length; i++) {
@@ -78,7 +77,8 @@ class InfoCommand extends Command {
         }
 
         // Page information
-        embed.footer = `Page: ${(pagePosition)}/${pages.length} | Total Commands: ${commands.length} | Data from The Movie Database (TMDb)`;
+        embed.footer = `Page: ${(pagePosition)}/${pages.length} | ` +
+            `Total Commands: ${commands.length} | Data from The Movie Database (TMDb)`;
 
         // Response
         this.embed.create(message.channel.id, embed);
