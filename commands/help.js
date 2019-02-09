@@ -50,7 +50,9 @@ class InfoCommand extends Command {
             'title': 'DMDb - Discord Movie Database',
             'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
                 `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more detailed information about a command.\n` +
-                '\n**<>** = Argument is required. **[]** = Argument is optional. *Do not include the brackets.*',
+                '\n**<>** = Argument is required. **[]** = Argument is optional. *Do not include the brackets.*\n' +
+                '\nExample Command: `!?movies thor --page 2 --year 2011`\n' +
+                `${message.db.guild.tips ? 'Toggle tips with the `config` command.' : ''}`,
             'fields': []
         };
 

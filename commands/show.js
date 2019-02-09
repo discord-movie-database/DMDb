@@ -49,7 +49,8 @@ class ShowHandler extends Command {
                 { 'name': 'TMDb ID', 'value': this.TMDbID(TVShow.id)
             }]),
 
-            'footer': `TIP: Not the TV show you wanted? Try searching for it using the ${message.prefix}shows command.`
+            'footer': message.db.guild.tips ? `TIP: Not the TV show you wanted? ` +
+                `Try searching for it using the ${message.db.guild.prefix}shows command.` : ''
         });
     }
 }

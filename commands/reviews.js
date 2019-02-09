@@ -42,7 +42,8 @@ class ReviewsCommand extends Command {
                     `[Click here to read the full review.](${review.url})`
             })),
 
-            'footer': 'TIP: Use flags (--page) to get more results.'
+            'footer': message.db.guild.tips ?
+                'TIP: Use flags (--page) to get more results.' : ''
         });
     }
 }

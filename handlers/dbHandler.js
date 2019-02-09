@@ -13,7 +13,8 @@ class DBHandler {
                 commanddisabled: { type: Boolean, default: true }
             },
             usageCount: { type: Number, default: 0 },
-            anime: { type: Boolean, default: false }
+            anime: { type: Boolean, default: false },
+            tips: { type: Boolean, default: true }
         }
 
         this.userSchema = {

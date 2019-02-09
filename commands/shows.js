@@ -50,7 +50,8 @@ class ShowsCommand extends Command {
                     `${this.TMDbID(TVShow.id)}`
             })),
 
-            'footer': `TIP: Use flags (--year, --page) to get more and accurate results.`
+            'footer': message.db.guild.tips ?
+                `TIP: Use flags (--year, --page) to get more and accurate results.` : ''
         });
     }
 }

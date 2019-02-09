@@ -54,7 +54,8 @@ class CreditsCommand extends Command {
                     `${this.TMDbID(credit.id)}`
             })),
             
-            'footer': 'TIP: Use the flags (--page) to get more results.'
+            'footer': message.db.guild.tips ?
+                'TIP: Use the flags (--page) to get more results.' : ''
         });
     }
 }

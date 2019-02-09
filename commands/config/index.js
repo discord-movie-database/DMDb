@@ -41,7 +41,7 @@ class ConfigCommand extends Command {
             'fields': this.optionKeys.map(key => ({
                 'name': key,
                 'value': this.options[key].info.description +
-                `\nUsage: \`${message.db.guild.prefix}config ${key} ${this.options[key].info.usage}\``
+                `\nUsage: \`${message.db.guild.prefix}config ${key} ${this.options[key].info.usage || ''}\``
             }))
         });
     }
