@@ -300,7 +300,7 @@ class DMDb extends APITemplate {
      * @param {string} query Movie name or ID
      * @returns {object} Error or credits
      */
-    async getCredits(query) {
+    async getMovieCredits(query) {
         const movie = await this.getMovieID(query, true);
         if (movie.error) return movie;
 

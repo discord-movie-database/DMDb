@@ -1,10 +1,11 @@
 const Command = require('../handlers/commandHandler');
 
-class ShowsCommand extends Command {
+class CreditsCommand extends Command {
     constructor(client) {
         super(client, {
             'shortDescription': 'Get the cast and crew for a movie.',
-            'longDescription': 'TODO',
+            'longDescription': 'Get a list of the cast and crew in a movie. ' +
+                'Use the `--page` flag to get more results.',
             'usage': '<Movie Name or ID>',
             'weight': 34,
             'visible': true,
@@ -27,7 +28,7 @@ class ShowsCommand extends Command {
         const page = (flags.page - 1) || 0;
 
         // Get credits from API
-        const credits = await this.api.dmdb.getCredits(query);
+        const credits = await this.api.dmdb.getMovieCredits(query);
         if (credits.error) return this.embed.error(status, credits.error); // Error
 
         // Put credits into pages
@@ -58,4 +59,4 @@ class ShowsCommand extends Command {
     }
 }
 
-module.exports = ShowsCommand;
+module.exports = CreditsCommand;
