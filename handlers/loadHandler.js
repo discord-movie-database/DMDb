@@ -56,8 +56,8 @@ class LoadHandler {
 
         // START BOT LIST STATS INTERVAL
         if (this.client.env === 'main' && this.client.config.options.bot.postStats) {
-            this.client.handlers.botlist.updateAllSites();
-            this.client.handlers.botlist.listInterval();
+            this.client.handlers.botlist.updateAllLists();
+            this.client.handlers.botlist.startListUpdates();
         }
 
         // DONE
