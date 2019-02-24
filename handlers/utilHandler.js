@@ -30,8 +30,9 @@ class Util {
 
         for (let i = 0; i < words.length; i++) {
             const word = words[i];
+            if (!word) continue;
             
-            if (word && word.startsWith('--')) {
+            if (word.startsWith('--')) {
                 const flagName = word.slice(2);
                 const flagValue = words[i + 1];
 
@@ -40,6 +41,16 @@ class Util {
 
                 words.splice(i, 2);
                 i = i - 2;
+            }
+
+            if (word.startsWith('++')) {
+                const flagName = word.slice(2);
+                
+                if (flagName !== 'query')
+                    response[flagName] = true;
+
+                words.splice(i, 1);
+                i = i - 1;
             }
         }
 
