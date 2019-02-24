@@ -4,16 +4,23 @@ class ListHandler {
     constructor(client) {
         this.client = client;
 
-        this.clientID = '412006490132447249';
+        this.clientID = this.client.config.options.bot.id;
+        this.listData = this.client.config.tokens.botlist;
+
+        this.client.listInterval;
     }
 
-    listInterval() {
+    _success(endpoint) {
+        this.client.handlers.log.success(`Posted guilds to ${endpoint}`);
+    }
+
+    startListUpdates() {
         if (this.client.config.options.bot.postStats)
             this.client.listInterval = setInterval(() => {
-                this.updateAllSites(); }, 43200000);
+                this.updateAllLists(); }, 1000 * 60 * 60 * 8);
     }
 
-    updateAllSites() {
+    updateAllLists() {
         const guildCount = this.client.guilds.size;
 
         this.client.handlers.log.info(`Posting ${guildCount} guilds...`);
@@ -21,58 +28,48 @@ class ListHandler {
         this.discordbotsOrg(guildCount);
         this.discordbotsGg(guildCount);
         this.botsOndiscordXyz(guildCount);
+        this.carbonitexNet(guildCount);
     }
 
     async discordbotsOrg(guildCount) {
-        const endpointPrefix = 'https://discordbots.org/api';
-        const endpointURL = `${endpointPrefix}/bots/${this.clientID}/stats`;
+        const endpointURL = `${this.listData.discordbotsOrg.url}/bots/${this.clientID}/stats`;
         
-        let apiResponse;
-        try {
-            apiResponse = await request.post(endpointURL)
-                .set('Authorization', this.client.config.tokens.botlist.discordbotsOrg)
-                .send({ 'server_count': guildCount });
-
-        } catch (err) { return console.log(err); }
+        const apiResponse = await request.post(endpointURL)
+            .set('Authorization', this.listData.discordbotsOrg.token)
+            .send({ server_count: guildCount }).catch(console.error);
         if (!apiResponse) return;
 
-        this._success(endpointPrefix);
+        this._success(this.listData.discordbotsOrg.url);
     }
 
     async discordbotsGg(guildCount) {
-        const endpointPrefix = 'https://discord.bots.gg/api/v1';
-        const endpointURL = `${endpointPrefix}/bots/${this.clientID}/stats`;
+        const endpointURL = `${this.listData.discordbotsGg.url}/bots/${this.clientID}/stats`;
 
-        let apiResponse;
-        try {
-            apiResponse = await request.post(endpointURL)
-                .set('Authorization', this.client.config.tokens.botlist.discordBotsGg)
-                .send({ 'guildCount': guildCount });
-
-        } catch (err) { return console.log(err); }
+        let apiResponse = await request.post(endpointURL)
+            .set('Authorization', this.listData.discordbotsGg.token)
+            .send({ guildCount: guildCount }).catch(console.error);
         if (!apiResponse) return;
 
-        this._success(endpointPrefix);
+        this._success(this.listData.discordbotsGg.url);
     }
 
     async botsOndiscordXyz(guildCount) {
-        const endpointPrefix = 'https://bots.ondiscord.xyz/bot-api';
-        const endpointURL = `${endpointPrefix}/bots/${this.clientID}/guilds`;
+        const endpointURL = `${this.listData.botsOndiscordXyz.url}/bots/${this.clientID}/guilds`;
 
-        let apiResponse;
-        try {
-            apiResponse = await request.post(endpointURL)
-                .set('Authorization', this.client.config.tokens.botlist.botsOndiscordXyz)
-                .send({ 'guildCount': guildCount });
-
-        } catch (err) { return console.log(err); }
+        let apiResponse = await request.post(endpointURL)
+            .set('Authorization', this.listData.botsOndiscordXyz.token)
+            .send({ guildCount: guildCount }).catch(console.error);
         if (!apiResponse) return;
 
-        this._success(endpointPrefix);
+        this._success(this.listData.botsOndiscordXyz.url);
     }
 
-    _success(endpoint) {
-        this.client.handlers.log.success(`Posted guilds to ${endpoint}`);
+    async carbonitexNet(guildCount) {
+        let apiResponse = await request.post(this.listData.carbonitexNet.url).send({
+            key: this.listData.carbonitexNet.token, servercount: guildCount }).catch(console.error);
+        if (!apiResponse) return;
+
+        this._success(this.listData.carbonitexNet.url);
     }
 }
 
