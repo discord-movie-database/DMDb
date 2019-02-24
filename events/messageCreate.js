@@ -58,8 +58,9 @@ class MsgEvent {
         this.client.stats.totalUsageCount++;
 
         // Command execution log
-        this.client.handlers.log.info(`Command: ${commandName} | User: ${message.author.id} | ` +
-            `Guild: ${message.channel.guild ? message.channel.guild.id : 'DM'}` +
+        this.client.handlers.log.info(`${message.db.guild.prefix}${chalk.bold(commandName)} | ` +
+            `U${message.author.id} | ` +
+            `G${message.channel.guild ? message.channel.guild.id : 'DM'}` +
             `${message.arguments[0] ? ` | Args: ${message.arguments.join(' ')}` : ''}`);
     }
 }
