@@ -5,7 +5,7 @@ class CreditsCommand extends Command {
         super(client, {
             'shortDescription': 'Get the cast and crew for a movie.',
             'longDescription': 'Get a list of the cast and crew in a movie. ' +
-                'Use the `--page` flag to get more results.',
+                'Use the `--page` flag to get more results. Use the `++show` flag for a TV show.',
             'usage': '<Movie Name or ID>',
             'weight': 34,
             'visible': true,
@@ -26,9 +26,11 @@ class CreditsCommand extends Command {
         query = flags.query;
 
         const page = (flags.page - 1) || 0;
+        const show = flags.show;
 
         // Get credits from API
-        const credits = await this.api.dmdb.getMovieCredits(query);
+        const credits = show ? await this.api.dmdb.getTVShowCredits(query)
+            : await this.api.dmdb.getMovieCredits(query);
         if (credits.error) return this.embed.error(status, credits.error); // Error
 
         // Put credits into pages
@@ -40,7 +42,7 @@ class CreditsCommand extends Command {
 
         // Response
         this.embed.edit(status, {
-            'title': credits.title,
+            'title': credits.title || credits.name,
             'description': `Current Page: **${(page + 1)}** **|** ` +
                 `Total Pages: ${pages.length} **|** ` +
                 `Total Results: ${credits.cast.length}`,
@@ -55,7 +57,7 @@ class CreditsCommand extends Command {
             })),
             
             'footer': message.db.guild.tips ?
-                'TIP: Use the flags (--page) to get more results.' : ''
+                'TIP: Use the flags (--page, ++show) to get more results.' : ''
         });
     }
 }
