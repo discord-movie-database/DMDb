@@ -8,9 +8,22 @@
             "tmdb": ""
         },
         "botlist": {
-            "discordbotsOrg": "",
-            "discordBotsGg": "",
-            "botsOndiscordXyz": ""
+            "discordbotsOrg": {
+                "url": "https://discordbots.org/api",
+                "prefix": ""
+            },
+            "discordBotsGg": {
+                "url": "https://discord.bots.gg/api/v1",
+                "token": ""
+            },
+            "botsOndiscordXyz": {
+                "url": "https://bots.ondiscord.xyz/bot-api",
+                "token": ""
+            },
+            "carbonitexNet": {
+                "url": "https://www.carbonitex.net/discord/data/botdata.php",
+                "token": ""
+            }
         }
     },
     "options": {
@@ -20,10 +33,12 @@
             "disableEveryone": true,
             "disableEvents": {
                 "TYPING_START": true,
-                "PRESENCE_UPDATE": true
+                "PRESENCE_UPDATE": true,
+                "VOICE_STATE_UPDATE": true
             }
         },
         "bot": {
+            "id": "",
             "prefix": "",
             "status": "",
             "embed": {
@@ -34,10 +49,13 @@
         }
     },
     "db": {
-        "url": "mongodb://localhost/dmdb",
-        "port": 0,
+        "name": "dmdb",
+        "port": 3333,
         "options": {
             "useNewUrlParser": true,
+            "user": "",
+            "pass": "",
+            "authSource": "admin",
             "autoReconnect": true,
             "reconnectTries": 25,
             "reconnectInterval": 250
