@@ -1,40 +1,34 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
 class DBHandler {
     constructor(client) {
         this.client = client;
+        this.client.db = mongoose;
 
         this.guildSchema = {
             id: String,
             prefix: { type: String, default: null },
             disabledCommands: [ String ],
             messages: {
-                commanddisabled: { type: Boolean, default: true }
-            },
-            usageCount: { type: Number, default: 0 },
+                commanddisabled: { type: Boolean, default: true } },
             anime: { type: Boolean, default: false },
             tips: { type: Boolean, default: true }
         }
-
         this.userSchema = {
             id: String,
-            voted: Date,
-            usageCount: { type: Number, default: 0 }
+            voted: Date
         }
     }
 
     async connect() {
-        this.client.db = mongoose;
-        
-        try {
-            await mongoose.connect(this.client.config.db.url,
-                this.client.config.db.options);
-        } catch (err) {
-            this.client.handlers.log.error('', err);
+        const url = `mongodb://localhost:${this.client.config.db.port}` +
+            `/${this.client.config.db.name}`;
+        const options = this.client.config.db.options;
 
+        await mongoose.connect(url, options).catch(err => {
+            this.client.handlers.log.error('', err);
             process.exit();
-        }
+        });
 
         this.client.db.connection.on('connected', () =>
             this.client.handlers.log.success('Connected to database.'));
