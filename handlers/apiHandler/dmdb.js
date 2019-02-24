@@ -222,17 +222,17 @@ class DMDb extends APITemplate {
      * @param {string} query TV show name
      * @returns {string} Error or ID
      */
-    async getTVShowID(query) {
+    async getTVShowID(query, details) {
         const TVShowID = await this.convertExternalID(query);
         if (typeof TVShowID === 'string') return TVShowID;
 
-        if (!TVShowID.error && TVShowID.tv_results[0])
-            return TVShowID.tv_results[0].id;
+        if (!TVShowID.error && TVShowID.tv_results[0]) return details ?
+            TVShowID.tv_results[0] : TVShowID.tv_results[0].id;
 
         const TVShows = await this.getTVShows(query);
         if (TVShows.error) return TVShows;
 
-        return TVShows.results[0].id;
+        return details ? TVShows.results[0] : TVShows.results[0].id;
     }
 
     /**
@@ -295,6 +295,20 @@ class DMDb extends APITemplate {
     }
 
     /**
+     * Reponse handler for credits
+     * 
+     * @param {object} info Info about credits source
+     * @param {object} credits Cast and cew
+     * @returns {object} Error or credits
+     */
+    _credits(info, credits) {
+        if (credits.cast.length === 0)
+            return this.error('No cast or crew found.');
+
+        return {...info, ...credits};
+    }
+
+    /**
      * Get the cast and crew for a movie
      * 
      * @param {string} query Movie name or ID
@@ -307,10 +321,23 @@ class DMDb extends APITemplate {
         const credits = await this.get(`movie/${movie.id}/credits`);
         if (credits.error) return credits;
 
-        if (credits.cast.length === 0)
-            return this.error('No cast or crew found.');
-        
-        return {...credits, ...movie};
+        return this._credits(movie, credits);
+    }
+
+    /**
+     * Get the cast and crew for a TV show
+     * 
+     * @param {string} query TV show name or ID
+     * @returns {object} Error or credits
+     */
+    async getTVShowCredits(query) {
+        const TVShow = await this.getTVShowID(query, true);
+        if (TVShow.error) return TVShow;
+
+        const credits = await this.get(`tv/${TVShow.id}/credits`);
+        if (credits.error) return credits;
+
+        return this._credits(TVShow, credits);
     }
 
     /**
@@ -331,16 +358,13 @@ class DMDb extends APITemplate {
     }
 
     /**
-     * Get a movie poster with an ID or name
+     * Get a poster
      * 
-     * @param {string} query Movie name or ID
+     * @param {string} query Source of poster
      * @returns {object} Error or buffer
      */
-    async getPoster(query, size) {
-        const movie = await this.getMovie(query);
-        if (movie.error) return movie;
-
-        const posterPath = movie.poster_path;
+    async _getPoster(source, size) {
+        const posterPath = source.poster_path;
         if (!posterPath) return this.error('No poster for this movie.');
 
         size = this.posterSizes[size] || this.posterSizes[2];
@@ -353,6 +377,34 @@ class DMDb extends APITemplate {
             console.log(err);
         }
         return this.error('No poster.');
+    }
+
+    /**
+     * Get a movie poster with an ID or name
+     * 
+     * @param {string} query Movie name or ID
+     * @param {boolean} size Poster size
+     * @returns {object} Error or buffer
+     */
+    async getMoviePoster(query, size) {
+        const movie = await this.getMovie(query);
+        if (movie.error) return movie;
+
+        return this._getPoster(movie, size);
+    }
+
+    /**
+     * Get a TV show poster with an ID or name
+     * 
+     * @param {string} query TV show name or ID
+     * @param {boolean} size Poster size
+     * @returns {object} Error or buffer
+     */
+    async getTVShowPoster(query, size) {
+        const TVShow = await this.getTVShow(query);
+        if (TVShow.error) return TVShow;
+
+        return this._getPoster(TVShow, size);
     }
 }
 
