@@ -14,8 +14,8 @@ class ListHandler {
         this.client.handlers.log.success(`Posted guilds to ${endpoint}`);
     }
 
-    startListUpdates() {
-        if (this.client.config.options.bot.postStats)
+    startListInterval() {
+        if (this.client.env === 'main' & this.client.config.options.bot.postStats)
             this.client.listInterval = setInterval(() => {
                 this.updateAllLists(); }, 1000 * 60 * 60 * 8);
     }

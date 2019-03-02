@@ -3,6 +3,7 @@ const fs = require('fs');
 class LoadHandler {
     constructor(client) {
         this.client = client;
+        this.config = this.client.config;
         
         this.util = this.client.handlers.util;
 
@@ -11,80 +12,28 @@ class LoadHandler {
         this.handlerDir = __dirname;
     }
 
-    _status() {
-        this.client.status.values = [
-            () => this.client.config.options.bot.status,
-            () => `${this.client.guilds.size} Servers`,
-            () => `${this.client.users.size} Users`
-        ];
-
-        this.client.status.position = 0;
-        this.client.status.interval = setInterval(() => {
-            this.client.editStatus({
-                'name': `${this.client.config.options.bot.prefix}Help | ` +
-                    `${this.client.status.values[this.client.status.position]()}` });
-
-            this.client.status.position !== this.client.status.values.length - 1
-                ? this.client.status.position++ : this.client.status.position = 0;
-        }, 30000);
-    }
-
     async start() {
         this.client.handlers.log.success('Connected to Discord');
         if (this.client.loaded) return;
 
-        // START
-        this.client.handlers.log.info('Loading bot');
-
-        // CONNECT TO DATABASE
-        this.client.handlers.log.info('Connecting to database');
         await this.databaseConnect();
-        this.client.handlers.log.success('Connected to database');
+        await this.loadCommands()
+        await this.loadEvents(); 
 
-        // LOAD COMMANDS
-        await this.loadCommands();
-        const commandNames = this.getCommandNames();
-        this.client.handlers.log.info(`Loaded commands: ${this.util.list(commandNames)}`);
+        this.client.handlers.botlist.startListInterval();
+        this.client.handlers.bot.startStatusInterval();
 
-        // LOAD EVENTS
-        await this.loadEvents();
-        const eventNames = Object.keys(this.client.events);
-        this.client.handlers.log.info(`Loaded events: ${this.util.list(eventNames)}`);
-
-        // UPDATE BOT STATUS
-        this._status();
-
-        // START BOT LIST STATS INTERVAL
-        if (this.client.env === 'main' && this.client.config.options.bot.postStats) {
-            this.client.handlers.botlist.updateAllLists();
-            this.client.handlers.botlist.startListUpdates();
-        }
-
-        // DONE
-        this.client.handlers.log.success('Finished loading bot');
+        this.client.handlers.log.info('Finished Loading');
     }
 
     async reload() {
-        // START
-        this.client.handlers.log.info('Reloading bot');
+        this.client.handlers.log.info('Reloading Bot');
 
-        // RELOAD HANDLERS
         await this.reloadHandlers();
-        const handlerNames = this.getHandlerNames();
-        this.client.handlers.log.info(`Reloaded handlers: ${this.util.list(handlerNames)}`);
-
-        // RELOAD EVENTS
         await this.reloadEvents();
-        const eventNames = this.getEventNames();
-        this.client.handlers.log.info(`Reloaded events: ${this.util.list(eventNames)}`);
-
-        // RELOAD COMMANDS
         await this.reloadCommands();
-        const commandNames = this.getCommandNames();
-        this.client.handlers.log.info(`Reloaded commands: ${this.util.list(commandNames)}`);
 
-        // DONE
-        this.client.handlers.log.success('Finished reloading bot');
+        this.client.handlers.log.info('Finished Reloading');
     }
 
     // COMMANDS //
@@ -107,13 +56,16 @@ class LoadHandler {
         }
     }
 
-    async loadCommands() {
+    async loadCommands(log) {
         const commandDir = fs.readdirSync(this.commandDir);
 
         for (let i = 0; i < commandDir.length; i++) {
             const fileName = this.util.removeFileExtension(commandDir[i]);
             await this.loadCommand(fileName);
         }
+
+        const commandNames = this.util.list(this.getCommandNames());
+        if (!log) this.client.handlers.log.success(`Loaded Commands: ${commandNames}`);
     }
 
     async unloadCommand(commandName) {
@@ -131,8 +83,11 @@ class LoadHandler {
     }
 
     async reloadCommands() {
-        this.unloadCommands();
-        this.loadCommands();
+        await this.unloadCommands();
+        await this.loadCommands(true);
+
+        const commandNames = this.util.list(this.getCommandNames());
+        this.client.handlers.log.success(`Reloaded Commands: ${commandNames}`);
     }
 
     // EVENTS //
@@ -148,17 +103,20 @@ class LoadHandler {
 
             this.client.on(eventName, this.client.events[eventName].process);
         } catch (err) {
-            this.client.handlers.log.error(`Loading event: ${eventName}`, err);
+            this.client.handlers.log.error(`Loading Event: ${eventName}`, err);
         }
     }
 
-    async loadEvents() {
+    async loadEvents(log) {
         const eventDir = fs.readdirSync(this.eventDir);
 
         for (let i = 0 ; i < eventDir.length; i++) {
             const eventName = this.util.removeFileExtension(eventDir[i]);
             await this.loadEvent(eventName);
         }
+
+        const eventNames = this.util.list(this.getEventNames());
+        if (!log) this.client.handlers.log.success(`Loaded Events: ${eventNames}`);
     }
 
     async unloadEvent(eventName) {
@@ -177,8 +135,11 @@ class LoadHandler {
     }
 
     async reloadEvents() {
-        this.unloadEvents();
-        this.loadEvents();
+        await this.unloadEvents();
+        await this.loadEvents(true);
+
+        const eventNames = this.util.list(this.getEventNames());
+        this.client.handlers.log.success(`Reloaded Events: ${eventNames}`);
     }
 
     // HANDLERS //
@@ -201,29 +162,26 @@ class LoadHandler {
         delete this.client.handlers[handlerName];
     }
 
-    async reloadHandlers() {
+    async reloadHandlers(log) {
         const handlers = this.client.handlers;
 
         for (let i = 0; i < handlers.length; i++) {
             const handlerName = handlers[i];
+
             await this.unloadHandler(handlerName);
             await this.loadHandler(handlerName);
         }
+
+        const handlerNames = this.util.list(this.getHandlerNames());
+        if (!log) this.client.handlers.log.success(`Reloaded handlers: ${handlerNames}`);
     }
 
     // DATABASE //
 
     async databaseConnect() {
         await this.client.handlers.db.connect();
-    }
 
-    async databaseDisconnect() {
-        await this.client.db.disconnect();
-    }
-
-    async databaseReconnect() {
-        await this.databaseDisconnect();
-        await this.databaseConnect();
+        this.client.handlers.log.success('Connected to Database');
     }
 }
 
