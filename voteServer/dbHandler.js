@@ -3,9 +3,7 @@ const mongoose = require('mongoose');
 class DBHandler {
     constructor(base) {
         this.base = base;
-
-        this.url = this.base.config.db.url;
-        this.options = this.base.config.db.options;
+        this.base.db = mongoose;
 
         this.userSchema = {
             id: { type: String, required: true },
@@ -18,14 +16,17 @@ class DBHandler {
         this.base.emit('db');
     }
 
-    connect() {
+    async connect() {
         console.log('Connecting to database...');
 
-        this.base.db = mongoose;
+        const url = `mongodb://localhost:${this.base.config.db.port}` +
+            `/${this.base.config.db.name}`;
+        const options = this.base.config.db.options;
 
-        try {
-            this.base.db.connect(this.url, this.options);
-        } catch (err) { throw err; }
+        await this.base.db.connect(url, options).catch(err => {
+            console.error(err);
+            process.exit();
+        });
 
         this.base.db.set('useFindAndModify', false);
         this.base.db.model('user', this.userSchema);
@@ -34,9 +35,7 @@ class DBHandler {
     }
 
     async update(ID, data) {
-        data = data || {};
-
-        return await this.base.db.model('user').findOneAndUpdate({ id: ID }, data,
+        return await this.base.db.model('user').findOneAndUpdate({ id: ID }, data || {},
             { 'upsert': true, 'setDefaultsOnInsert': true, 'new': true });
     }
 }
