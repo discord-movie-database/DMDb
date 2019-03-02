@@ -9,6 +9,7 @@ const APIHandler = require('./handlers/apiHandler');
 const BotlistHandler = require('./handlers/botlistHandler');
 const DBHandler = require('./handlers/dbHandler');
 const UtilHandler = require('./handlers/utilHandler');
+const BotHandler = require('./handlers/botHandler');
 
 class Client extends Eris {
     constructor(config) {
@@ -36,6 +37,7 @@ class Client extends Eris {
         this.handlers.db = new DBHandler(this);
         this.handlers.load = new LoadHandler(this);
         this.handlers.botlist = new BotlistHandler(this);
+        this.handlers.bot = new BotHandler(this);
 
         this.handlers.log.info('Connecting to Discord');
         this.on('ready', () => this.handlers.load.start());
