@@ -27,10 +27,12 @@ class CreditsCommand extends Command {
 
         const page = (flags.page - 1) || 0;
         const show = flags.show;
+        const person = flags.person;
 
         // Get credits from API
-        const credits = show ? await this.api.dmdb.getTVShowCredits(query)
-            : await this.api.dmdb.getMovieCredits(query);
+        const credits = show ? await this.api.dmdb.getTVShowCredits(query) :
+            person ? await this.api.dmdb.getPersonCredits(query) :
+            await this.api.dmdb.getMovieCredits(query);
         if (credits.error) return this.embed.error(status, credits.error); // Error
 
         // Put credits into pages
@@ -46,18 +48,21 @@ class CreditsCommand extends Command {
             'description': `Current Page: **${(page + 1)}** **|** ` +
                 `Total Pages: ${pages.length} **|** ` +
                 `Total Results: ${credits.cast.length}`,
-            'thumbnail': this.thumbnail(cast[0].profile_path ||
-                credits.cast[0].profile_path),
+            'thumbnail': this.thumbnail(cast[0].profile_path || cast[0].poster_path),
             
             'fields': cast.map(credit => ({
-                'name': credit.character,
-                'value': `${credit.name} **|** ` +
-                    `${this.gender(credit.gender)} **|** ` +
+                'name': this.character(credit.character),
+                'value': person ? `Movie: ${credit.title} **|** ` +
+                    `Release: ${this.releaseDate(credit.release_date)} **|** ` +
+                    `${this.TMDbID(credit.id)}` :
+
+                    `Name: ${this.name(credit.name)} **|** ` +
+                    `Gender: ${this.gender(credit.gender)} **|** ` +
                     `${this.TMDbID(credit.id)}`
             })),
             
             'footer': message.db.guild.tips ?
-                'TIP: Use the flags (--page, ++show) to get more results.' : ''
+                'TIP: Use the flags (--page, ++show, ++person) to get more results.' : ''
         });
     }
 }

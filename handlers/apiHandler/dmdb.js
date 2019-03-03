@@ -173,17 +173,17 @@ class DMDb extends APITemplate {
      * @param {string} query Movie name
      * @returns {string} Error or ID
      */
-    async getPersonID(query) {
+    async getPersonID(query, details) {
         const personID = await this.convertExternalID(query);
         if (typeof personID === 'string') return personID;
 
-        if (!personID.error && personID.person_results[0])
-            return personID.person_results[0].id;
+        if (!personID.error && personID.person_results[0]) return details
+            ? personID.person_results[0] : personID.person_results[0].id;
 
         const people = await this.getPeople(query);
         if (people.error) return people;
 
-        return people.results[0].id;
+        return details ? people.results[0] : people.results[0].id;
     }
 
     /**
@@ -341,6 +341,22 @@ class DMDb extends APITemplate {
     }
 
     /**
+     * Get the credits of a person
+     * 
+     * @param {string} query Person or ID
+     * @returns {object} Error or credits
+     */
+    async getPersonCredits(query) {
+        const person = await this.getPersonID(query, true);
+        if (person.error) return person;
+
+        const credits = await this.get(`person/${person.id}/combined_credits`);
+        if (credits.error) return credits;
+
+        return this._credits(person, credits);
+    }
+
+    /**
      * Get the user reviews for a movie
      * 
      * @param {string} query Movie name or ID
@@ -364,8 +380,8 @@ class DMDb extends APITemplate {
      * @returns {object} Error or buffer
      */
     async _getPoster(source, size) {
-        const posterPath = source.poster_path;
-        if (!posterPath) return this.error('No poster for this movie.');
+        const posterPath = source.poster_path || source.profile_path;
+        if (!posterPath) return this.error('No poster for this source.');
 
         size = this.posterSizes[size] || this.posterSizes[2];
 
@@ -405,6 +421,20 @@ class DMDb extends APITemplate {
         if (TVShow.error) return TVShow;
 
         return this._getPoster(TVShow, size);
+    }
+
+    /**
+     * Get a person poster with an ID or name
+     * 
+     * @param {string} query name or ID
+     * @param {boolean} size Poster size
+     * @returns {object} Error or buffer
+     */
+    async getPersonPoster(query, size) {
+        const person = await this.getPerson(query);
+        if (person.error) return person;
+
+        return this._getPoster(person, size);
     }
 }
 
