@@ -43,7 +43,7 @@ class ActorCommand extends Command {
             }]),
 
             'footer': message.db.guild.prefix ? 'TIP: Not the person you wanted?' +
-                ` Try searching for it using the ${message.db.guild.prefix}people command.` : ''
+                ` Try searching for them using the ${message.db.guild.prefix}people command.` : ''
         });
     }
 }

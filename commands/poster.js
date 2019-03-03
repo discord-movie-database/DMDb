@@ -25,6 +25,7 @@ class PosterCommand extends Command {
         query = flags.query;
 
         const show = flags.show;
+        const person = flags.person;
 
         // Vote status
         const voted = message.db.user.voted &&
@@ -32,8 +33,9 @@ class PosterCommand extends Command {
         const size = voted ? 5 : 2;
 
         // Get poster from API
-        const poster = show ? await this.api.dmdb.getTVShowPoster(query, size)
-            : await this.api.dmdb.getMoviePoster(query, size);
+        const poster = show ? await this.api.dmdb.getTVShowPoster(query, size) :
+            person ? await this.api.dmdb.getPersonPoster(query, size) :
+            await this.api.dmdb.getMoviePoster(query, size);
         if (poster.error) return this.embed.error(status, poster); // Error
 
         // Response

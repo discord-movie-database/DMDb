@@ -174,6 +174,14 @@ class CommandHandler {
         return value || 'N/A';
     }
 
+    character(value) {
+        return value || 'N/A';
+    }
+
+    name(value) {
+        return value || 'N/A';
+    }
+
     TMDbID(value) {
         return `t${value}`;
     }
