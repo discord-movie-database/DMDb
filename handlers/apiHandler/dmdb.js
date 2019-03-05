@@ -127,7 +127,8 @@ class DMDb extends APITemplate {
      */
     async getMovieID(query, details) {
         const movieID = await this.convertExternalID(query);
-        if (typeof movieID === 'string') return movieID;
+        if (typeof movieID === 'string')
+            return details ? await this.getMovie(query) : movieID;
 
         if (!movieID.error && movieID.movie_results[0]) return details
             ? movieID.movie_results[0] : movieID.movie_results[0].id;
@@ -175,7 +176,8 @@ class DMDb extends APITemplate {
      */
     async getPersonID(query, details) {
         const personID = await this.convertExternalID(query);
-        if (typeof personID === 'string') return personID;
+        if (typeof personID === 'string')
+            return details ? await this.getPerson(query) : personID;
 
         if (!personID.error && personID.person_results[0]) return details
             ? personID.person_results[0] : personID.person_results[0].id;
@@ -224,7 +226,8 @@ class DMDb extends APITemplate {
      */
     async getTVShowID(query, details) {
         const TVShowID = await this.convertExternalID(query);
-        if (typeof TVShowID === 'string') return TVShowID;
+        if (typeof TVShowID === 'string')
+            return details ? await this.getTVShow(query) : TVShowID;
 
         if (!TVShowID.error && TVShowID.tv_results[0]) return details ?
             TVShowID.tv_results[0] : TVShowID.tv_results[0].id;
