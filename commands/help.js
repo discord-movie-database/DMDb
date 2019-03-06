@@ -6,6 +6,8 @@ class InfoCommand extends Command {
             'visible': false,
             'restricted': false
         });
+
+        this.wikiURL = 'https://github.com/Dumblings/DMDb/wiki';
     }
 
     commandDescription(message) {
@@ -22,10 +24,10 @@ class InfoCommand extends Command {
 
         // Command information embed
         this.embed.create(message.channel.id, {
-            'title': `Command: ${commandName.charAt(0).toUpperCase() + commandName.slice(1)}`,
-            'description': command.longDescription ||
-                           command.shortDescription ||
-                           'No description for this command.',
+            'title': `${this.capitaliseStart(commandName)} Command`,
+            'description': `${command.description || 'No description available for this command.'}\n` +
+                `[*Click here to read the full documentation.*](${command.documentation ?
+                    `${this.wikiURL}/${commandName}-command)` : 'No documentation available for this command.'}`,
             'fields': [{
                 'name': 'Visible',
                 'value': this.yesno(command.visible || false),
@@ -47,12 +49,11 @@ class InfoCommand extends Command {
 
         // Embed template
         const embed = {
-            'title': 'DMDb - Discord Movie Database',
+            'title': 'DMDb - The Discord Movie Database',
             'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
-                `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more detailed information about a command.\n` +
-                '\n**<>** = Argument is required. **[]** = Argument is optional. *Do not include the brackets.*\n' +
-                '\nExample Command: `!?movies thor --page 2 --year 2011`\n' +
-                `${message.db.guild.tips ? 'Toggle tips with the `config` command.' : ''}`,
+                `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more information about a command.\n` +
+                '\nExample Command: `!?movies thor --page 2 --year 2011`\n' + 
+                `[Click here](${this.wikiURL}) to read the full documention.`,
             'fields': []
         };
 
@@ -74,7 +75,8 @@ class InfoCommand extends Command {
             // Append commands to response
             embed.fields.push({
                 'name': `${message.db.guild.prefix}${commandName} ${command.usage || ''}`,
-                'value': `- ${command.shortDescription}`
+                'value': `${command.documentation ? `[**-**](${this.wikiURL}/${commandName}-command)` : '**-**'}` +
+                    ` ${command.description}`
             });
         }
 
@@ -88,7 +90,6 @@ class InfoCommand extends Command {
 
     async process(message) {
         const argument = message.arguments[0];
-
         if (!argument) return this.commandList(message);
         if (/\d+/.test(argument)) return this.commandList(message, argument);
 

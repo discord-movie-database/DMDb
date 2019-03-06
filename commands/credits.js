@@ -3,9 +3,8 @@ const Command = require('../handlers/commandHandler');
 class CreditsCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get the cast and crew for a movie.',
-            'longDescription': 'Get a list of the cast and crew in a movie. ' +
-                'Use the `--page` flag to get more results. Use the `++show` flag for a TV show.',
+            'description': 'Get the cast and crew for a movie.',
+            'documentation': true,
             'usage': '<Movie Name or ID>',
             'weight': 34,
             'visible': true,

@@ -3,9 +3,8 @@ const Command = require('../handlers/commandHandler');
 class ReviewsCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get the user reviews for a movie.',
-            'longDescription': 'Get a list of user reviews for a movie. ' +
-                'Use the `--page` flag for more results.',
+            'description': 'Get the user reviews for a movie.',
+            'documentation': true,
             'usage': '<Movie Name or ID>',
             'weight': 33,
             'visible': true,

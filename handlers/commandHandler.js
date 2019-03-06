@@ -6,8 +6,8 @@ class CommandHandler {
             this.info = {};
 
             this.info.name = info.name || false;
-            this.info.shortDescription = info.shortDescription || '';
-            this.info.longDescription = info.longDescription || '';
+            this.info.description = info.description || '';
+            this.info.documentation = info.documentation || false;
             this.info.usage = info.usage || '';
             this.info.visible = typeof info.visible === 'boolean'
                 ? info.visible : false;

@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class ActorCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get information about a person.',
-            'longDescription': 'Get information about a person with a IMDb ID, TMDb ID, or the person\'s name.',
+            'description': 'Get information about a person.',
+            'documentation': true,
             'usage': '<Person\'s Name or ID>',
             'visible': true,
             'restricted': false,

@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class SimilarCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get similar movies.',
-            'longDescription': 'Search for movies similar to query.',
+            'description': 'Get similar movies.',
+            'documentation': true,
             'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,
