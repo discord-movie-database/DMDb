@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class TrailerCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get a trailer for a movie.',
-            'longDescription': 'Get a trailer for a movie. First video on the TMDb page will be used.',
+            'description': 'Get a trailer for a movie.',
+            'documentation': true,
             'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,

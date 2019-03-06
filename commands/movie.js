@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class TitleCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get information about a movie.',
-            'longDescription': 'Get information about a movie with an IMDb ID, TMDb ID, or the movie name.',
+            'description': 'Get information about a movie.',
+            'documentation': true,
             'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,

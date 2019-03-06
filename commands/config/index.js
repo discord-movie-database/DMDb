@@ -5,9 +5,8 @@ const Command = require('../../handlers/commandHandler');
 class ConfigCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Customise the bot for your guild.',
-            'longDescription': 'Requires the Manage Guild Permission. ' +
-                'Customize common features such as the prefix or toggle commands.',
+            'description': 'Customise the bot for your guild.',
+            'documentation': false,
             'usage': '[Option]',
             'visible': true,
             'restricted': false

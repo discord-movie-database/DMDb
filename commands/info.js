@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class InfoCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Information about the bot.',
-            'longDescription': 'Useful statistics to help the developer and satisfy curious users.',
+            'description': 'Information about the bot.',
+            'documentation': true,
             'visible': true,
             'restricted': false,
             'weight': 5

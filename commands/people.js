@@ -3,11 +3,8 @@ const Command = require('../handlers/commandHandler');
 class PeopleCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Search for people.',
-            'longDescription': 'Multiple people with the same name? Search for more than one person.' +
-                'Use the **IMDb ID** or **TMDb ID** with the `person` command to get more detailed information about them.\n\n' +
-                'Use **flags** to get even more and accurate results.\nAvailable flags for this command: `page`.\n\n' +
-                'Examples:\n`prefix#people Christoph Waltz --page 2`',
+            'description': 'Search for people.',
+            'documentation': true,
             'usage': '<Person\'s Name>',
             'weight': 40,
             'visible': true,

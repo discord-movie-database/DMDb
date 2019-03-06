@@ -3,11 +3,8 @@ const Command = require('../handlers/commandHandler');
 class ShowsCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Search for TV shows.',
-            'longDescription': 'Multiple TV shows with the same name? Search for more than one TV show.\n' +
-                'Use the **IMDb ID** or **TMDb** ID with the `show` command to get more detailed information about it.\n\n' +
-                'Use **flags** to get even more and accurate results.\nAvailable flags for this command: `page`, `year`.\n\n' +
-                'Examples:\n`prefix#shows Black Mirror --page 2`\n`prefix#shows Black Mirror --year 2011`',
+            'description': 'Search for TV shows.',
+            'documentation': true,
             'usage': '<TV Show Name>',
             'weight': 36,
             'visible': true,

@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class PosterCommand extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get a movie\'s poster. [Vote for higher resolution posters.](https://vote.dmdb.xyz/)',
-            'longDescription': 'Get a poster of a movie. Use the `++show` flag to get the poster of a TV show.',
+            'description': 'Get a movie\'s poster. [Vote for higher resolution posters.](https://vote.dmdb.xyz/)',
+            'documentation': true,
             'usage': '<Movie Name or ID>',
             'visible': true,
             'restricted': false,

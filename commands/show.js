@@ -3,8 +3,8 @@ const Command = require('../handlers/commandHandler');
 class ShowHandler extends Command {
     constructor(client) {
         super(client, {
-            'shortDescription': 'Get information about a TV show.',
-            'longDescription': 'Get information about a TV show with an IMDb ID, TMDb ID, or the show\'s name.',
+            'description': 'Get information about a TV show.',
+            'documentation': true,
             'usage': '<TV Show Name or ID>',
             'visible': true,
             'restricted': false,
