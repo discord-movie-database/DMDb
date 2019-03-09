@@ -20,10 +20,12 @@ class InfoCommand extends Command {
         // Response
         this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
-            'description': '**[Vote](https://discordbots.org/bot/412006490132447249/vote)** | ' +
+            'description': '[Vote](https://discordbots.org/bot/412006490132447249/vote) | ' +
                 '[Invite Bot](https://bit.ly/2PXWYLR) | ' +
                 '[Support Server](https://discord.gg/fwAxQjV) | ' +
-                '[Source Code](https://github.com/Dumblings/DMDb)',
+                '[Source Code](https://github.com/Dumblings/DMDb) | ' +
+                '[Documentation](https://github.com/Dumblings/DMDb/wiki) | ' +
+                '[Website](https://dmdb.xyz)',
             'fields': [{
                 'name': 'Developer',
                 'value': 'Dumplings#7460'
@@ -43,18 +45,16 @@ class InfoCommand extends Command {
                 'name': 'Users',
                 'value': `${this.client.users.size}`
             }, {
-                'name': 'Uptime',
-                'value': this.uptime(),
+                'name': 'Shards',
+                'value': `${this.client.shards.size}${shardId}`
             }, {
                 'name': 'Commands Executed',
                 'value': this.client.stats.totalUsageCount + 1
             }, {
-                'name': 'Shards',
-                'value': `${this.client.shards.size}${shardId}`
+                'name': 'Uptime',
+                'value': this.uptime(),
             }].map((field) => ({ ...field,
-                'inline': typeof field.inline === 'boolean' ? field.inline : true })),
-            'footer': `Total Commands: ${Object.keys(this.client.commands).length} | ` +
-                'Data from The Movie Database (TMDb)'
+                'inline': typeof field.inline === 'boolean' ? field.inline : true }))
         });
     }
 }
