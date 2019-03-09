@@ -15,6 +15,9 @@ class optionToggleCommand extends template {
 
         if (!this.client.commands[command])
             return this.embed.error(message.channel.id, 'Command not found.');
+        
+        if (command === 'config')
+            return this.embed.error(message.channel.id, 'You cannot disable this command.');
 
         const guild = await this.dbHandler.getOrUpdateGuild(message.channel.guild.id);
 
