@@ -34,7 +34,7 @@ class MsgEvent {
         const command = this.client.commands[commandName];
 
         // Check if command is disabled in guild
-        if (message.db.guild.disabledCommands.indexOf(commandName) > -1)
+        if (message.db.guild.disabledCommands && message.db.guild.disabledCommands.indexOf(commandName) > -1)
             return message.db.guild.messages.commanddisabled ?
                 this.client.handlers.embed.error(message.channel.id, 'This command is disabled.') : false;
 
