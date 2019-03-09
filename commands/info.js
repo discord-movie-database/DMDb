@@ -23,12 +23,12 @@ class InfoCommand extends Command {
             'description': '[Vote](https://discordbots.org/bot/412006490132447249/vote) | ' +
                 '[Invite Bot](https://bit.ly/2PXWYLR) | ' +
                 '[Support Server](https://discord.gg/fwAxQjV) | ' +
-                '[Source Code](https://github.com/Dumblings/DMDb) | ' +
                 '[Documentation](https://github.com/Dumblings/DMDb/wiki) | ' +
+                '[Changelog](https://github.com/Dumblings/DMDb/wiki/Changelog) | ' +
                 '[Website](https://dmdb.xyz)',
             'fields': [{
-                'name': 'Developer',
-                'value': 'Dumplings#7460'
+                'name': 'Bot Version',
+                'value': this.package.version
             }, {
                 'name': 'Library',
                 'value': `Eris ${this.package.dependencies.eris}`
