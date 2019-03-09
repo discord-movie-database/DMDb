@@ -25,9 +25,10 @@ class InfoCommand extends Command {
         // Command information embed
         this.embed.create(message.channel.id, {
             'title': `${this.capitaliseStart(commandName)} Command`,
-            'description': `${command.description || 'No description available for this command.'}\n` +
-                `[*Click here to read the full documentation.*](${command.documentation ?
-                    `${this.wikiURL}/${commandName}-command)` : 'No documentation available for this command.'}`,
+            'description': `${command.description || 'No description available for this command.'} ` +
+                `[Read the full documentation.](${command.documentation ?
+                    `${this.wikiURL}/${this.capitaliseStart(commandName)}-command)` :
+                        'No documentation available for this command.'}`,
             'fields': [{
                 'name': 'Visible',
                 'value': this.yesno(command.visible || false),
@@ -53,7 +54,8 @@ class InfoCommand extends Command {
             'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
                 `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more information about a command.\n` +
                 '\nExample Command: `!?movies thor --page 2 --year 2011`\n' + 
-                `[Click here](${this.wikiURL}) to read the full documention.`,
+                `[Click here](${this.wikiURL}) to read the full documention.\n` +
+                `\nCommand List:`,
             'fields': []
         };
 
@@ -75,8 +77,7 @@ class InfoCommand extends Command {
             // Append commands to response
             embed.fields.push({
                 'name': `${message.db.guild.prefix}${commandName} ${command.usage || ''}`,
-                'value': `${command.documentation ? `[**-**](${this.wikiURL}/${commandName}-command)` : '**-**'}` +
-                    ` ${command.description}`
+                'value': `- ${command.description}`
             });
         }
 
