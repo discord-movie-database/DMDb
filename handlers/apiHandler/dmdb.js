@@ -253,13 +253,14 @@ class DMDb extends APITemplate {
     }
 
     /**
-     * Get upcoming movies in theatres
+     * Get popular movies on TMDb
      * 
      * @returns {object} Error or movies
      */
-    async getUpcomingMovies() {
-        const movies = await this.getResults('movie/upcoming');
-        if (movies.error) return movies;
+    async getPopularMovies(flags) {
+        const movies = await this.getResults('movie/popular', {
+            'page': flags.page
+        });
 
         return movies;
     }
