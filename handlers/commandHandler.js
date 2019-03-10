@@ -156,6 +156,13 @@ class CommandHandler {
         return value ? value === 2 ? 'Male' : 'Female' : 'N/A';
     }
 
+    mediaType(value) {
+        if (value === 'tv') return 'TV';
+        if (value === 'movie') return 'Movie';
+        
+        return 'N/A';
+    }
+
     placeOfBirth(value) {
         return value || 'N/A';
     }
