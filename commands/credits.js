@@ -51,8 +51,8 @@ class CreditsCommand extends Command {
             
             'fields': cast.map(credit => ({
                 'name': this.character(credit.character),
-                'value': person ? `Movie: ${credit.title} **|** ` +
-                    `Release: ${this.releaseDate(credit.release_date)} **|** ` +
+                'value': person ? `${this.mediaType(credit.media_type)}: ${credit.title || credit.name} **|** ` +
+                    `Release: ${this.releaseDate(credit.release_date || credit.first_air_date)} **|** ` +
                     `${this.TMDbID(credit.id)}` :
 
                     `Name: ${this.name(credit.name)} **|** ` +
