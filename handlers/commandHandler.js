@@ -30,6 +30,22 @@ class CommandHandler {
         return value ? 'Yes' : 'No';
     }
 
+    joinResult(arr, light) {
+        return light ? arr.join(' | ') : arr.join(' **|** ');
+    }
+
+    resultDescription(result) {
+        const resultDescriptionData = [
+            `Current Page: **${result.page}**`,
+            `Total Pages: ${result.total_pages}`,
+            `Total Results: ${result.total_results}`
+        ];
+
+        if (result.year) resultDescriptionData.push(`Year: ${result.year}`);
+
+        return this.joinResult(resultDescriptionData);
+    }
+
     imdbURL(ID) {
         return `https://www.imdb.com/title/${ID}`;
     }

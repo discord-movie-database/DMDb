@@ -82,8 +82,11 @@ class InfoCommand extends Command {
         }
 
         // Page information
-        embed.footer = `Page: ${(pagePosition)}/${pages.length} | ` +
-            `Total Commands: ${commands.length} | Data from The Movie Database (TMDb)`;
+        embed.footer = this.joinResult([
+            `Page: ${(pagePosition)}/${pages.length}`,
+            `Total Commands: ${commands.length}`,
+            `Data from The Movie Database (TMDb)`
+        ], true);
 
         // Response
         this.embed.create(message.channel.id, embed);

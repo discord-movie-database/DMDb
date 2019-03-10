@@ -31,15 +31,15 @@ class PeopleCommand extends Command {
         // Response
         this.embed.edit(status, {
             'title': 'Search Results',
-            'description': `Current Page: **${people.page}** **|** `+
-                `Total Pages: ${people.total_pages} **|** ` +
-                `Total Results: ${people.total_results}`,
+            'description': this.resultDescription(people),
 
             'fields': people.results.map(person => ({
                 'name': person.name,
-                'value': `**${person.index}** **|** ` +
-                    `Known For: ${this.knownFor(person.known_for)} **|** ` +
+                'value': this.joinResult([
+                    `**${person.index}**`,
+                    `Known For: ${this.knownFor(person.known_for)}`,
                     `${this.TMDbID(person.id)}`
+                ])
             })),
 
             'footer': message.db.guild.tips ?

@@ -31,20 +31,21 @@ class MoviesCommand extends Command {
         const movies = await this.api.dmdb.getMovies(flags);
         if (movies.error) return this.embed.error(status, movies.error); // Error
 
+        movies.year = year;
+
         // Response
         this.embed.edit(status, {
             'title': 'Search Results',
-            'description': `Current Page: **${movies.page}** **|**` +
-                ` Total Pages: ${movies.total_pages} **|**` + 
-                ` Total Results: ${movies.total_results} **|**` +
-                ` Year: ${year}`,
+            'description': this.resultDescription(movies),
             
             'fields': movies.results.map(movie => ({
                 'name': movie.title,
-                'value': `**${movie.index}** **|** ` +
-                    `Vote Average: ${this.voteAverage(movie.vote_average)} **|** ` +
-                    `Release: ${this.releaseDate(movie.release_date)} **|** ` +
+                'value': this.joinResult([
+                    `**${movie.index}**`,
+                    `Vote Average: ${this.voteAverage(movie.vote_average)}`,
+                    `Release: ${this.releaseDate(movie.release_date)}`,
                     `${this.TMDbID(movie.id)}`
+                ])
             })),
 
             'footer': message.db.guild.tips ?

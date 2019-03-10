@@ -20,12 +20,14 @@ class InfoCommand extends Command {
         // Response
         this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
-            'description': '[Vote](https://discordbots.org/bot/412006490132447249/vote) | ' +
-                '[Invite Bot](https://bit.ly/2PXWYLR) | ' +
-                '[Support Server](https://discord.gg/fwAxQjV) | ' +
-                '[Documentation](https://github.com/Dumblings/DMDb/wiki) | ' +
-                '[Changelog](https://github.com/Dumblings/DMDb/wiki/Changelog) | ' +
-                '[Website](https://dmdb.xyz)',
+            'description': this.joinResult([
+                '[Vote](https://discordbots.org/bot/412006490132447249/vote)',
+                '[Invite Bot](https://bit.ly/2PXWYLR)',
+                '[Support Server](https://discord.gg/fwAxQjV)',
+                '[Documentation](https://github.com/Dumblings/DMDb/wiki)',
+                '[Changelog](https://github.com/Dumblings/DMDb/wiki/Changelog)',
+                '[Website](https://dmdb.xyz)'
+            ], true),
             'fields': [{
                 'name': 'Bot Version',
                 'value': this.package.version

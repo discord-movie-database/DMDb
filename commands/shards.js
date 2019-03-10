@@ -12,10 +12,10 @@ class ShardsCommand extends Command {
         this.embed.create(message.channel.id, {
             fields: this.client.shards.map((shard) => ({
                 name: `${shard.id}`,
-                value: `Status: ${this.capitaliseStart(shard.status)} | ` +
-                    `Latency: ${shard.latency}ms | ` +
+                value: this.joinResult([`Status: ${this.capitaliseStart(shard.status)}`,
+                    `Latency: ${shard.latency}ms`,
                     `Guilds: ${this.client.guilds.filter(guild =>
-                        guild.shard.id === shard.id).length}`
+                        guild.shard.id === shard.id).length}`])
             }))
         });
     }
