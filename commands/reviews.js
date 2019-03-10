@@ -31,13 +31,11 @@ class ReviewsCommand extends Command {
         // Response
         this.embed.edit(status, {
             'title': `${reviews.title} - Reviews`,
-            'description': `Current Page: **${reviews.page}** **|**` +
-                ` Total Pages: ${reviews.total_pages} **|**` + 
-                ` Total Results: ${reviews.total_results}`,
+            'description': this.resultDescription(reviews),
             
             'fields': reviews.results.map(review => ({
                 'name': review.author,
-                'value': `**${review.index}** **|** ${this.review(review.content)}\n` +
+                'value': this.joinResult([`**${review.index}**`, `${this.review(review.content)}\n`]) +
                     `[Click here to read the full review.](${review.url})`
             })),
 

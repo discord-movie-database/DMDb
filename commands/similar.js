@@ -27,14 +27,16 @@ class SimilarCommand extends Command {
         // Response
         this.embed.edit(status, {
             'title': 'Search Results',
-            'description': `Showing similar results for \`${query}\` based on keywords and genres.`,
+            'description': `Showing similar results based on keywords and genres.`,
 
             'fields': movies.results.map((movie, index) => ({
                 'name': movie.title,
-                'value': `**${(index + 1)}** **|** ` +
-                    `Release: ${this.releaseDate(movie.release_date)} **|** ` +
-                    `Vote Average: ${this.voteAverage(movie.vote_average)} **|** ` +
+                'value': this.joinResult([
+                    `**${(index + 1)}**`,
+                    `Release: ${this.releaseDate(movie.release_date)}`,
+                    `Vote Average: ${this.voteAverage(movie.vote_average)}`,
                     `${this.TMDbID(movie.id)}`
+                ])
             }))
         });
     }

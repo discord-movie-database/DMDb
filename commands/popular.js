@@ -26,16 +26,16 @@ class PopularCommand extends Command {
         // Response
         this.embed.edit(status, {
             'title': 'Popular Movies',
-            'description': `Current Page: **${movies.page}** **|** `+
-                `Total Pages: ${movies.total_pages} **|** ` +
-                `Total Results: ${movies.total_results}`,
+            'description': this.resultDescription(movies),
 
             'fields': movies.results.map((movie) => ({
                 'name': movie.title,
-                'value': `**${movie.index}** **|** ` +
-                    `Release: ${this.releaseDate(movie.release_date)} **|** ` +
-                    `Vote Average: ${this.voteAverage(movie.vote_average)} **|** ` +
+                'value': this.joinResult([
+                    `**${movie.index}**`,
+                    `Release: ${this.releaseDate(movie.release_date)}`,
+                    `Vote Average: ${this.voteAverage(movie.vote_average)}`,
                     `${this.TMDbID(movie.id)}`
+                ])
             }))
         });
     }

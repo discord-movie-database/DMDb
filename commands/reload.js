@@ -11,8 +11,7 @@ class ReloadCommand extends Command {
     async process(message) {
         const reload = await this.client.handlers.load.reload();
 
-        this.embed.success(message.channel.id, 'Reloaded commands, events & handlers.' +
-            '\n*Note: Hard restart to update index and new handlers.*');
+        this.embed.success(message.channel.id, 'Reloaded commands, events & handlers.');
     }
 }
 

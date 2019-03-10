@@ -31,20 +31,21 @@ class ShowsCommand extends Command {
         const TVShows = await this.api.dmdb.getTVShows(flags);
         if (TVShows.error) return this.embed.error(status, TVShows.error); // Error
 
+        TVShows.year = year;
+
         // Response
         this.embed.edit(status, {
             'title': 'Search Results',
-            'description': `Current Page: **${TVShows.page}** **|**` +
-                ` Total Pages: ${TVShows.total_pages} **|**` + 
-                ` Total Results: ${TVShows.total_results} **|**` +
-                ` Year: ${year}`,
+            'description': this.resultDescription(TVShows),
             
             'fields': TVShows.results.map(TVShow => ({
                 'name': TVShow.name,
-                'value': `**${TVShow.index}** **|** ` +
-                    `Vote Average: ${this.voteAverage(TVShow.vote_average)} **|** ` +
-                    `First Air Date: ${this.releaseDate(TVShow.first_air_date)} **|** ` +
+                'value': this.joinResult([
+                    `**${TVShow.index}**`,
+                    `Vote Average: ${this.voteAverage(TVShow.vote_average)}`,
+                    `First Air Date: ${this.releaseDate(TVShow.first_air_date)}`,
                     `${this.TMDbID(TVShow.id)}`
+                ])
             })),
 
             'footer': message.db.guild.tips ?

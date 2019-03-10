@@ -35,7 +35,7 @@ class CreditsCommand extends Command {
         if (credits.error) return this.embed.error(status, credits.error); // Error
 
         // Put credits into pages
-        const pages = this.util.chunkArray(credits.cast, 7);
+        const pages = this.util.chunkArray(credits.cast, 5);
         if (page > pages.length) return this.embed.error(status, 'No Results Found.');
 
         // Credits at page
@@ -44,20 +44,24 @@ class CreditsCommand extends Command {
         // Response
         this.embed.edit(status, {
             'title': credits.title || credits.name,
-            'description': `Current Page: **${(page + 1)}** **|** ` +
-                `Total Pages: ${pages.length} **|** ` +
-                `Total Results: ${credits.cast.length}`,
+            'description': this.joinResult([
+                `Current Page: **${(page + 1)}** `,
+                `Total Pages: ${pages.length}`,
+                `Total Results: ${credits.cast.length}`
+            ]),
             'thumbnail': this.thumbnail(cast[0].profile_path || cast[0].poster_path),
             
             'fields': cast.map(credit => ({
                 'name': this.character(credit.character),
-                'value': person ? `${this.mediaType(credit.media_type)}: ${credit.title || credit.name} **|** ` +
-                    `Release: ${this.releaseDate(credit.release_date || credit.first_air_date)} **|** ` +
-                    `${this.TMDbID(credit.id)}` :
+                'value': person ? this.joinResult([`${this.mediaType(credit.media_type)}: ${credit.title || credit.name}`,
+                    `Release: ${this.releaseDate(credit.release_date || credit.first_air_date)}`,
+                    `${this.TMDbID(credit.id)}`]) :
 
-                    `Name: ${this.name(credit.name)} **|** ` +
-                    `Gender: ${this.gender(credit.gender)} **|** ` +
-                    `${this.TMDbID(credit.id)}`
+                    this.joinResult([
+                        `Name: ${this.name(credit.name)}`,
+                        `Gender: ${this.gender(credit.gender)}`,
+                        `${this.TMDbID(credit.id)}`
+                    ])
             })),
             
             'footer': message.db.guild.tips ?
