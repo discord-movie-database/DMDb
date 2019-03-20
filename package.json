@@ -1,7 +1,7 @@
 {
     "name": "dmdb",
     "description": "Discord Movie Database (V2)",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "private": true,
     "scripts": {
         "test": "node index.js dev --trace-warnings",
