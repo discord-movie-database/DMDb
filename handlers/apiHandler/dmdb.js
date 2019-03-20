@@ -279,6 +279,19 @@ class DMDb extends APITemplate {
     }
 
     /**
+     * Get TV shows airing today
+     * 
+     * @returns {object} Error or TV shows
+     */
+    async getTVShowsAiringToday(flags) {
+        const shows = await this.getResults('tv/airing_today', {
+            'page': flags.page
+        });
+
+        return shows;
+    }
+
+    /**
      * Get siliar movies with an ID or name
      * 
      * @param {string} query Movie name or ID
