@@ -20,24 +20,34 @@ class SimilarCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
+        const flags = this.util.flags(query);
+        query = flags.query;
+
+        const show = flags.shows;
+
         // Get movie from API
-        const movies = await this.api.dmdb.getSimilarMovies(query);
-        if (movies.error) return this.embed.error(status, movies); // Error
+        const similar = show ? await this.api.dmdb.getSimilarTVShows(query) :
+            await this.api.dmdb.getSimilarMovies(query);
+        if (similar.error) return this.embed.error(status, similar); // Error
 
         // Response
         this.embed.edit(status, {
-            'title': 'Search Results',
-            'description': `Showing similar results based on keywords and genres.`,
+            'title': `Similar ${show ? 'TV Show' : 'Movie'} Results`,
+            'description': this.resultDescription(similar),
 
-            'fields': movies.results.map((movie, index) => ({
-                'name': movie.title,
+            'fields': similar.results.map((result, index) => ({
+                'name': result.title || result.name,
                 'value': this.joinResult([
-                    `**${(index + 1)}**`,
-                    `Release: ${this.releaseDate(movie.release_date)}`,
-                    `Vote Average: ${this.voteAverage(movie.vote_average)}`,
-                    `${this.TMDbID(movie.id)}`
+                    `**${(result.index)}**`,
+                    `${show ? 'First Air Date' : 'Release Date'}: ` +
+                        `${this.releaseDate(result.release_date || result.first_air_date)}`,
+                    `Vote Average: ${this.voteAverage(result.vote_average)}`,
+                    `${this.TMDbID(result.id)}`
                 ])
-            }))
+            })),
+
+            'footer': message.db.guild.tips ?
+                'TIP: Use flags (--page, ++show) to get more results.' : ''
         });
     }
 }
