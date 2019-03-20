@@ -23,15 +23,14 @@ class DBHandler {
             `/${this.base.config.db.name}`;
         const options = this.base.config.db.options;
 
-        await this.base.db.connect(url, options).catch(err => {
+        await this.base.db.connect(url, options).then(() => this._connected()).catch(err => {
             console.error(err);
             process.exit();
         });
 
         this.base.db.set('useFindAndModify', false);
-        this.base.db.model('user', this.userSchema);
 
-        this.base.db.connection.on('connected', this._connected.bind(this));
+        this.base.db.model('user', this.userSchema);
     }
 
     async update(ID, data) {
