@@ -253,7 +253,7 @@ class DMDb extends APITemplate {
     }
 
     /**
-     * Get popular movies on TMDb
+     * Get popular movies
      * 
      * @returns {object} Error or movies
      */
@@ -263,6 +263,19 @@ class DMDb extends APITemplate {
         });
 
         return movies;
+    }
+
+    /**
+     * Get popular TV shows
+     * 
+     * @returns {object} Error or TV shows
+     */
+    async getPopularTVShows(flags) {
+        const shows = await this.getResults('tv/popular', {
+            'page': flags.page
+        });
+
+        return shows;
     }
 
     /**
