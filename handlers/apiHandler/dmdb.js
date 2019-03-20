@@ -305,6 +305,19 @@ class DMDb extends APITemplate {
     }
 
     /**
+     * Get siliar TV shows with an ID or name
+     * 
+     * @param {string} query TV show name or ID
+     * @returns {object} Error or TV shows
+     */
+    async getSimilarTVShows(query) {
+        const TVShowID = await this.getTVShowID(query);
+        if (TVShowID.error) return TVShowID;
+
+        return await this.getResults(`tv/${TVShowID}/similar`);
+    }
+
+    /**
      * Get movie trailers with an ID or name
      * 
      * @param {string} query Movie name or ID
