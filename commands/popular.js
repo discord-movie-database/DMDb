@@ -4,7 +4,7 @@ class PopularCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Most popular movies on TMDb.',
-            'documentation': false,
+            'documentation': true,
             'visible': true,
             'restricted': false,
             'weight': 10
@@ -36,7 +36,8 @@ class PopularCommand extends Command {
                 'name': result.title || result.name,
                 'value': this.joinResult([
                     `**${result.index}**`,
-                    `Release: ${this.releaseDate(result.release_date || result.first_air_date)}`,
+                    `${show ? 'First Air Date' : 'Release Date'}: ` +
+                        `${this.releaseDate(result.release_date || result.first_air_date)}`,
                     `Vote Average: ${this.voteAverage(result.vote_average)}`,
                     `${this.TMDbID(result.id)}`
                 ])
