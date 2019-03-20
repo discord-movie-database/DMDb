@@ -12,29 +12,33 @@ class PopularCommand extends Command {
     }
 
     async process(message) {
-        const query = message.arguments.join(' ');
+        let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
         const flags = this.util.flags(query);
+        query = flags.query;
+
+        const show = flags.shows;
 
         // Get movies from API
-        const movies = await this.api.dmdb.getPopularMovies(flags);
-        if (movies.error) return this.embed.error(movies);
+        const popular = show ? await this.api.dmdb.getPopularTVShows(flags) :
+            await this.api.dmdb.getPopularMovies(flags);
+        if (popular.error) return this.embed.error(popular);
 
         // Response
         this.embed.edit(status, {
-            'title': 'Popular Movies',
-            'description': this.resultDescription(movies),
+            'title': `Popular ${show ? 'TV Shows' : 'Movies'}`,
+            'description': this.resultDescription(popular),
 
-            'fields': movies.results.map((movie) => ({
-                'name': movie.title,
+            'fields': popular.results.map((result) => ({
+                'name': result.title || result.name,
                 'value': this.joinResult([
-                    `**${movie.index}**`,
-                    `Release: ${this.releaseDate(movie.release_date)}`,
-                    `Vote Average: ${this.voteAverage(movie.vote_average)}`,
-                    `${this.TMDbID(movie.id)}`
+                    `**${result.index}**`,
+                    `Release: ${this.releaseDate(result.release_date || result.first_air_date)}`,
+                    `Vote Average: ${this.voteAverage(result.vote_average)}`,
+                    `${this.TMDbID(result.id)}`
                 ])
             }))
         });
