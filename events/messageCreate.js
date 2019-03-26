@@ -15,7 +15,7 @@ class MsgEvent {
             'user': {}
         }; // Database Object
 
-        if (message.bot) return; // Check if not a bot
+        if (message.author.bot) return; // Check if not a bot
 
         if (message.channel.guild) // Get guild information from database
             message.db.guild = await this.db.getOrUpdateGuild(message.channel.guild.id);
