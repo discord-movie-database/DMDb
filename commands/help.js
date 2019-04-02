@@ -93,9 +93,15 @@ class InfoCommand extends Command {
     }
 
     async process(message) {
-        const argument = message.arguments[0];
-        if (!argument) return this.commandList(message);
-        if (/\d+/.test(argument)) return this.commandList(message, argument);
+        let query = message.arguments.join(' ');
+
+        const flags = this.util.flags(query);
+        query = flags.query;
+
+        const page = query.length > 0 ? query : flags.page;
+
+        if (!page) return this.commandList(message);
+        if (/\d+/.test(page)) return this.commandList(message, parseInt(page));
 
         this.commandDescription(message);
     }
