@@ -15,9 +15,10 @@ class ListHandler {
     }
 
     startListInterval() {
-        if (this.client.env === 'main' & this.client.config.options.bot.postStats)
-            this.client.listInterval = setInterval(() => {
-                this.updateAllLists(); }, 1000 * 60 * 60 * 8);
+        if (this.client.env === 'main' & !this.client.config.options.bot.botList) return;
+       
+        this.client.listInterval = setInterval(() => {
+            this.updateAllLists(); }, 1000 * 60 * 60 * 8);
     }
 
     updateAllLists() {

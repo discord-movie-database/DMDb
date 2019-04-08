@@ -45,7 +45,8 @@
                 "color": ""
             },
             "developers": [ "148899081304014848" ],
-            "postStats": false
+            "botList": false,
+            "updateStats": true
         }
     },
     "db": {
