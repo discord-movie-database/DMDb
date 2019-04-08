@@ -22,6 +22,7 @@ class LoadHandler {
 
         this.client.handlers.botlist.startListInterval();
         this.client.handlers.bot.startStatusInterval();
+        this.client.handlers.stats.startStatsInterval();
 
         this.client.handlers.log.info('Finished Loading');
     }
