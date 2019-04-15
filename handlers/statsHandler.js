@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 class StatsHandler {
     constructor(client) {
         this.client = client;
@@ -15,7 +17,7 @@ class StatsHandler {
     updateStats() {
         const stats = this.getStats();
 
-        this.client.db.model('bstats').create({
+        mongoose.model('statistics').create({
             'date': new Date(),
             ...stats
         });
