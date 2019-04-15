@@ -4,11 +4,6 @@ const schemas = require('dmdb-schemas');
 class DBHandler {
     constructor(client) {
         this.client = client;
-        this.client.db = mongoose;
-
-        this.guildSchema = schemas.guild;
-        this.userSchema = schemas.user;
-        this.statsSchema = schemas.stats;
     }
 
     async connect() {
@@ -16,37 +11,36 @@ class DBHandler {
             `/${this.client.config.db.name}`;
         const options = this.client.config.db.options;
 
-        await this.client.db.connect(url, options).catch(err => {
+        const connection = await mongoose.connect(url, options).catch(err => {
             this.client.handlers.log.error('', err);
             process.exit();
         });
 
-        this.client.db.connection.on('connected', () =>
+        mongoose.connection.on('connected', () =>
             this.client.handlers.log.success('Connected to database.'));
-        this.client.db.connection.on('disconnect', () =>
+        mongoose.connection.on('disconnect', () =>
             this.client.handlers.log.warn('Disconnected from database.'));
         
-        this.client.db.set('useFindAndModify', false);
+        mongoose.set('useFindAndModify', false);
 
-        this.client.db.model('guild', this.guildSchema);
-        this.client.db.model('user', this.userSchema);
-        this.client.db.model('bstats', this.statsSchema);
+        mongoose.model('guilds', new mongoose.Schema(schemas.guilds));
+        mongoose.model('users', new mongoose.Schema(schemas.users));
+        mongoose.model('statistics', new mongoose.Schema(schemas.statistics));
     }
 
     async getOrUpdate(model, ID, updates) {
-        return await this.client.db.model(model).findOneAndUpdate(
-            { 'id': ID },
-            updates || {},
+        return await mongoose.model(model).findOneAndUpdate(
+            { 'id': ID }, updates || {},
             { 'upsert': true, 'setDefaultsOnInsert': true, 'new': true }
         );
     }
 
     async getOrUpdateGuild(guildID, updates) {
-        return await this.getOrUpdate('guild', guildID, updates);
+        return await this.getOrUpdate('guilds', guildID, updates);
     }
 
     async getOrUpdateUser(userID, updates) {
-        return await this.getOrUpdate('user', userID, updates);
+        return await this.getOrUpdate('users', userID, updates);
     }
 }
 

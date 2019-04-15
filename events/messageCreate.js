@@ -10,10 +10,10 @@ class MsgEvent {
     }
 
     async process(message) {
-        message.db = {
+        message.db = { // Database Object
             'guild': {},
             'user': {}
-        }; // Database Object
+        };
 
         if (message.author.bot) return; // Check if not a bot
 
@@ -35,15 +35,12 @@ class MsgEvent {
 
         // Check if command is disabled in guild
         if (message.db.guild.disabledCommands && message.db.guild.disabledCommands.indexOf(commandName) > -1)
-            return message.db.guild.messages.commanddisabled ?
+            return message.db.guild.commandDisabledMsg ?
                 this.client.handlers.embed.error(message.channel.id, 'This command is disabled.') : false;
 
         // Check if user has developer permission
         if (command.info.restricted && !this.developers.includes(message.author.id))
             return this.client.handlers.embed.error(message.channel.id, 'No Permission.');
-
-        // Get user information from database
-        message.db.user = await this.db.getOrUpdateUser(message.author.id);
 
         // Command execution log
         this.client.handlers.log.info(`${message.db.guild.prefix}${chalk.bold(commandName)} | ` +

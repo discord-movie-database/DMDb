@@ -5,7 +5,7 @@
     "private": true,
     "scripts": {
         "schemas": "npm i dmdb-schemas",
-        "test": "node index.js dev --trace-warnings",
+        "dev": "node index.js dev --trace-warnings",
         "start": "npm run schemas && node index.js main"
     },
     "dependencies": {
