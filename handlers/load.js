@@ -159,7 +159,7 @@ class LoadHandler {
     }
 
     async unloadHandler(handlerName) {
-        this.util.deleteRequireCache(`${this.handlerDir}/${handlerName}Handler`);
+        this.util.deleteRequireCache(`${this.handlerDir}/${handlerName}`);
         delete this.client.handlers[handlerName];
     }
 

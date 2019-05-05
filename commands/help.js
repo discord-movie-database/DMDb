@@ -1,4 +1,4 @@
-const Command = require('../handlers/commandHandler');
+const Command = require('../helpers/command');
 
 class InfoCommand extends Command {
     constructor(client) {

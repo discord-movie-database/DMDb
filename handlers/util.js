@@ -1,6 +1,4 @@
-class Util {
-    constructor() { }
-
+class UtilHelper {
     removeFileExtension(file) {
         const fileMatch = file.match(/(\w+)\.(\w+)/i);
         return fileMatch ? fileMatch[1] : file;
@@ -59,4 +57,4 @@ class Util {
     }
 }
 
-module.exports = Util;
+module.exports = UtilHelper;
