@@ -4,11 +4,11 @@ class ShowsCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Search for TV shows.',
-            'documentation': true,
             'usage': '<TV Show Name>',
-            'weight': 36,
+            'documentation': true,
             'visible': true,
-            'restricted': false
+            'restricted': false,
+            'weight': 450
         });
     }
 
@@ -24,14 +24,12 @@ class ShowsCommand extends Command {
         const flags = this.util.flags(query);
         query = flags.query;
 
-        const year = flags.year && /^\d{4}$/.test(flags.year)
-            ? flags.year : 'All';
-
         // Get TV shows from API
         const TVShows = await this.api.dmdb.getTVShows(flags);
         if (TVShows.error) return this.embed.error(status, TVShows.error); // Error
 
-        TVShows.year = year;
+        // Year flag
+        TVShows.year = flags.year && /^\d{4}$/.test(flags.year) ? flags.year : 'All';;
 
         // Response
         this.embed.edit(status, {

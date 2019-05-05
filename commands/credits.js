@@ -4,11 +4,11 @@ class CreditsCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Get the cast and crew for a movie.',
-            'documentation': true,
             'usage': '<Movie Name or ID>',
-            'weight': 34,
+            'documentation': true,
             'visible': true,
-            'restricted': false
+            'restricted': false,
+            'weight': 350
         });
     }
 
@@ -22,11 +22,11 @@ class CreditsCommand extends Command {
 
         // Advanced search
         const flags = this.util.flags(query);
-        query = flags.query;
+        query = flags.query; // Update query
 
-        const page = (flags.page - 1) || 0;
-        const show = flags.show;
-        const person = flags.person;
+        const page = (flags.page - 1) || 0; // Page flag
+        const show = flags.show; // Show flag
+        const person = flags.person; // Person flag
 
         // Get credits from API
         const credits = show ? await this.api.dmdb.getTVShowCredits(query) :
@@ -38,7 +38,7 @@ class CreditsCommand extends Command {
         const pages = this.util.chunkArray(credits.cast, 5);
         if (page > pages.length) return this.embed.error(status, 'No Results Found.');
 
-        // Credits at page
+        // Get credits from page position
         const cast = pages[page];
 
         // Response
@@ -53,11 +53,13 @@ class CreditsCommand extends Command {
             
             'fields': cast.map(credit => ({
                 'name': this.character(credit.character),
-                'value': person ? this.joinResult([`${this.mediaType(credit.media_type)}: ${credit.title || credit.name}`,
+                'value': person ? this.joinResult([ // Person flag: gives information and movies or tv shows
+                    `${this.mediaType(credit.media_type)}`,
+                    `${credit.title || credit.name}`,
                     `Release: ${this.releaseDate(credit.release_date || credit.first_air_date)}`,
                     `${this.TMDbID(credit.id)}`]) :
 
-                    this.joinResult([
+                    this.joinResult([ // No person flag: gives information about people
                         `Name: ${this.name(credit.name)}`,
                         `Gender: ${this.gender(credit.gender)}`,
                         `${this.TMDbID(credit.id)}`

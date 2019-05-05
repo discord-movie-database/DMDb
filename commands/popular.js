@@ -4,22 +4,26 @@ class PopularCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Most popular movies on TMDb.',
+            'usage': null,
             'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 10
+            'weight': 100
         });
     }
 
     async process(message) {
+        // Query?
         let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
+        // Advanced search
         const flags = this.util.flags(query);
         query = flags.query;
 
+        // Show flag
         const show = flags.shows;
 
         // Get movies from API

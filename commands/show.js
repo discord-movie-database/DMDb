@@ -4,11 +4,11 @@ class ShowHandler extends Command {
     constructor(client) {
         super(client, {
             'description': 'Get information about a TV show.',
-            'documentation': true,
             'usage': '<TV Show Name or ID>',
+            'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 37
+            'weight': 500
         });
     }
 

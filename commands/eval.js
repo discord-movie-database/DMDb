@@ -3,26 +3,27 @@ const Command = require('../helpers/command');
 class EvalCommand extends Command {
     constructor(client) {
         super(client, {
+            'description': 'Developer only command for testing.',
+            'usage': '<Javascript>',
             'visible': false,
-            'restricted': true
+            'restricted': true,
+            'weight': 0
         });
     }
 
     async process(message) {
         // Check for arguments
-        if (!message.arguments[0])
-            return this.embed.error(message.channel.id, 'No Arguments.');
+        if (!message.arguments[0]) return this.usageMessage(message);
 
-        // Eval content
-        let evaled;
-        // Eval
-        try { evaled = eval(message.arguments.join(' ')); }
-        catch (err) { evaled = err; }
+        let evaluated;
+        try { // Evaluate
+            evaluated = eval(message.arguments.join(' '));
+        } catch (err) { evaluated = err; }
 
         // Response
-        const response = typeof evaled === 'object' ? JSON.stringify(evaled) :
-                         typeof evaled === 'undefined' ? 'No Content' : `${evaled}`;
-        this.embed.success(message.channel.id, response || 'Done.');
+        const response = typeof evaled === 'object' ? JSON.stringify(evaluated) :
+            [undefined, null].indexOf(evaluated) >= 0 ? 'No Content' : `${evaluated}`;
+        this.embed.success(message.channel.id, `${response}` || 'Unhandled response.');
     }
 }
 

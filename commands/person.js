@@ -4,11 +4,11 @@ class ActorCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Get information about a person.',
-            'documentation': true,
             'usage': '<Person\'s Name or ID>',
+            'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 50
+            'weight': 600
         });
     }
 
@@ -20,13 +20,13 @@ class ActorCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
-        // Get movie from API
+        // Get person from API
         const person = await this.api.dmdb.getPerson(query);
         if (person.error) return this.embed.error(status, person); // Error
 
         // Response
         this.embed.edit(status, {
-            'url': this.personUrl(person.imdb_id, person.id),
+            'url': this.tmdbPersonURL(person.id),
             'title': person.name,
             'description': this.description(person.biography),
             'thumbnail': this.thumbnail(person.profile_path),

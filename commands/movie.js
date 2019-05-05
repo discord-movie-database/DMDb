@@ -3,12 +3,12 @@ const Command = require('../helpers/command');
 class TitleCommand extends Command {
     constructor(client) {
         super(client, {
-            'description': 'Get information about a movie.',
-            'documentation': true,
+            'description': 'Get the primary information about a movie.',
             'usage': '<Movie Name or ID>',
+            'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 70
+            'weight': 700
         });
     }
 
@@ -26,7 +26,7 @@ class TitleCommand extends Command {
 
         // Response
         this.embed.edit(status, {
-            'url': this.movieUrl(movie.imdb_id, movie.id),
+            'url': this.tmdbMovieURL(movie.id),
             'title': movie.title,
             'description': this.description(movie.overview),
             'thumbnail': this.thumbnail(movie.poster_path),
@@ -35,7 +35,7 @@ class TitleCommand extends Command {
                 { 'name': 'Status', 'value': movie.status },
                 { 'name': 'Release Date', 'value': this.releaseDate(movie.release_date) },
                 { 'name': 'Runtime', 'value': this.runtime(movie.runtime) },
-                { 'name': 'Adult', 'value': this.adult(movie.adult) },
+                { 'name': 'Popularity', 'value': this.popularity(movie.popularity) },
                 { 'name': 'Genres', 'value': this.genres(movie.genres), 'inline': false },
                 { 'name': 'Countries', 'value': this.countries(movie.production_countries), 'inline': false },
                 { 'name': 'Languages', 'value': this.languages(movie.spoken_languages), 'inline': false },
