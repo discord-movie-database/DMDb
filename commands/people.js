@@ -4,11 +4,11 @@ class PeopleCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Search for people.',
-            'documentation': true,
             'usage': '<Person\'s Name>',
-            'weight': 40,
+            'documentation': true,
             'visible': true,
-            'restricted': false
+            'restricted': false,
+            'weight': 550
         });
     }
 

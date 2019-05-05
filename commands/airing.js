@@ -4,21 +4,23 @@ class AiringCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'TV shows that are airing today.',
+            'usage': null,
             'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 19
+            'weight': 150
         });
     }
 
     async process(message) {
+        // Query?
         let query = message.arguments.join(' ');
 
         // Status of command response
         const status = await this.searchingMessage(message);
 
+        // Advanced search
         const flags = this.util.flags(query);
-        query = flags.query;
 
         // Get movies from API
         const airing = await this.api.dmdb.getTVShowsAiringToday(flags);

@@ -1,26 +1,21 @@
 class CommandHelper {
     constructor(client, info) {
         this.client = client;
+        this.config = this.client.config.options.bot;
         
-        if (info) {
-            this.info = {};
-
-            this.info.name = info.name || false;
-            this.info.description = info.description || '';
-            this.info.documentation = info.documentation || false;
-            this.info.usage = info.usage || '';
-            this.info.visible = typeof info.visible === 'boolean'
-                ? info.visible : false;
-            this.info.restricted = typeof info.restricted === 'boolean'
-                ? info.restricted : true; 
-            this.info.weight = info.weight || 0;
-        }
+        if (info) this.info = {
+            'name': info.name || false,
+            'description': info.description || null,
+            'documentation': info.description || false,
+            'usage': info.usage || null,
+            'visible': typeof info.visible === 'boolean' ? info.visible : false,
+            'restricted': typeof info.restricted === 'boolean' ? info.restricted : true,
+            'weight': info.weight || 0
+        };
 
         this.util = this.client.handlers.util;
         this.embed = this.client.handlers.embed;
         this.api = this.client.handlers.api;
-
-        this.config = this.client.config.options.bot;
 
         this.months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
@@ -54,12 +49,12 @@ class CommandHelper {
         return `https://www.themoviedb.org/movie/${ID}`;
     }
 
-    movieUrl(imdb, tmdb) {
-        return imdb ? this.imdbURL(imdb) : this.tmdbMovieURL(tmdb);
-    }
-
     tmdbShowURL(ID) {
         return `https://www.themoviedb.org/tv/${ID}`; 
+    }
+
+    tmdbPersonURL(imdb, tmdb) {
+        return `https://www.themoviedb.org/person/${tmdb}`;
     }
 
     thumbnail(value) {
@@ -181,12 +176,6 @@ class CommandHelper {
 
     placeOfBirth(value) {
         return value || 'N/A';
-    }
-    
-    personUrl(imdb, tmdb) {
-        return imdb 
-            ? `https://www.imdb.com/name/${imdb}`
-            : `https://www.themoviedb.org/person/${tmdb}`;
     }
 
     knownFor(value) {

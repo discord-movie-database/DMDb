@@ -4,11 +4,11 @@ class ReviewsCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Get the user reviews for a movie.',
-            'documentation': true,
             'usage': '<Movie Name or ID>',
-            'weight': 33,
+            'documentation': true,
             'visible': true,
-            'restricted': false
+            'restricted': false,
+            'weight': 300
         });
     }
 
@@ -24,7 +24,7 @@ class ReviewsCommand extends Command {
         const flags = this.util.flags(query);
         query = flags.query;
 
-        // Get movies from API
+        // Get reviews from API
         const reviews = await this.api.dmdb.getMovieReviews(flags);
         if (reviews.error) return this.embed.error(status, reviews.error); // Error
 

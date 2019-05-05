@@ -3,20 +3,18 @@ const Command = require('../helpers/command');
 class InfoCommand extends Command {
     constructor(client) {
         super(client, {
-            'description': 'Information about the bot.',
+            'description': 'Information and statistics about the bot.',
+            'usage': null,
             'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 5
+            'weight': 50
         });
 
         this.package = require('../package.json');
     }
 
     async process(message) {
-        const shardId = message.channel.guild ?
-            ` (Current: ${message.channel.guild.shard.id})` : '';
-
         // Response
         this.embed.create(message.channel.id, {
             'title': 'DMDb Information',
@@ -48,7 +46,10 @@ class InfoCommand extends Command {
                 'value': `${this.client.users.size}`
             }, {
                 'name': 'Shards',
-                'value': `${this.client.shards.size}${shardId}`
+                'value': `${this.client.shards.size}`
+            }, {
+                'name': 'Current Shard',
+                'value': message.channel.guild ? `${message.channel.guild.shard.id}` : 'N/A'
             }, {
                 'name': 'Commands Executed',
                 'value': this.client.stats.totalUsageCount + 1

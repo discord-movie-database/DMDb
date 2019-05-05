@@ -4,11 +4,11 @@ class SimilarCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Get similar movies.',
-            'documentation': true,
             'usage': '<Movie Name or ID>',
+            'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 30
+            'weight': 250
         });
     }
 
@@ -23,7 +23,7 @@ class SimilarCommand extends Command {
         const flags = this.util.flags(query);
         query = flags.query;
 
-        const show = flags.shows;
+        const show = flags.shows; // Show flag
 
         // Get movie from API
         const similar = show ? await this.api.dmdb.getSimilarTVShows(query) :

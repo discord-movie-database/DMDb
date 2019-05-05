@@ -4,11 +4,11 @@ class MoviesCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Search for movies.',
-            'documentation': true,
             'usage': '<Movie Name>',
-            'weight': 60,
+            'documentation': true,
             'visible': true,
-            'restricted': false
+            'restricted': false,
+            'weight': 650
         });
     }
 
@@ -24,14 +24,12 @@ class MoviesCommand extends Command {
         const flags = this.util.flags(query);
         query = flags.query;
 
-        const year = flags.year && /^\d{4}$/.test(flags.year)
-            ? flags.year : 'All';
-
         // Get movies from API
         const movies = await this.api.dmdb.getMovies(flags);
         if (movies.error) return this.embed.error(status, movies.error); // Error
 
-        movies.year = year;
+        // Year flag
+        movies.year = flags.year && /^\d{4}$/.test(flags.year) ? flags.year : 'All';;
 
         // Response
         this.embed.edit(status, {

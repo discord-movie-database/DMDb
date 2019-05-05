@@ -3,12 +3,12 @@ const Command = require('../helpers/command');
 class PosterCommand extends Command {
     constructor(client) {
         super(client, {
-            'description': 'Get a movie\'s poster. [Vote for higher resolution posters.](https://vote.dmdb.xyz/)',
-            'documentation': true,
+            'description': 'Get a movie\'s poster.',
             'usage': '<Movie Name or ID>',
+            'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 35
+            'weight': 400
         });
     }
 
@@ -24,18 +24,13 @@ class PosterCommand extends Command {
         const flags = this.util.flags(query);
         query = flags.query;
 
-        const show = flags.show;
-        const person = flags.person;
-
-        // Vote status
-        const voted = message.db.user.voted &&
-            message.db.user.voted > (new Date() - (1000 * 60 * 60 * 24 * 14)) ? true : false;
-        const size = voted ? 5 : 2;
+        const show = flags.show; // Show flag
+        const person = flags.person; // Person flag
 
         // Get poster from API
-        const poster = show ? await this.api.dmdb.getTVShowPoster(query, size) :
-            person ? await this.api.dmdb.getPersonPoster(query, size) :
-            await this.api.dmdb.getMoviePoster(query, size);
+        const poster = show ? await this.api.dmdb.getTVShowPoster(query, 3) :
+            person ? await this.api.dmdb.getPersonPoster(query, 3) :
+            await this.api.dmdb.getMoviePoster(query, 3);
         if (poster.error) return this.embed.error(status, poster); // Error
 
         // Response

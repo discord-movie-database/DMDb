@@ -4,11 +4,11 @@ class TrailerCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Get a trailer for a movie.',
-            'documentation': true,
             'usage': '<Movie Name or ID>',
+            'documentation': true,
             'visible': true,
             'restricted': false,
-            'weight': 20
+            'weight': 200
         });
     }
 
@@ -24,6 +24,7 @@ class TrailerCommand extends Command {
         const trailers = await this.api.dmdb.getTrailers(query);
         if (trailers.error) return this.embed.error(status, trailers); // Error
 
+        // Find trailer
         const trailer = trailers[0];
         if (!trailer) return this.embed.error(status, 'No trailers found.');
 

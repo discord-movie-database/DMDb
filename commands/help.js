@@ -3,8 +3,12 @@ const Command = require('../helpers/command');
 class InfoCommand extends Command {
     constructor(client) {
         super(client, {
+            'description': 'Get a list of commands or a information on a specific command.',
+            'usage': '[Command Name]',
+            'documentation': false,
             'visible': false,
-            'restricted': false
+            'restricted': false,
+            'weight': 0
         });
 
         this.wikiURL = 'https://github.com/Dumblings/DMDb/wiki';
