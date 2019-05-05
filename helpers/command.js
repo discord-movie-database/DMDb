@@ -1,4 +1,4 @@
-class CommandHandler {
+class CommandHelper {
     constructor(client, info) {
         this.client = client;
         
@@ -270,4 +270,4 @@ class CommandHandler {
     }
 }
 
-module.exports = CommandHandler;
+module.exports = CommandHelper;

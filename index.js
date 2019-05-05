@@ -2,15 +2,15 @@ const env = process.argv[2] || 'dev';
 
 const Eris = require('eris');
 
-const LoadHandler = require('./handlers/loadHandler');
-const LogHandler = require('./handlers/logHandler');
-const EmbedHandler = require('./handlers/embedHandler');
-const APIHandler = require('./handlers/apiHandler');
-const BotlistHandler = require('./handlers/botlistHandler');
-const DBHandler = require('./handlers/dbHandler');
-const UtilHandler = require('./handlers/utilHandler');
-const BotHandler = require('./handlers/botHandler');
-const StatsHandler = require('./handlers/statsHandler');
+const LoadHandler = require('./handlers/load');
+const LogHandler = require('./handlers/log');
+const EmbedHandler = require('./handlers/embed');
+const APIHandler = require('./handlers/api');
+const BotlistHandler = require('./handlers/botlist');
+const DBHandler = require('./handlers/db');
+const UtilHandler = require('./handlers/util');
+const BotHandler = require('./handlers/bot');
+const StatsHandler = require('./handlers/stats');
 
 class Client extends Eris {
     constructor(config) {
@@ -27,9 +27,9 @@ class Client extends Eris {
         this.stats = {};
         this.stats.totalUsageCount = 0;
 
-        this.commands = new Array();
-        this.events = new Array();
-        this.handlers = new Object();
+        this.commands = [];
+        this.events = [];
+        this.handlers = {};
         
         this.handlers.util = new UtilHandler(this);
         this.handlers.log = new LogHandler(this);
