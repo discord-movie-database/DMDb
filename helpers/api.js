@@ -1,8 +1,9 @@
-class APITemplate {
+const request = require('superagent');
+
+class APIHelper {
     constructor(client) {
         this.client = client;
 
-        this.request = require('superagent');
         this.util = this.client.handlers.util;
     }
 
@@ -37,7 +38,7 @@ class APITemplate {
 
         let response;
         try {
-            response = await this.request.get(requestURL);
+            response = await request.get(requestURL);
         } catch (err) { console.log(err); }
 
         if (response && response.statusCode === 429)
@@ -48,4 +49,4 @@ class APITemplate {
     }
 }
 
-module.exports = APITemplate;
+module.exports = APIHelper;

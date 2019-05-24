@@ -1,6 +1,6 @@
-const APITemplate = require('./template');
+const APIHelper = require('../../helpers/api');
 
-class MyAnimeList extends APITemplate {
+class MyAnimeList extends APIHelper {
     constructor(client) {
         super(client);
 
