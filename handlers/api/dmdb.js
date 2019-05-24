@@ -1,6 +1,7 @@
-const APITemplate = require('./template');
+const request = require('superagent');
+const APIHelper = require('../../helpers/api');
 
-class DMDb extends APITemplate {
+class DMDb extends APIHelper {
     constructor(client) {
         super(client);
 
@@ -430,7 +431,7 @@ class DMDb extends APITemplate {
 
         const posterURL = `https://image.tmdb.org/t/p/w${size}${posterPath}`;
         try {
-            const image = await this.request(posterURL);
+            const image = await request(posterURL);
             return image.body;
         } catch (err) {
             console.log(err);
