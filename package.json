@@ -9,10 +9,10 @@
         "start": "npm run schemas && node index.js main"
     },
     "dependencies": {
-        "chalk": "^2.4.1",
+        "chalk": "^2.4.2",
         "dmdb-schemas": "gist:8fed8db6bbc715586c14b6f9239fc76d",
-        "eris": "^0.8.6",
-        "mongoose": "^5.4.0",
-        "superagent": "^4.0.0"
+        "eris": "git+https://github.com/reboxer/eris.git#dev",
+        "mongoose": "^5.5.11",
+        "superagent": "^4.1.0"
     }
 }
