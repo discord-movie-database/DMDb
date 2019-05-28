@@ -5,7 +5,7 @@ class ActorCommand extends Command {
         super(client, {
             'description': 'Get information about a person.',
             'usage': '<Person\'s Name or ID>',
-            'documentation': true,
+            'flags': false,
             'visible': true,
             'restricted': false,
             'weight': 600

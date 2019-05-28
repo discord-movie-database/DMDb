@@ -5,7 +5,7 @@ class PeopleCommand extends Command {
         super(client, {
             'description': 'Search for people.',
             'usage': '<Person\'s Name>',
-            'documentation': true,
+            'flags': ['page'],
             'visible': true,
             'restricted': false,
             'weight': 550

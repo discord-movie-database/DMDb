@@ -5,7 +5,7 @@ class TrailerCommand extends Command {
         super(client, {
             'description': 'Get a trailer for a movie.',
             'usage': '<Movie Name or ID>',
-            'documentation': true,
+            'flags': false,
             'visible': true,
             'restricted': false,
             'weight': 200

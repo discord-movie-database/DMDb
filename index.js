@@ -25,7 +25,7 @@ class Client extends Eris {
         this.status = {};
 
         this.stats = {};
-        this.stats.totalUsageCount = 0;
+        this.stats.executed = 0;
 
         this.commands = [];
         this.events = [];

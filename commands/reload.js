@@ -4,8 +4,8 @@ class ReloadCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Developer only command for testing or updating bot.',
-            'usage': null,
-            'documentation': false,
+            'usage': false,
+            'flags': false,
             'visible': false,
             'restricted': true,
             'weight': 0

@@ -5,7 +5,7 @@ class ReviewsCommand extends Command {
         super(client, {
             'description': 'Get the user reviews for a movie.',
             'usage': '<Movie Name or ID>',
-            'documentation': true,
+            'flags': ['page'],
             'visible': true,
             'restricted': false,
             'weight': 300

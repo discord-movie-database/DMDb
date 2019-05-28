@@ -48,7 +48,7 @@ class LoadHandler {
             const Command = require(`${this.commandDir}/${commandName}`);
             this.client.commands[commandName] = new Command(this.client);
 
-            this.client.commands[commandName].info.usageCount = 0;
+            this.client.commands[commandName].meta.executed = 0;
 
             if (this.client.commands[commandName].load)
                 this.client.commands[commandName].load();

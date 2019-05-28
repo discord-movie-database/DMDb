@@ -5,7 +5,7 @@ class CreditsCommand extends Command {
         super(client, {
             'description': 'Get the cast and crew for a movie.',
             'usage': '<Movie Name or ID>',
-            'documentation': true,
+            'flags': ['page', 'show', 'person'],
             'visible': true,
             'restricted': false,
             'weight': 350
