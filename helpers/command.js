@@ -21,6 +21,10 @@ class CommandHelper {
                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
     }
 
+    random(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+
     yesno(value) {
         return value ? 'Yes' : 'No';
     }
