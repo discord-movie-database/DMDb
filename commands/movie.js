@@ -5,11 +5,16 @@ class TitleCommand extends Command {
         super(client, {
             'description': 'Get the primary information about a movie.',
             'usage': '<Movie Name or ID>',
-            'flags': false,
+            'flags': ['more'],
             'visible': true,
             'restricted': false,
             'weight': 700
         });
+
+        this.tips = [
+            'Not the movie you wanted? Try searching for it using the {prefix}movies command.',
+            'Want more information for this result? Use the ++more flag.'
+        ]
     }
 
     async process(message) {
@@ -19,6 +24,9 @@ class TitleCommand extends Command {
 
         // Status of command response
         const status = await this.searchingMessage(message);
+
+        const flags = this.util.flags(query);
+        query = flags.query;
 
         // Get movie from API
         const movie = await this.api.dmdb.getMovie(query);
@@ -31,7 +39,7 @@ class TitleCommand extends Command {
             'description': this.description(movie.overview),
             'thumbnail': this.thumbnail(movie.poster_path),
 
-            'fields': this.parseEmbedFields([
+            'fields': this.parseEmbedFields(flags.more ? [
                 { 'name': 'Status', 'value': movie.status },
                 { 'name': 'Release Date', 'value': this.releaseDate(movie.release_date) },
                 { 'name': 'Runtime', 'value': this.runtime(movie.runtime) },
@@ -46,10 +54,17 @@ class TitleCommand extends Command {
                 { 'name': 'Votes', 'value': this.voteCount(movie.vote_count) },
                 { 'name': 'IMDb ID', 'value': this.IMDbID(movie.imdb_id) },
                 { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id)
-            }]),
+            }] : [
+                { 'name': 'Release Date', 'value': this.releaseDate(movie.release_date) },
+                { 'name': 'Runtime', 'value': this.runtime(movie.runtime) },
+                { 'name': 'Revenue', 'value': this.revenue(movie.revenue) },
+                { 'name': 'Vote Average', 'value': this.voteAverage(movie.vote_average) },
+                { 'name': 'IMDb ID', 'value': this.IMDbID(movie.imdb_id) },
+                { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id) }
+            ]),
 
-            'footer': message.db.guild.tips ? 'TIP: Not the movie you wanted?' +
-                ` Try searching for it using the ${message.db.guild.prefix}movies command.` : ''
+            'footer': message.db.guild.tips ?
+                `TIP: ${this.random(this.tips).replace('{prefix}', message.db.guild.prefix)}` : ''
         });
     }
 }

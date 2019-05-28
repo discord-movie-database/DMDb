@@ -16,7 +16,8 @@ class InfoCommand extends Command {
             'year': { 'arguments': true, 'description': 'Get results from a specific year.' },
             'show': { 'arguments': false, 'description': 'Get a result for a TV show instead of a movie.' },
             'shows': { 'arguments': false, 'description': 'Get results for TV shows instead of movies.' },
-            'person': { 'arguments': false, 'description': 'Get a result for a person instead of a movie.' }
+            'person': { 'arguments': false, 'description': 'Get a result for a person instead of a movie.' },
+            'more': { 'arguments': false, 'description': 'Get more information for a result.' }
         }
     }
 
@@ -70,7 +71,7 @@ class InfoCommand extends Command {
         commands = commands.sort((a, b) => this.client.commands[b].meta.weight - this.client.commands[a].meta.weight);
         
         // Put commands into pages
-        const pages = this.util.chunkArray(commands, 7);
+        const pages = this.util.chunkArray(commands, 6);
         const page = pages[pagePosition - 1]; // Get current page
 
         // Check if page exists
