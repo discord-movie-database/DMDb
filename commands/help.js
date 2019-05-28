@@ -5,47 +5,50 @@ class InfoCommand extends Command {
         super(client, {
             'description': 'Get a list of commands or a information on a specific command.',
             'usage': '[Command Name]',
-            'documentation': false,
+            'flags': ['page'],
             'visible': false,
             'restricted': false,
             'weight': 0
         });
 
-        this.wikiURL = 'https://github.com/Dumblings/DMDb/wiki';
+        this.flags = {
+            'page': { 'arguments': true, 'description': 'Get more results.' },
+            'year': { 'arguments': true, 'description': 'Get results from a specific year.' },
+            'show': { 'arguments': false, 'description': 'Get a result for a TV show instead of a movie.' },
+            'shows': { 'arguments': false, 'description': 'Get results for TV shows instead of movies.' },
+            'person': { 'arguments': false, 'description': 'Get a result for a person instead of a movie.' }
+        }
+    }
+
+    formatFlag(flag) {
+        return `[${this.flags[flag].arguments ? `--${flag} <#>` : `++${flag}`}]`;
+    }
+
+    formatFlags(flags) {
+        return flags ? flags.map(flag => this.formatFlag(flag)).join(' ') : false;
     }
 
     commandDescription(message) {
-        // Get & format command name
-        let commandName = message.arguments[0];
-        if (commandName) commandName = commandName.toLowerCase();
+        // Format command name
+        const commandName = message.arguments[0] ? message.arguments[0].toLowerCase() : false;
 
         // Check if command exists
-        if (!this.client.commands[commandName])
-            return this.embed.error(message.channel.id, 'Command not found.');
+        if (!this.client.commands[commandName]) return this.embed.error(message.channel.id, 'Command not found.');
 
-        // Command
-        const command = this.client.commands[commandName].info;
+        const command = this.client.commands[commandName].meta; // Command meta
 
-        // Command information embed
+        // Response
         this.embed.create(message.channel.id, {
             'title': `${this.capitaliseStart(commandName)} Command`,
-            'description': `${command.description || 'No description available for this command.'} ` +
-                `[Read the full documentation.](${command.documentation ?
-                    `${this.wikiURL}/${this.capitaliseStart(commandName)}-command)` :
-                        'No documentation available for this command.'}`,
-            'fields': [{
-                'name': 'Visible',
-                'value': this.yesno(command.visible || false),
-                'inline': true
-            }, {
-                'name': 'Restricted',
-                'value': this.yesno(command.restricted || false),
-                'inline': true
-            }, {
-                'name': 'Usage Count',
-                'value': `${command.usageCount}`,
-                'inline': true
-            }]
+            'description': `${command.description || 'No description available for this command.'}\n`,
+            
+            'fields': [
+                { 'name': 'Usage', 'value': command.usage || 'N/A', 'inline': false },
+                { 'name': 'Flags', 'value': this.formatFlags(command.flags) || 'N/A', 'inline': false },
+                { 'name': 'Visible', 'value': this.yesno(command.visible), 'inline': true },
+                { 'name': 'Restricted', 'value': this.yesno(command.restricted), 'inline': true },
+                { 'name': 'Executed', 'value': `${command.executed}`, 'inline': true }
+            ]
         });
     }
 
@@ -57,30 +60,31 @@ class InfoCommand extends Command {
             'title': 'DMDb - The Discord Movie Database',
             'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
                 `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more information about a command.\n` +
-                '\nExample Command: `!?movies thor --page 2 --year 2011`\n' + 
-                `[Click here](${this.wikiURL}) to read the full documention.\n` +
-                `\nCommand List:`,
+                '\nExample Command: `!?movies thor --page 2 --year 2011`\n\nCommand List:',
             'fields': []
         };
 
-        // Filter commands. Hidden / Restricted
-        const commands = Object.keys(this.client.commands).filter((commandName) =>
-            this.client.commands[commandName].info.visible).sort((a, b) =>
-                this.client.commands[b].info.weight - this.client.commands[a].info.weight);
+        // Remove hidden & restricted commands
+        let commands = Object.keys(this.client.commands);
+        commands = commands.filter((command) => this.client.commands[command].meta.visible);
+        commands = commands.sort((a, b) => this.client.commands[b].meta.weight - this.client.commands[a].meta.weight);
         
+        // Put commands into pages
         const pages = this.util.chunkArray(commands, 7);
-        const page = pages[pagePosition - 1];
+        const page = pages[pagePosition - 1]; // Get current page
 
+        // Check if page exists
         if (!page) return this.embed.error(message.channel.id, 'Page not found.');
 
-        // Filtered commands
+        // Append commands to embed
         for (let i = 0; i < page.length; i++) {
             const commandName = page[i];
-            const command = this.client.commands[commandName].info;
+            const command = this.client.commands[commandName].meta;
 
             // Append commands to response
             embed.fields.push({
-                'name': `${message.db.guild.prefix}${commandName} ${command.usage || ''}`,
+                'name': `${message.db.guild.prefix}${commandName} ${command.usage || ''} ` +
+                    `${this.formatFlags(command.flags) || ''}`, // Format flags
                 'value': `- ${command.description}`
             });
         }
@@ -97,16 +101,22 @@ class InfoCommand extends Command {
     }
 
     async process(message) {
+        // Query
         let query = message.arguments.join(' ');
 
+        // Get flags
         const flags = this.util.flags(query);
         query = flags.query;
 
+        // Get page from query
         const page = query.length > 0 ? query : flags.page;
 
+        // Command list
         if (!page) return this.commandList(message);
+        // Command list at page
         if (/\d+/.test(page)) return this.commandList(message, parseInt(page));
 
+        // Get info for specific command
         this.commandDescription(message);
     }
 }

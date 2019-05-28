@@ -5,6 +5,7 @@ class EvalCommand extends Command {
         super(client, {
             'description': 'Developer only command for testing.',
             'usage': '<Javascript>',
+            'flags': false,
             'visible': false,
             'restricted': true,
             'weight': 0

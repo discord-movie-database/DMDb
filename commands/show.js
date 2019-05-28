@@ -5,7 +5,7 @@ class ShowHandler extends Command {
         super(client, {
             'description': 'Get information about a TV show.',
             'usage': '<TV Show Name or ID>',
-            'documentation': true,
+            'flags': false,
             'visible': true,
             'restricted': false,
             'weight': 500

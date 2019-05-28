@@ -5,7 +5,7 @@ class MoviesCommand extends Command {
         super(client, {
             'description': 'Search for movies.',
             'usage': '<Movie Name>',
-            'documentation': true,
+            'flags': ['page', 'year'],
             'visible': true,
             'restricted': false,
             'weight': 650

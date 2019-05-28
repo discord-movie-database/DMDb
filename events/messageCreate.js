@@ -39,7 +39,7 @@ class MsgEvent {
                 this.client.handlers.embed.error(message.channel.id, 'This command is disabled.') : false;
 
         // Check if user has developer permission
-        if (command.info.restricted && !this.developers.includes(message.author.id))
+        if (command.meta.restricted && !this.developers.includes(message.author.id))
             return this.client.handlers.embed.error(message.channel.id, 'No Permission.');
 
         // Command execution log
@@ -49,8 +49,8 @@ class MsgEvent {
             `${message.arguments[0] ? ` | Args: ${message.arguments.join(' ')}` : ''}`);
 
         // Store usage in memory
-        this.client.commands[commandName].info.usageCount++;
-        this.client.stats.totalUsageCount++;
+        this.client.commands[commandName].meta.executed++;
+        this.client.stats.executed++;
 
         try { // Execute command
             command.process(message);

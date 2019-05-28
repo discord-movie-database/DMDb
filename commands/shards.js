@@ -4,8 +4,8 @@ class ShardsCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Check status of all shards.',
-            'usage': null,
-            'documentation': false,
+            'usage': false,
+            'flags': false,
             'visible': false,
             'restricted': false,
             'weight': 0

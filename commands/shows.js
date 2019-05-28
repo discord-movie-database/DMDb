@@ -5,7 +5,7 @@ class ShowsCommand extends Command {
         super(client, {
             'description': 'Search for TV shows.',
             'usage': '<TV Show Name>',
-            'documentation': true,
+            'flags': ['page', 'year'],
             'visible': true,
             'restricted': false,
             'weight': 450

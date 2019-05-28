@@ -5,7 +5,7 @@ class PosterCommand extends Command {
         super(client, {
             'description': 'Get a movie\'s poster.',
             'usage': '<Movie Name or ID>',
-            'documentation': true,
+            'flags': ['show', 'person'],
             'visible': true,
             'restricted': false,
             'weight': 400

@@ -1,16 +1,16 @@
 class CommandHelper {
-    constructor(client, info) {
+    constructor(client, meta) {
         this.client = client;
         this.config = this.client.config.options.bot;
         
-        if (info) this.info = {
-            'name': info.name || false,
-            'description': info.description || null,
-            'documentation': info.description || false,
-            'usage': info.usage || null,
-            'visible': typeof info.visible === 'boolean' ? info.visible : false,
-            'restricted': typeof info.restricted === 'boolean' ? info.restricted : true,
-            'weight': info.weight || 0
+        if (meta) this.meta = {
+            'name': meta.name || false,
+            'description': meta.description || false,
+            'flags': meta.flags || [],
+            'usage': meta.usage || false,
+            'visible': typeof meta.visible === 'boolean' ? meta.visible : false,
+            'restricted': typeof meta.restricted === 'boolean' ? meta.restricted : true,
+            'weight': meta.weight || 0
         };
 
         this.util = this.client.handlers.util;

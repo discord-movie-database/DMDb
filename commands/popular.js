@@ -4,8 +4,8 @@ class PopularCommand extends Command {
     constructor(client) {
         super(client, {
             'description': 'Most popular movies on TMDb.',
-            'usage': null,
-            'documentation': true,
+            'usage': false,
+            'flags': ['shows'],
             'visible': true,
             'restricted': false,
             'weight': 100

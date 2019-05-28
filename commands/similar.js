@@ -5,7 +5,7 @@ class SimilarCommand extends Command {
         super(client, {
             'description': 'Get similar movies.',
             'usage': '<Movie Name or ID>',
-            'documentation': true,
+            'flags': ['page', 'show'],
             'visible': true,
             'restricted': false,
             'weight': 250
