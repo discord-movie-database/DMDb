@@ -14,7 +14,11 @@ class TitleCommand extends Command {
         this.tips = [
             'Not the movie you wanted? Try searching for it using the {prefix}movies command.',
             'Want more information for this result? Use the ++more flag.'
-        ]
+        ];
+    }
+
+    randomTip(prefix) {
+        return this.random(this.tips).replace('{prefix}', prefix);
     }
 
     async process(message) {
@@ -63,8 +67,7 @@ class TitleCommand extends Command {
                 { 'name': 'TMDb ID', 'value': this.TMDbID(movie.id) }
             ]),
 
-            'footer': message.db.guild.tips ?
-                `TIP: ${this.random(this.tips).replace('{prefix}', message.db.guild.prefix)}` : ''
+            'footer': message.db.guild.tips ? `TIP: ${this.randomTip(message.db.guild.prefix)}` : ''
         });
     }
 }
