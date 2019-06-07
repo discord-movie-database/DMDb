@@ -3,7 +3,7 @@ const Command = require('../helpers/command');
 class InfoCommand extends Command {
     constructor(client) {
         super(client, {
-            'description': 'Get a list of commands or a information on a specific command.',
+            'description': 'Get a list of commands or information for a specific command.',
             'usage': '[Command Name]',
             'flags': ['page'],
             'visible': false,
@@ -11,14 +11,7 @@ class InfoCommand extends Command {
             'weight': 0
         });
 
-        this.flags = {
-            'page': { 'arguments': true, 'description': 'Get more results.' },
-            'year': { 'arguments': true, 'description': 'Get results from a specific year.' },
-            'show': { 'arguments': false, 'description': 'Get a result for a TV show instead of a movie.' },
-            'shows': { 'arguments': false, 'description': 'Get results for TV shows instead of movies.' },
-            'person': { 'arguments': false, 'description': 'Get a result for a person instead of a movie.' },
-            'more': { 'arguments': false, 'description': 'Get more information for a result.' }
-        }
+        this.flags = this.client.commands['flags'].flags;
     }
 
     formatFlag(flag) {
@@ -61,7 +54,8 @@ class InfoCommand extends Command {
             'title': 'DMDb - The Discord Movie Database',
             'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
                 `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more information about a command.\n` +
-                '\nExample Command: `!?movies thor --page 2 --year 2011`\n\nCommand List:',
+                '\nExample Command: `!?movies thor --page 2 --year 2011`\n' +
+                `Use the \`${message.db.guild.prefix}flags\` command to learn how to use them.\n\nCommand List:`,
             'fields': []
         };
 
@@ -93,7 +87,7 @@ class InfoCommand extends Command {
         // Page information
         embed.footer = this.joinResult([
             `Page: ${(pagePosition)}/${pages.length}`,
-            `Total Commands: ${commands.length}`,
+            `Commands: ${commands.length}`,
             `Data from The Movie Database (TMDb)`
         ], true);
 

@@ -259,7 +259,7 @@ class CommandHelper {
 
     async usageMessage(message) {
         return this.embed.error(message.channel.id,
-            `Command usage: \`${this.info.usage}\``);
+            `Command usage: \`${this.meta.usage}\``);
     }
 }
 
