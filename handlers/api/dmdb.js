@@ -319,23 +319,48 @@ class DMDb extends APIHelper {
     }
 
     /**
-     * Get movie trailers with an ID or name
+     * Get movie trailers with for a movie or TV show
      * 
-     * @param {string} query Movie name or ID
+     * @param {string} endpoint Specify if movie or TV show
+     * @param {string} ID Movie or TV show ID
      * @returns {object} Error or trailers
      */
-    async getTrailers(query) {
-        const movieID = await this.getMovieID(query);
-        if (movieID.error) return movieID;
-
-        const videos = await this.get(`movie/${movieID}/videos`);
+    async getTrailers(endpoint, ID) {
+        let videos = await this.get(`${endpoint}/${ID}/videos`);
         if (videos.error) return videos;
+
+        videos.results = videos.results.filter(video => video.type === 'Trailer');
 
         if (videos.results.length === 0)
             return this.error('No trailers found.');
 
-        return videos.results.filter(video =>
-            video.site === "YouTube" && video.type === "Trailer");
+        return videos.results;
+    }
+
+    /**
+     * Get movie trailers with for a movie
+     * 
+     * @param {string} query Name of movie or ID
+     * @returns {object} Error or trailers
+     */
+    async getMovieTrailers(query) {
+        const movieID = await this.getMovieID(query);
+        if (movieID.error) return movieID;
+
+        return this.getTrailers('movie', movieID);
+    }
+
+    /**
+     * Get movie trailers with for a TV show
+     * 
+     * @param {string} query Name of TV show or ID
+     * @returns {object} Error or trailers
+     */
+    async getTVShowTrailers(query) {
+        const TVShowID = await this.getTVShowID(query);
+        if (TVShowID.error) return TVShowID;
+
+        return this.getTrailers('tv', TVShowID);
     }
 
     /**
