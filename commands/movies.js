@@ -47,7 +47,7 @@ class MoviesCommand extends Command {
             })),
 
             'footer': message.db.guild.tips ?
-                'TIP: Use flags (--year, --page) to get more and accurate results.' : ''
+                'TIP: Use flags (--year, --page) to get more results.' : ''
         });
     }
 }
