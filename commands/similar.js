@@ -20,7 +20,7 @@ class SimilarCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
-        const flags = this.util.flags(query);
+        const flags = this.util.flags(query, this.meta.flags);
         query = flags.query;
 
         const show = flags.shows; // Show flag

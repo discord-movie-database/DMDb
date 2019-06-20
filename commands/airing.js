@@ -20,7 +20,7 @@ class AiringCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Advanced search
-        const flags = this.util.flags(query);
+        const flags = this.util.flags(query, this.meta.flags);
 
         // Get movies from API
         const airing = await this.api.dmdb.getTVShowsAiringToday(flags);

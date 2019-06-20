@@ -11,11 +11,11 @@ class InfoCommand extends Command {
             'weight': 0
         });
 
-        this.flags = this.client.commands['flags'].flags;
+        this.flags = this.client.flags;
     }
 
     formatFlag(flag) {
-        return `[${this.flags[flag].arguments ? `--${flag} <#>` : `++${flag}`}]`;
+        return `[${this.flags[flag].requiresArguments ? `--${flag} <#>` : `++${flag}`}]`;
     }
 
     formatFlags(flags) {
@@ -100,7 +100,7 @@ class InfoCommand extends Command {
         let query = message.arguments.join(' ');
 
         // Get flags
-        const flags = this.util.flags(query);
+        const flags = this.util.flags(query, this.meta.flags);
         query = flags.query;
 
         // Get page from query
