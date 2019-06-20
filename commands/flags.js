@@ -11,13 +11,13 @@ class FlagsCommand extends Command {
             'weight': 0
         });
 
-        this.flags = {
-            'page': { 'arguments': true, 'description': 'Get more results.' },
-            'year': { 'arguments': true, 'description': 'Get results from a specific year.' },
-            'show': { 'arguments': false, 'description': 'Get a result for a TV show instead of a movie.' },
-            'shows': { 'arguments': false, 'description': 'Get results for TV shows instead of movies.' },
-            'person': { 'arguments': false, 'description': 'Get a result for a person instead of a movie.' },
-            'more': { 'arguments': false, 'description': 'Get more information for a result.' }
+        this.client.flags = {
+            'page': { 'requiresArguments': true, 'description': 'Get more results.' },
+            'year': { 'requiresArguments': true, 'description': 'Get results from a specific year.' },
+            'show': { 'requiresArguments': false, 'description': 'Get a result for a TV show instead of a movie.' },
+            'shows': { 'requiresArguments': false, 'description': 'Get results for TV shows instead of movies.' },
+            'person': { 'requiresArguments': false, 'description': 'Get a result for a person instead of a movie.' },
+            'more': { 'requiresArguments': false, 'description': 'Get more information for a result.' }
         };
     }
 
@@ -26,7 +26,7 @@ class FlagsCommand extends Command {
         const query = message.arguments.join(' ');
 
         // Advanced search
-        const flags = this.util.flags(query);
+        const flags = this.util.flags(query, this.meta.flags);
 
         // Response
         this.embed.create(message.channel.id, {
@@ -42,7 +42,7 @@ class FlagsCommand extends Command {
                 '\n\nUse the `++more` flag with this command to get a list of flags and what they do.'),
 
             'fields': flags.more ? Object.keys(this.flags).map(flag => ({ 'name': this.capitaliseStart(flag),
-                'value': `${this.flags[flag].arguments ? '`--`' : '`++`'} ${this.flags[flag].description}` })) : []
+                'value': `${this.flags[flag].requiresArguments ? '`--`' : '`++`'} ${this.flags[flag].description}` })) : []
         });
     }
 }

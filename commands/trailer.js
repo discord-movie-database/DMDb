@@ -17,7 +17,7 @@ class TrailerCommand extends Command {
         if (!message.arguments[0]) return this.usageMessage(message);
         let query = message.arguments.join(' ');
 
-        const flags = this.util.flags(query);
+        const flags = this.util.flags(query, this.meta.flags);
         query = flags.query;
 
         // Status of command response

@@ -1,4 +1,8 @@
 class UtilHelper {
+    constructor(client) {
+        this.client = client;
+    }
+
     removeFileExtension(file) {
         const fileMatch = file.match(/(\w+)\.(\w+)/i);
         return fileMatch ? fileMatch[1] : file;
@@ -16,44 +20,44 @@ class UtilHelper {
         const tempArray = array.slice();
         const chunks = [];
 
-        while (tempArray.length > 0)
+        while (tempArray.length > 0) {
             chunks.push(tempArray.splice(0, chunkSize));
+        }
 
         return chunks;
     }
+    
+    flags(query, possibleFlags) {
+        const queryArguments = query.split(' ');
+        const presentFlags = {};
 
-    flags(query) {
-        const words = query.split(' ');
-        const response = {};
-
-        for (let i = 0; i < words.length; i++) {
-            const word = words[i];
-            if (!word) continue;
+        for (let i = 0; i < queryArguments.length; i++) {
+            let argument = queryArguments[i];
             
-            if (word.startsWith('--')) {
-                const flagName = word.slice(2);
-                const flagValue = words[i + 1];
+            // Check if the argument starts with flag prefix "--"
+            if (!argument || !argument.startsWith('--')) continue;
+            argument = argument.slice(2).toLowerCase(); // Remove the prefix from flag name
 
-                if (flagName !== 'query' && flagValue)
-                    response[flagName] = flagValue;
+            // Check if the flag is valid
+            if (possibleFlags.indexOf(argument) < 0) continue;
 
-                words.splice(i, 2);
-                i = i - 2;
-            }
-
-            if (word.startsWith('++')) {
-                const flagName = word.slice(2);
+            if (this.client.flags[argument].requiresArguments) {
+                presentFlags[argument] = queryArguments[i + 1]; // Flag present with argument
                 
-                if (flagName !== 'query')
-                    response[flagName] = true;
+                // Remove the flag name and argument from the query
+                queryArguments.splice(i, 2);
+                i = i - 2;
+            } else {
+                presentFlags[argument] = true; // Flag present but no argument
 
-                words.splice(i, 1);
+                // Remove the flag name from the query
+                queryArguments.splice(i, 1);
                 i = i - 1;
             }
         }
 
-        response.query = words.join(' ');
-        return response;
+        query = queryArguments.join(' ');
+        return { query, ...presentFlags };
     }
 }
 

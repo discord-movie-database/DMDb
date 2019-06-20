@@ -21,7 +21,7 @@ class ReviewsCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Advanced search
-        const flags = this.util.flags(query);
+        const flags = this.util.flags(query, this.meta.flags);
         query = flags.query;
 
         // Get reviews from API

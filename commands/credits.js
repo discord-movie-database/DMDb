@@ -21,7 +21,7 @@ class CreditsCommand extends Command {
         const status = await this.searchingMessage(message);
 
         // Advanced search
-        const flags = this.util.flags(query);
+        const flags = this.util.flags(query, this.meta.flags);
         query = flags.query; // Update query
 
         const page = (flags.page - 1) || 0; // Page flag

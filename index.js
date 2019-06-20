@@ -27,6 +27,8 @@ class Client extends Eris {
         this.stats = {};
         this.stats.executed = 0;
 
+        this.flags = {};
+
         this.commands = [];
         this.events = [];
         this.handlers = {};
