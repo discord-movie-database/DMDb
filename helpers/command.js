@@ -65,6 +65,13 @@ class CommandHelper {
         return value ? `https://image.tmdb.org/t/p/w500${value}` : 'https://via.placeholder.com/300x450?text=N/A';
     }
 
+    videoSourceUrl(site, key) {
+        if (site === 'YouTube') return `https://youtube.com/watch?v=${key}`;
+        if (site === 'Vimeo') return `https://vimeo.com/${key}`;
+        
+        return 'Video source not supported.';
+    }
+
     releaseDate(value) {
         if (!value) return 'N/A';
 

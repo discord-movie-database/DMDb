@@ -5,7 +5,7 @@ class TrailerCommand extends Command {
         super(client, {
             'description': 'Get a trailer for a movie.',
             'usage': '<Movie Name or ID>',
-            'flags': ['show'],
+            'flags': ['show', 'more'],
             'visible': true,
             'restricted': false,
             'weight': 200
@@ -23,16 +23,31 @@ class TrailerCommand extends Command {
         // Status of command response
         const status = await this.searchingMessage(message);
 
-        // Get movie from API
-        const trailers = flags.show ? await this.api.dmdb.getTVShowTrailers(query) :
-            await this.api.dmdb.getMovieTrailers(query);
-        if (trailers.error) return this.embed.error(status, trailers); // Error
+        // Get videos from API
+        const videos = flags.show ? await this.api.dmdb.getTVShowVideos(query) :
+            await this.api.dmdb.getMovieVideos(query);
+        if (videos.error) return this.embed.error(status, videos); // Error
 
-        // Find trailer
-        const trailer = trailers[0];
+        // All videos
+        if (flags.more) return this.embed.edit(status, {
+            'fields': videos.results.map(video => ({
+                'name': video.name, 'value': this.videoSourceUrl(video.site, video.key)
+            }))
+        });
 
-        // Response
-        this.embed.edit(status, `https://www.youtube.com/watch?v=${trailer.key}`);
+        // Filter videos which are not trailers or teasers
+        videos.results = videos.results.filter(video =>
+            video.type === 'Trailer' || video.type === 'Teaser');
+
+        // Check if there are any videos
+        if (videos.results.length === 0)
+            return this.embed.error(status, 'No trailers or teasers found.');
+
+        // First result
+        const video = videos.results[0];
+
+        // Return link to video
+        return this.embed.edit(status, this.videoSourceUrl(video.site, video.key));
     }
 }
 

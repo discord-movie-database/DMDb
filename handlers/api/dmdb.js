@@ -318,49 +318,54 @@ class DMDb extends APIHelper {
         return await this.getResults(`tv/${TVShowID}/similar`);
     }
 
+    _videos(info, videos) {
+        if (videos.results.length === 0)
+            return this.error('No videos found.');
+
+        return {...info, ...videos};
+    }
+
     /**
-     * Get movie trailers with for a movie or TV show
+     * Get videos for a movie or TV show
      * 
-     * @param {string} endpoint Specify if movie or TV show
+     * @param {string} endpoint Movie or TV show?
      * @param {string} ID Movie or TV show ID
      * @returns {object} Error or trailers
      */
-    async getTrailers(endpoint, ID) {
-        let videos = await this.get(`${endpoint}/${ID}/videos`);
+    async getVideos(endpoint, result) {
+        const videos = await this.get(`${endpoint}/${result.id}/videos`);
         if (videos.error) return videos;
 
-        videos.results = videos.results.filter(video => video.type === 'Trailer');
-
         if (videos.results.length === 0)
-            return this.error('No trailers found.');
+            return this.error('No videos found.');
 
-        return videos.results;
+        return this._videos(result, videos);
     }
 
     /**
-     * Get movie trailers with for a movie
+     * Get videos for a movie
      * 
      * @param {string} query Name of movie or ID
-     * @returns {object} Error or trailers
+     * @returns {object} Error or videos
      */
-    async getMovieTrailers(query) {
-        const movieID = await this.getMovieID(query);
-        if (movieID.error) return movieID;
+    async getMovieVideos(query) {
+        const movie = await this.getMovieID(query, true);
+        if (movie.error) return movie;
 
-        return this.getTrailers('movie', movieID);
+        return this.getVideos('movie', movie);
     }
 
     /**
-     * Get movie trailers with for a TV show
+     * Get videos for a TV show
      * 
      * @param {string} query Name of TV show or ID
-     * @returns {object} Error or trailers
+     * @returns {object} Error or videos
      */
-    async getTVShowTrailers(query) {
-        const TVShowID = await this.getTVShowID(query);
-        if (TVShowID.error) return TVShowID;
+    async getTVShowVideos(query) {
+        const TVShow = await this.getTVShowID(query, true);
+        if (TVShow.error) return TVShow;
 
-        return this.getTrailers('tv', TVShowID);
+        return this.getVideos('tv', TVShow);
     }
 
     /**
