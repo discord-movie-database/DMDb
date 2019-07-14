@@ -1,7 +1,7 @@
 {
     "name": "dmdb",
     "description": "Discord Movie Database (V2)",
-    "version": "2.1.3",
+    "version": "2.2.2",
     "private": true,
     "scripts": {
         "schemas": "npm i dmdb-schemas",
