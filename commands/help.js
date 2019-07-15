@@ -15,7 +15,7 @@ class InfoCommand extends Command {
     }
 
     formatFlag(flag) {
-        return `[${this.flags[flag].requiresArguments ? `--${flag} <#>` : `++${flag}`}]`;
+        return `[${this.flags[flag].requiresArguments ? `--${flag} <#>` : `--${flag}`}]`;
     }
 
     formatFlags(flags) {
