@@ -5,7 +5,7 @@ class AiringCommand extends Command {
         super(client, {
             'description': 'TV shows that are airing today.',
             'usage': false,
-            'flags': false,
+            'flags': ['page'],
             'visible': true,
             'restricted': false,
             'weight': 150

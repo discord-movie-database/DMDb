@@ -3,9 +3,9 @@ const Command = require('../helpers/command');
 class PopularCommand extends Command {
     constructor(client) {
         super(client, {
-            'description': 'Most popular movies on TMDb.',
+            'description': 'Current popular movies on TMDb.',
             'usage': false,
-            'flags': ['shows'],
+            'flags': ['page', 'shows'],
             'visible': true,
             'restricted': false,
             'weight': 100
@@ -33,7 +33,7 @@ class PopularCommand extends Command {
 
         // Response
         this.embed.edit(status, {
-            'title': `Popular ${show ? 'TV Shows' : 'Movies'}`,
+            'title': `Currently Popular ${show ? 'TV Shows' : 'Movies'}`,
             'description': this.resultDescription(popular),
 
             'fields': popular.results.map((result) => ({
