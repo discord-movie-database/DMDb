@@ -51,7 +51,7 @@ class InfoCommand extends Command {
 
         // Embed template
         const embed = {
-            'title': 'DMDb - The Discord Movie Database',
+            'title': 'DMDb - Discord Movie Database',
             'description': `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
                 `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more information about a command.\n` +
                 '\nExample Command: `!?movies thor --page 2 --year 2011`\n' +
