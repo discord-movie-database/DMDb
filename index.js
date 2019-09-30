@@ -1,28 +1,23 @@
-const env = process.argv[2] || 'dev';
+import Eris from 'eris';
 
-const Eris = require('eris');
-
-const LoadHandler = require('./handlers/load');
-const LogHandler = require('./handlers/log');
-const EmbedHandler = require('./handlers/embed');
-const APIHandler = require('./handlers/api');
-const BotlistHandler = require('./handlers/botlist');
-const DBHandler = require('./handlers/db');
-const UtilHandler = require('./handlers/util');
-const StatusHandler = require('./handlers/status');
-const StatsHandler = require('./handlers/stats');
+import LoadHandler from './handlers/load';
+import LogHandler from './handlers/log';
+import EmbedHandler from './handlers/embed';
+import APIHandler from './handlers/api';
+import BotlistHandler from './handlers/botlist';
+import DBHandler from './handlers/db';
+import UtilHandler from './handlers/util';
+import StatusHandler from './handlers/status';
+import StatsHandler from './handlers/stats';
 
 class Client extends Eris {
     constructor(config) {
-        super(config.tokens.discord[env], config.options.client);
+        super(config.tokens.discord, config.client);
 
-        this.env = env;
-        this.config = config;
         this.loaded = false;
+        this.config = config;
 
         this.db;
-
-        this.status = {};
 
         this.stats = {};
         this.stats.executed = 0;
@@ -44,7 +39,7 @@ class Client extends Eris {
         this.handlers.stats = new StatsHandler(this);
 
         this.handlers.log.info('Connecting to Discord');
-        this.on('ready', () => this.handlers.load.start());
+        this.once('ready', () => this.handlers.load.start());
     }
 }
 

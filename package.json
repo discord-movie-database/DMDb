@@ -1,18 +1,18 @@
 {
     "name": "dmdb",
-    "description": "Discord Movie Database (V2)",
-    "version": "2.2.3",
+    "description": "Discord Movie Database",
+    "version": "2.3.0",
     "private": true,
     "scripts": {
-        "schemas": "npm i dmdb-schemas",
-        "dev": "node index.js dev --trace-warnings",
-        "start": "npm run schemas && node index.js main"
+        "dev": "cross-env NODE_ENV=dev node -r esm index.js",
+        "prod": "cross-env NODE_ENV=prod node -r esm index.js"
     },
     "dependencies": {
-        "chalk": "^2.4.2",
-        "dmdb-schemas": "gist:8fed8db6bbc715586c14b6f9239fc76d",
+        "axios": "^0.19.0",
+        "consola": "^2.10.1",
+        "cross-env": "^6.0.0",
         "eris": "github:abalabahaha/eris#dev",
-        "mongoose": "^5.5.11",
-        "superagent": "^4.1.0"
+        "esm": "^3.2.25",
+        "mongoose": "^5.7.3"
     }
 }
