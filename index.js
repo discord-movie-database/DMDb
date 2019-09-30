@@ -9,7 +9,7 @@ const APIHandler = require('./handlers/api');
 const BotlistHandler = require('./handlers/botlist');
 const DBHandler = require('./handlers/db');
 const UtilHandler = require('./handlers/util');
-const BotHandler = require('./handlers/bot');
+const StatusHandler = require('./handlers/status');
 const StatsHandler = require('./handlers/stats');
 
 class Client extends Eris {
@@ -40,7 +40,7 @@ class Client extends Eris {
         this.handlers.db = new DBHandler(this);
         this.handlers.load = new LoadHandler(this);
         this.handlers.botlist = new BotlistHandler(this);
-        this.handlers.bot = new BotHandler(this);
+        this.handlers.status = new StatusHandler(this);
         this.handlers.stats = new StatsHandler(this);
 
         this.handlers.log.info('Connecting to Discord');
