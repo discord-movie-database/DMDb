@@ -1,36 +1,41 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 class StatsHandler {
     constructor(client) {
         this.client = client;
+
+        this.interval;
+
+        this.guilds = () => this.client.guilds.size;
+        this.channels = () => Object.keys(this.client.channelGuildMap).length;
+        this.users = () => this.client.guilds.size;
+
+        this.commands = 0;
     }
 
-    getStats() {
+    get() {
         return {
-            'users': this.client.users.size,
-            'channels': Object.keys(this.client.channelGuildMap).length,
-            'guilds': this.client.guilds.size,
-            'commands': Object.keys(this.client.commands).length
-        }
+            guilds: this.guilds(),
+            channels: this.channels(),
+            users: this.users(),
+
+            commands: this.commands,
+        };
     }
 
-    updateStats() {
-        const stats = this.getStats();
-
-        mongoose.model('statistics').create({
-            'date': new Date(),
-            ...stats
-        });
+    update() {
+        mongoose.model('stats').create({ time: new Date(), ...this.get() });
     }
 
-    startStatsInterval() {
-        if (!this.client.config.options.bot.updateStats) return;
+    start() {
+        this.update();
 
-        this.updateStats();
-        this.client.statsInterval = setInterval(() =>
-            this.updateStats(), 1000 * 60 * 60 * 12);
+        this.interval = setInterval(() => this.update(), 1000 * 60 * 60 * 8); // 8 Hours
+    }
 
+    stop() {
+        clearInterval(this.interval);
     }
 }
 
-module.exports = StatsHandler;
+export default StatsHandler;

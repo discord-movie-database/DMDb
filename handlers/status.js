@@ -5,7 +5,7 @@ class StatusHandler {
         this.prefix = `${this.client.config.bot.prefix}help`;
         this.seperator = ' | ';
 
-        this.interval = false;
+        this.interval;
         this.position = 0;
 
         this.values = [
@@ -16,7 +16,7 @@ class StatusHandler {
     }
 
     start() {
-        this.interval = setInterval(() => this.update(), 1000 * 60 / 2); // 30s
+        this.interval = setInterval(() => this.update(), 1000 * 60 / 2); // 30 Seconds
     }
 
     update() {
