@@ -1,4 +1,5 @@
 import Eris from 'eris';
+import consola from 'consola';
 
 import _config from './config';
 
@@ -25,8 +26,19 @@ class Client extends Eris {
         this.command = new CommandHandler(this);
         this.routine = new RoutineHandler(this);
 
-        this.db.connection.on('open', () => this.connect());
-        this.on('ready', () => this.loaded = true);
+        this.db.connection.on('open', () => {
+            this.connect();
+
+            consola.success('Connected to database.');
+        });
+
+        this.on('ready', () => {
+            this.loaded = true;
+
+            consola.success('Connected to Discord.');
+
+            this.routine.getRoutine('stats').run();
+        });
     }
 }
 

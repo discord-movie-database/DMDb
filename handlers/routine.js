@@ -6,6 +6,10 @@ class RoutinesHandler extends HandlerStructure {
 
         this.loadFiles();
     }
+
+    getRoutine(routineName) {
+        return this.routines[routineName];
+    }
 }
 
 export default RoutinesHandler;
