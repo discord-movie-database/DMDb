@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class FlagsCommand extends Command {
+class FlagsCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'What flags do and how to use them.',
@@ -47,4 +47,4 @@ class FlagsCommand extends Command {
     }
 }
 
-module.exports = FlagsCommand;
+export default FlagsCommand;

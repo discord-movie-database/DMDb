@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class SimilarCommand extends Command {
+class SimilarCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Get similar movies.',
@@ -52,4 +52,4 @@ class SimilarCommand extends Command {
     }
 }
 
-module.exports = SimilarCommand;
+export default SimilarCommand;

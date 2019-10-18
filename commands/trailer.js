@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class TrailerCommand extends Command {
+class TrailerCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Get a trailer for a movie.',
@@ -51,4 +51,4 @@ class TrailerCommand extends Command {
     }
 }
 
-module.exports = TrailerCommand;
+export default TrailerCommand;

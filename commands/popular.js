@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class PopularCommand extends Command {
+class PopularCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Current popular movies on TMDb.',
@@ -50,4 +50,4 @@ class PopularCommand extends Command {
     }
 }
 
-module.exports = PopularCommand;
+export default PopularCommand;

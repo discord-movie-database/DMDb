@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class InfoCommand extends Command {
+class InfoCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Information and statistics about the bot.',
@@ -59,4 +59,4 @@ class InfoCommand extends Command {
     }
 }
 
-module.exports = InfoCommand;
+export default InfoCommand;

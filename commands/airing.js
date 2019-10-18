@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class AiringCommand extends Command {
+class AiringCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'TV shows that are airing today.',
@@ -44,4 +44,4 @@ class AiringCommand extends Command {
     }
 }
 
-module.exports = AiringCommand;
+export default AiringCommand;

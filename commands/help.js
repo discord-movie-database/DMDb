@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class InfoCommand extends Command {
+class HelpCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Get a list of commands or information for a specific command.',
@@ -116,4 +116,4 @@ class InfoCommand extends Command {
     }
 }
 
-module.exports = InfoCommand;
+export default HelpCommand;

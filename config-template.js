@@ -11,6 +11,7 @@ const envConfig = {
     prod: {
         tokens: {
             discord: 'abc123', // !
+            tmdb: 'abc123', // !
         },
         
         db: {
@@ -19,6 +20,7 @@ const envConfig = {
             name: 'dmdb',
             options: {
                 useNewUrlParser: true,
+                auth: { authSource: 'admin' },
                 user: 'admin',
                 pass: 'prodpass', // !
             },
@@ -28,6 +30,7 @@ const envConfig = {
     dev: {
         tokens: {
             discord: 'abc123', // !
+            tmdb: 'abc123', // !
         },
 
         db: {
@@ -36,6 +39,7 @@ const envConfig = {
             name: 'dmdb',
             options: {
                 useNewUrlParser: true,
+                auth: { authSource: 'admin' },
                 user: 'admin',
                 pass: 'devpass', // !
             },
@@ -47,11 +51,7 @@ export default {
     env: NODE_ENV,
     ...envConfig[NODE_ENV],
 
-    tokens: {
-        tmdb: 'abc123', // !
-    },
-
-    list: { // Automatically disabled if value is set to false.
+    list: { // Disabled if value is set to false.
         discordBotList: {
             endpoint: 'https://discordbots.org/api',
             token: 'abc123',
@@ -84,7 +84,7 @@ export default {
             CHANNEL_UPDATE: true,
             GUILD_BAN_ADD: true,
             GUILD_BAN_REMOVE: true,
-            // GUILD_CREATE: false, // Bot joined guild
+            // GUILD_CREATE: false, // Bot invited / joined guild
             // GUILD_DELETE: false, // Bot kicked / left guild
             GUILD_MEMBER_ADD: true,
             GUILD_MEMBER_REMOVE: true,
@@ -105,6 +105,5 @@ export default {
     },
 
     prefix: '!?',
-    embedColour: 0xE6B91E,
     developers: [ '612086654454333462' ], // !
 };

@@ -1,12 +1,14 @@
-class StatusHandler {
+import RoutineStructure from '../structures/routine';
+
+class StatusRoutine extends RoutineStructure {
     constructor(client) {
-        this.client = client;
+        super(client);
 
-        this.prefix = `${this.client.config.bot.prefix}help`;
-        this.seperator = ' | ';
-
-        this.interval;
+        this.intervalDuration = 100 * 60 / 2;
         this.position = 0;
+
+        this.prefix = `${this.client.config.prefix}help`;
+        this.seperator = ' | ';
 
         this.values = [
             () => this.config.status,
@@ -15,20 +17,12 @@ class StatusHandler {
         ];
     }
 
-    start() {
-        this.interval = setInterval(() => this.update(), 1000 * 60 / 2); // 30 Seconds
-    }
-
-    update() {
+    run() {
         const value = this.values[this.position]();
         this.client.editStatus({ name: this.prefix + this.seperator + value });
 
         this.position !== this.values.length - 1 ? this.position++ : this.position = 0;
     }
-
-    stop() {
-        clearInterval(this.interval);
-    }
 }
 
-export default StatusHandler;
+export default StatusRoutine;

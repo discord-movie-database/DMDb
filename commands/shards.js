@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class ShardsCommand extends Command {
+class ShardsCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Check status of all shards.',
@@ -26,4 +26,4 @@ class ShardsCommand extends Command {
     }
 }
 
-module.exports = ShardsCommand;
+export default ShardsCommand;

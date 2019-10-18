@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class TitleCommand extends Command {
+class MovieCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Get the primary information about a movie.',
@@ -72,4 +72,4 @@ class TitleCommand extends Command {
     }
 }
 
-module.exports = TitleCommand;
+export default MovieCommand;

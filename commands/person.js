@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class ActorCommand extends Command {
+class ActorCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Get information about a person.',
@@ -47,4 +47,4 @@ class ActorCommand extends Command {
     }
 }
 
-module.exports = ActorCommand;
+export default ActorCommand;

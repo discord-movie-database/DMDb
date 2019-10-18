@@ -1,11 +1,15 @@
-class ErrorEvent {
+import consola from 'consola';
+
+import EventStructure from '../structures/event';
+
+class ErrorEvent extends EventStructure {
     constructor(client) {
-        this.client = client;
+        super(client);
     }
 
-    process(error) {
-        console.error(error);
+    onEvent(event) {
+        consola.error(event);
     }
 }
 
-module.exports = ErrorEvent;
+export default ErrorEvent;
