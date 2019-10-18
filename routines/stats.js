@@ -1,3 +1,5 @@
+import consola from 'consola';
+
 import RoutineStructure from '../structures/routine';
 
 class StatsRoutine extends RoutineStructure {
@@ -10,11 +12,11 @@ class StatsRoutine extends RoutineStructure {
     }
 
     run() {
-        this.client.repository.stats.insert({
-            guilds: this.guilds(),
-            channels: this.channels(),
-            users: this.users(),
-        });
+        const stats = { guilds: this.guilds(), channels: this.channels(), users: this.users() };
+
+        this.client.repository.getRepository('stats').insert(stats);
+
+        consola.info(`${stats.guilds} Guilds, ${stats.channels} Channels, ${stats.users} Users.`);
     }
 }
 

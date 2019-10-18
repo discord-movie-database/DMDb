@@ -6,6 +6,10 @@ class RepositoryHandler extends HandlerStructure {
 
         this.loadFiles();
     }
+
+    getRepository(repositoryName) {
+        return this.repository[repositoryName];
+    }
 }
 
 export default RepositoryHandler;
