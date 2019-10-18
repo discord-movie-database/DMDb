@@ -1,11 +1,11 @@
 import HandlerStructure from '../structures/handler';
 
-class UtilHandler extends HandlerStructure {
+class RoutinesHandler extends HandlerStructure {
     constructor(client) {
-        super(client, 'util');
+        super(client, 'routines');
 
         this.loadFiles();
     }
 }
 
-export default UtilHandler;
+export default RoutinesHandler;

@@ -1,16 +1,15 @@
-class CommandHelper {
+class CommandStructure {
     constructor(client, meta) {
         this.client = client;
-        this.config = this.client.config.options.bot;
         
         if (meta) this.meta = {
-            'name': meta.name || false,
-            'description': meta.description || false,
-            'flags': meta.flags || [],
-            'usage': meta.usage || false,
-            'visible': typeof meta.visible === 'boolean' ? meta.visible : false,
-            'restricted': typeof meta.restricted === 'boolean' ? meta.restricted : true,
-            'weight': meta.weight || 0
+            name: meta.name || false,
+            description: meta.description || false,
+            flags: meta.flags || [],
+            usage: meta.usage || false,
+            visible: typeof meta.visible === 'boolean' ? meta.visible : false,
+            restricted: typeof meta.restricted === 'boolean' ? meta.restricted : true,
+            weight: meta.weight || 0
         };
 
         this.util = this.client.handlers.util;
@@ -270,4 +269,4 @@ class CommandHelper {
     }
 }
 
-module.exports = CommandHelper;
+export default CommandStructure;

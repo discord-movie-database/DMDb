@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class CreditsCommand extends Command {
+class CreditsCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Get the cast and crew for a movie.',
@@ -72,4 +72,4 @@ class CreditsCommand extends Command {
     }
 }
 
-module.exports = CreditsCommand;
+export default CreditsCommand;

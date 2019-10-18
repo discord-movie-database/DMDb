@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class EvalCommand extends Command {
+class EvalCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Developer only command for testing.',
@@ -28,4 +28,4 @@ class EvalCommand extends Command {
     }
 }
 
-module.exports = EvalCommand;
+export default EvalCommand;

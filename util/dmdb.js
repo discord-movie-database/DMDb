@@ -1,7 +1,6 @@
-const request = require('superagent');
-const APIHelper = require('../../helpers/api');
+import UtilStructure from '../structures/util';
 
-class DMDb extends APIHelper {
+class DMDbUtil extends UtilStructure {
     constructor(client) {
         super(client);
 
@@ -512,4 +511,4 @@ class DMDb extends APIHelper {
     }
 }
 
-module.exports = DMDb;
+export default DMDbUtil;

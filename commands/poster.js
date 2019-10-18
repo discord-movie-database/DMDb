@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class PosterCommand extends Command {
+class PosterCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Get a movie\'s poster.',
@@ -42,4 +42,4 @@ class PosterCommand extends Command {
     }
 }
 
-module.exports = PosterCommand;
+export default PosterCommand;

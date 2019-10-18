@@ -1,6 +1,6 @@
-const Command = require('../helpers/command');
+import CommandStructure from '../structures/command';
 
-class ReloadCommand extends Command {
+class ReloadCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             'description': 'Developer only command for testing or updating bot.',
@@ -21,4 +21,4 @@ class ReloadCommand extends Command {
     }
 }
 
-module.exports = ReloadCommand;
+export default ReloadCommand;
