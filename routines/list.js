@@ -5,7 +5,10 @@ import consola from 'consola';
 
 class ListRoutine extends RoutineStructure {
     constructor(client) {
-        super(client, 1000 * 60 * 60 * 8, true) // 8 Hours
+        super(client, 1000 * 60 * 60 * 8, { // 8 hours
+            prodOnly: true,
+            runOnIntervalStart: true,
+        });
 
         this.guilds = () => this.client.guilds.size;
     }

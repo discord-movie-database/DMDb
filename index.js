@@ -37,7 +37,9 @@ class Client extends Eris {
 
             consola.success('Connected to Discord.');
 
-            this.routine.getRoutine('stats').run();
+            for (let routineName in this.routine.routines) {
+                this.routine.getRoutine(routineName).start();
+            }
         });
     }
 }
