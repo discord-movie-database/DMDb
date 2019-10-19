@@ -18,29 +18,16 @@ class Client extends Eris {
         this.loaded = false;
         this.config = config;
 
+        this.log = consola;
+
         this.db = databaseService;
+        this.db.connection.on('open', () => this.emit('databaseConnect'));
 
         this.repository = new RepositoryHandler(this);
         this.util = new UtilHandler(this);
         this.event = new EventHandler(this);
         this.command = new CommandHandler(this);
         this.routine = new RoutineHandler(this);
-
-        this.db.connection.on('open', () => {
-            this.connect();
-
-            consola.success('Connected to database.');
-        });
-
-        this.on('ready', () => {
-            this.loaded = true;
-
-            consola.success('Connected to Discord.');
-
-            for (let routineName in this.routine.routines) {
-                this.routine.getRoutine(routineName).start();
-            }
-        });
     }
 }
 
