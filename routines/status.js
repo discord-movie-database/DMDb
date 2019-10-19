@@ -2,16 +2,17 @@ import RoutineStructure from '../structures/routine';
 
 class StatusRoutine extends RoutineStructure {
     constructor(client) {
-        super(client);
+        super(client, 1000 * 60 / 2, { // 30 seconds
+            runOnIntervalStart: true,
+        });
 
-        this.intervalDuration = 100 * 60 / 2;
         this.position = 0;
 
         this.prefix = `${this.client.config.prefix}help`;
         this.seperator = ' | ';
 
         this.values = [
-            () => this.config.status,
+            () => 'Movies, TV Shows & People',
             () => `${this.client.guilds.size} Servers`,
             () => `${this.client.users.size} Users`
         ];

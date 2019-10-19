@@ -4,7 +4,9 @@ import RoutineStructure from '../structures/routine';
 
 class StatsRoutine extends RoutineStructure {
     constructor(client) {
-        super(client, 1000 * 60 * 60 * 8); // 8 Hours
+        super(client, 1000 * 60 * 60 * 8, { // 8 hours
+            runOnIntervalStart: true,
+        });
 
         this.guilds = () => this.client.guilds.size;
         this.channels = () => Object.keys(this.client.channelGuildMap).length;
