@@ -35,6 +35,7 @@ translations for different languages and enhance the experience for other users.
 
 DMDb is primarily looking for translations for the following langauges: `German (de), French (fr),
 Spanish (es), Russian (ru), Italian (it), Portuguese (pt), Chinese Simplified (zh) and Korean (ko).`
+These are the popular contributed languages on [TMDb](https://www.themoviedb.org/contribute).
 
 Translations can be found in the `/lang` directory, stored in [JSON](https://www.json.org/) and
 named as the [ISO 639-1](https://en.wikipedia.org/wiki/ISO_639-1) code of the language. If the
