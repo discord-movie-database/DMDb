@@ -1,60 +1,61 @@
+import packageInfo from '../package.json';
+
 import CommandStructure from '../structures/command';
 
 class InfoCommand extends CommandStructure {
     constructor(client) {
         super(client, {
-            'description': 'Information and statistics about the bot.',
-            'usage': false,
-            'flags': false,
-            'visible': true,
-            'restricted': false,
-            'weight': 50
+            description: 'Information and statistics about the bot.',
+            usage: false,
+            flags: false,
+            visible: true,
+            restricted: false,
+            weight: 50
         });
-
-        this.package = require('../package.json');
     }
 
     async process(message) {
-        // Response
+        const stats = this.client.routine.getRoutine('stats');
+
         this.embed.create(message.channel.id, {
-            'title': 'DMDb Information',
-            'description': this.joinResult([
+            title: 'DMDb Information',
+            description: this.joinResult([
                 '[Invite Bot](https://bit.ly/2PXWYLR)',
                 '[Support Server](https://discord.gg/fwAxQjV)',
                 '[Website](https://dmdb.xyz)'
             ], true),
-            'fields': [{
-                'name': 'Bot Version',
-                'value': this.package.version
+            fields: [{
+                name: 'Bot Version',
+                value: packageInfo.version
             }, {
-                'name': 'Library',
-                'value': `Eris ${this.package.dependencies.eris}`
+                name: 'Library',
+                value: `Eris ${packageInfo.dependencies.eris}`
             }, {
-                'name': 'Node Version',
-                'value': `${process.versions.node}`
+                name: 'Node Version',
+                value: `${process.versions.node}`
             }, {
-                'name': 'Guilds',
-                'value': `${this.client.guilds.size}`
+                name: 'Guilds',
+                value: `${stats.guilds()}`
             }, {
-                'name': 'Channels',
-                'value': `${Object.keys(this.client.channelGuildMap).length}`
+                name: 'Channels',
+                value: `${stats.channels()}`
             }, {
-                'name': 'Users',
-                'value': `${this.client.users.size}`
+                name: 'Users',
+                value: `${stats.users()}`
             }, {
-                'name': 'Shards',
-                'value': `${this.client.shards.size}`
+                name: 'Shards',
+                value: `${this.client.shards.size}`
             }, {
-                'name': 'Current Shard',
-                'value': message.channel.guild ? `${message.channel.guild.shard.id}` : 'N/A'
+                name: 'Current Shard',
+                value: message.channel.guild ? `${message.channel.guild.shard.id}` : 'N/A'
             }, {
-                'name': 'Commands Executed',
-                'value': this.client.stats.executed + 1
+                name: 'Commands Executed',
+                name: this.command.commandsExecuted + 1
             }, {
-                'name': 'Uptime',
-                'value': this.uptime(),
+                name: 'Uptime',
+                value: this.uptime(),
             }].map((field) => ({ ...field,
-                'inline': typeof field.inline === 'boolean' ? field.inline : true }))
+                inline: typeof field.inline === 'boolean' ? field.inline : true }))
         });
     }
 }

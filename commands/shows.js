@@ -3,42 +3,36 @@ import CommandStructure from '../structures/command';
 class ShowsCommand extends CommandStructure {
     constructor(client) {
         super(client, {
-            'description': 'Search for TV shows.',
-            'usage': '<TV Show Name>',
-            'flags': ['page', 'year'],
-            'visible': true,
-            'restricted': false,
-            'weight': 450
+            description: 'Search for TV shows.',
+            usage: '<TV Show Name>',
+            flags: ['page', 'year'],
+            visible: true,
+            restricted: false,
+            weight: 450
         });
     }
 
     async process(message) {
-        // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
         let query = message.arguments.join(' ');
 
-        // Status of command response
         const status = await this.searchingMessage(message);
 
-        // Advanced search
-        const flags = this.util.flags(query, this.meta.flags);
+        const flags = this.flags.parse(query, this.meta.flags);
         query = flags.query;
 
-        // Get TV shows from API
-        const TVShows = await this.api.dmdb.getTVShows(flags);
-        if (TVShows.error) return this.embed.error(status, TVShows.error); // Error
+        const TVShows = await this.tmdb.getTVShows(flags);
+        if (TVShows.error) return this.embed.error(status, TVShows.error);
 
-        // Year flag
         TVShows.year = flags.year && /^\d{4}$/.test(flags.year) ? flags.year : 'All';;
 
-        // Response
         this.embed.edit(status, {
-            'title': 'Search Results',
-            'description': this.resultDescription(TVShows),
+            title: 'Search Results',
+            description: this.resultDescription(TVShows),
             
-            'fields': TVShows.results.map(TVShow => ({
-                'name': TVShow.name,
-                'value': this.joinResult([
+            fields: TVShows.results.map(TVShow => ({
+                name: TVShow.name,
+                value: this.joinResult([
                     `**${TVShow.index}**`,
                     `Vote Average: ${this.voteAverage(TVShow.vote_average)}`,
                     `First Air Date: ${this.releaseDate(TVShow.first_air_date)}`,
@@ -46,7 +40,7 @@ class ShowsCommand extends CommandStructure {
                 ])
             })),
 
-            'footer': message.db.guild.tips ?
+            footer: message.db.guild.tips ?
                 `TIP: Use flags (--year, --page) to get more and accurate results.` : ''
         });
     }

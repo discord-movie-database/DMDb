@@ -6,6 +6,10 @@ class UtilHandler extends HandlerStructure {
 
         this.loadFiles();
     }
+
+    getUtil(utilName) {
+        return this.util[utilName];
+    }
 }
 
 export default UtilHandler;

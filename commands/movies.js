@@ -3,42 +3,36 @@ import CommandStructure from '../structures/command';
 class MoviesCommand extends CommandStructure {
     constructor(client) {
         super(client, {
-            'description': 'Search for movies.',
-            'usage': '<Movie Name>',
-            'flags': ['page', 'year'],
-            'visible': true,
-            'restricted': false,
-            'weight': 650
+            description: 'Search for movies.',
+            usage: '<Movie Name>',
+            flags: ['page', 'year'],
+            visible: true,
+            restricted: false,
+            weight: 650
         });
     }
 
     async process(message) {
-        // Check for query
         if (!message.arguments[0]) return this.usageMessage(message);
         let query = message.arguments.join(' ');
 
-        // Status of command response
         const status = await this.searchingMessage(message);
 
-        // Advanced search
-        const flags = this.util.flags(query, this.meta.flags);
+        const flags = this.flags.parse(query, this.meta.flags);
         query = flags.query;
 
-        // Get movies from API
-        const movies = await this.api.dmdb.getMovies(flags);
-        if (movies.error) return this.embed.error(status, movies.error); // Error
+        const movies = await this.tmdb.getMovies(flags);
+        if (movies.error) return this.embed.error(status, movies.error);
 
-        // Year flag
         movies.year = flags.year && /^\d{4}$/.test(flags.year) ? flags.year : 'All';;
 
-        // Response
         this.embed.edit(status, {
-            'title': 'Search Results',
-            'description': this.resultDescription(movies),
+            title: 'Search Results',
+            description: this.resultDescription(movies),
             
-            'fields': movies.results.map(movie => ({
-                'name': movie.title,
-                'value': this.joinResult([
+            fields: movies.results.map(movie => ({
+                name: movie.title,
+                value: this.joinResult([
                     `**${movie.index}**`,
                     `Vote Average: ${this.voteAverage(movie.vote_average)}`,
                     `Release: ${this.releaseDate(movie.release_date)}`,
@@ -46,7 +40,7 @@ class MoviesCommand extends CommandStructure {
                 ])
             })),
 
-            'footer': message.db.guild.tips ?
+            footer: message.db.guild.tips ?
                 'TIP: Use flags (--year, --page) to get more results.' : ''
         });
     }

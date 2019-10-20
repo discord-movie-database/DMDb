@@ -4,7 +4,9 @@ class CommandHandler extends HandlerStructure {
     constructor(client) {
         super(client, 'commands');
 
-        // this.loadFiles();
+        this.loadFiles();
+
+        this.commandsExecuted = 0;
     }
 
     onMessageEvent(event) {
