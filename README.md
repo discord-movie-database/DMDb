@@ -49,5 +49,5 @@ TODO
 
 ## License 📄
 
-[MIT](https://github.com/discord-movie-database/DMDb/blob/v2/LICENSE.md) - Copyright © 2019 Discord
+[GNU GPLv3](https://github.com/discord-movie-database/DMDb/blob/v2/LICENSE.md) - Copyright © 2019 Discord
 Movie Database (DMDb).
