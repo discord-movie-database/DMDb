@@ -1,6 +1,6 @@
 import UtilStructure from '../structures/util';
 
-class DMDbUtil extends UtilStructure {
+class TMDbUtil extends UtilStructure {
     constructor(client) {
         super(client);
 
@@ -511,4 +511,4 @@ class DMDbUtil extends UtilStructure {
     }
 }
 
-export default DMDbUtil;
+export default TMDbUtil;

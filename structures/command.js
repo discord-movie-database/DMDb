@@ -12,9 +12,9 @@ class CommandStructure {
             weight: meta.weight || 0
         };
 
-        this.util = this.client.handlers.util;
-        this.embed = this.client.handlers.embed;
-        this.api = this.client.handlers.api;
+        this.embed = this.client.util.embed;
+        this.flags = this.client.util.flags;
+        this.tmdb = this.client.util.tmdb;
 
         this.months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
                         'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
