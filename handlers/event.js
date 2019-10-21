@@ -1,6 +1,14 @@
 import HandlerStructure from '../structures/handler';
 
+/**
+ * Event handler.
+ */
 class EventHandler extends HandlerStructure {
+    /**
+     * Create event handler.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, 'events');
 
@@ -9,6 +17,16 @@ class EventHandler extends HandlerStructure {
                 this.client.on(eventName, (event) => events[eventName].onEvent(event));
             }
         });
+    }
+
+    /**
+     * Get event.
+     * 
+     * @param {String} eventName Event name
+     * @returns {Object} Event
+     */
+    getEvent(eventName) {
+        return this.events[eventName];
     }
 }
 

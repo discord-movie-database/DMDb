@@ -1,7 +1,20 @@
 import fs from 'fs';
 import consola from 'consola';
 
+/**
+ * Handler structure.
+ * 
+ * @prop {Object} client DMDb client extends Eris
+ * @prop {String} handlerName Handler name
+ * @prop {String} directory Directory for handler files
+ */
 class HandlerStructure {
+    /**
+     * Create handler structure.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     * @param {String} handlerName Handler name
+     */
     constructor(client, handlerName) {
         this.client = client;
 
@@ -11,6 +24,12 @@ class HandlerStructure {
         this[handlerName] = {};
     }
 
+    /**
+     * Load handler files.
+     * 
+     * @param {(Function | undefined)} callback Callback function
+     * @returns {undefined}
+     */
     async loadFiles(callback) {
         const files = fs.readdirSync(this.directory);
 
@@ -31,6 +50,11 @@ class HandlerStructure {
         consola.success(`Loaded ${this.handlerName}.`);
     }
 
+    /**
+     * Unload handler files.
+     * 
+     * @returns {undefined}
+     */
     unloadFiles() {
         const fileNames = Object.keys(this[handlerName]);
 
@@ -44,6 +68,11 @@ class HandlerStructure {
         consola.success(`Unloaded ${this.handlerName}.`);
     }
 
+    /**
+     * Reload handler files.
+     * 
+     * @returns {undefined}
+     */
     reloadFiles() {
         consola.info(`Reloading ${this.handlerName}...`);
 
