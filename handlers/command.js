@@ -9,13 +9,24 @@ class CommandHandler extends HandlerStructure {
     /**
      * Create command handler.
      * 
-     * @param {object} client DMDb client extends Eris
+     * @param {Object} client DMDb client extends Eris
      */
     constructor(client) {
         super(client, 'commands');
+
         this.loadFiles();
 
         this.commandsExecuted = 0;
+    }
+
+    /**
+     * Get command.
+     * 
+     * @param {String} commandName Command name
+     * @returns {Object} Command
+     */
+    getCommand(commandName) {
+        return this.commands[commandName];
     }
 
     /**
