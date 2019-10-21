@@ -8,7 +8,7 @@ class CommandStructure {
             flags: meta.flags || [],
             usage: meta.usage || false,
             visible: typeof meta.visible === 'boolean' ? meta.visible : false,
-            restricted: typeof meta.restricted === 'boolean' ? meta.restricted : true,
+            developerOnly: typeof meta.developerOnly === 'boolean' ? meta.developerOnly : true,
             weight: meta.weight || 0
         };
 

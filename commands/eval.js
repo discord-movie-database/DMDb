@@ -7,12 +7,12 @@ class EvalCommand extends CommandStructure {
             usage: '<expression>',
             flags: false,
             visible: false,
-            restricted: true,
+            developerOnly: true,
             weight: 0
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         if (!message.arguments[0]) return this.usageMessage(message);
 
         let evaluated;

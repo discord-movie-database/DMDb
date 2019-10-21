@@ -7,12 +7,12 @@ class ShardsCommand extends CommandStructure {
             usage: false,
             flags: false,
             visible: false,
-            restricted: false,
+            developerOnly: false,
             weight: 0
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         this.embed.create(message.channel.id, {
             fields: this.client.shards.map((shard) => ({
                 name: `${shard.id}`,

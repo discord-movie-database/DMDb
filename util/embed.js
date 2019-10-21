@@ -75,7 +75,7 @@ class EmbedUtil extends UtilStructure {
     /**
      * Create or edit a successa message.
      * 
-     * @param {(Object|string)} message Channel ID or Message Promise
+     * @param {(Object | string)} message Channel ID or Message Promise
      * @param {String} content Success message
      * @returns {Promise} Message Promise
      */

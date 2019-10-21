@@ -7,12 +7,12 @@ class AiringCommand extends CommandStructure {
             usage: false,
             flags: ['page'],
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 150
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         const query = message.arguments.join(' ');
 
         const status = await this.searchingMessage(message);

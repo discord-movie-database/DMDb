@@ -7,12 +7,12 @@ class SimilarCommand extends CommandStructure {
             usage: '<Movie Name or ID>',
             flags: ['page', 'show'],
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 250
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         if (!message.arguments[0]) return this.usageMessage(message);
         let query = message.arguments.join(' ');
 

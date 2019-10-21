@@ -7,12 +7,12 @@ class PopularCommand extends CommandStructure {
             usage: false,
             flags: ['page', 'shows'],
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 100
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         let query = message.arguments.join(' ');
 
         const status = await this.searchingMessage(message);

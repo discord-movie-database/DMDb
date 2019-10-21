@@ -9,12 +9,12 @@ class InfoCommand extends CommandStructure {
             usage: false,
             flags: false,
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 50
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         const stats = this.client.routine.getRoutine('stats');
 
         this.embed.create(message.channel.id, {

@@ -7,14 +7,14 @@ class FlagsCommand extends CommandStructure {
             usage: false,
             flags: ['more'],
             visible: false,
-            restricted: false,
+            developerOnly: false,
             weight: 0
         });
 
         this.flagOptions = this.client.util.getUtil('flags').flags;
     }
 
-    async process(message) {
+    async executeCommand(message) {
         const query = message.arguments.join(' ');
 
         const flags = this.flags.parse(query, this.meta.flags);

@@ -7,12 +7,12 @@ class ShowsCommand extends CommandStructure {
             usage: '<TV Show Name>',
             flags: ['page', 'year'],
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 450
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         if (!message.arguments[0]) return this.usageMessage(message);
         let query = message.arguments.join(' ');
 
