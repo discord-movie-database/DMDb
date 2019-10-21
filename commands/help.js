@@ -7,7 +7,7 @@ class HelpCommand extends CommandStructure {
             usage: '[Command Name]',
             flags: ['page'],
             visible: false,
-            restricted: false,
+            developerOnly: false,
             weight: 0
         });
 
@@ -37,7 +37,7 @@ class HelpCommand extends CommandStructure {
                 { name: 'Usage', value: command.usage || 'N/A', inline: false },
                 { name: 'Flags', value: this.formatFlags(command.flags) || 'N/A', inline: false },
                 { name: 'Visible', value: this.yesno(command.visible), inline: true },
-                { name: 'Restricted', value: this.yesno(command.restricted), inline: true },
+                { name: 'Developer Only', value: this.yesno(command.developerOnly), inline: true },
                 { name: 'Executed', value: `${command.executed}`, inline: true }
             ]
         });
@@ -84,7 +84,7 @@ class HelpCommand extends CommandStructure {
         this.embed.create(message.channel.id, embed);
     }
 
-    async process(message) {
+    async executeCommand(message) {
         let query = message.arguments.join(' ');
 
         const flags = this.flags.parse(query, this.meta.flags);

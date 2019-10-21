@@ -7,12 +7,12 @@ class PersonCommand extends CommandStructure {
             usage: '<Person\'s Name or ID>',
             flags: false,
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 600
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         if (!message.arguments[0]) return this.usageMessage(message);
         const query = message.arguments.join(' ');
 

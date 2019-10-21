@@ -7,12 +7,12 @@ class MoviesCommand extends CommandStructure {
             usage: '<Movie Name>',
             flags: ['page', 'year'],
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 650
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         if (!message.arguments[0]) return this.usageMessage(message);
         let query = message.arguments.join(' ');
 

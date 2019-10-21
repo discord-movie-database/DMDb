@@ -7,7 +7,7 @@ class MovieCommand extends CommandStructure {
             usage: '<Movie Name or ID>',
             flags: ['more'],
             visible: true,
-            restricted: false,
+            developerOnly: false,
             weight: 700
         });
 
@@ -21,7 +21,7 @@ class MovieCommand extends CommandStructure {
         return this.random(this.tips).replace('{prefix}', prefix);
     }
 
-    async process(message) {
+    async executeCommand(message) {
         if (!message.arguments[0]) return this.usageMessage(message);
         let query = message.arguments.join(' ');
 

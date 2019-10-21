@@ -7,12 +7,12 @@ class ReloadCommand extends CommandStructure {
             usage: false,
             flags: false,
             visible: false,
-            restricted: true,
+            developerOnly: true,
             weight: 0
         });
     }
 
-    async process(message) {
+    async executeCommand(message) {
         await this.client.handlers.load.reload();
 
         this.embed.success(message.channel.id, 'Reloaded commands, events & handlers.');
