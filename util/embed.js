@@ -1,6 +1,14 @@
 import UtilStructure from '../structures/util';
 
+/**
+ * Embed util.
+ */
 class EmbedUtil extends UtilStructure {
+    /**
+     * Create embed util structure.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client);
     }
@@ -30,7 +38,7 @@ class EmbedUtil extends UtilStructure {
     /**
      * Create or edit a message.
      * 
-     * @param {(String|Object)} message Channel ID or Message Promise
+     * @param {(String | Object)} message Channel ID or Message Promise
      * @param {Object} embed Embed data
      * @returns {Promise} Message Promise
      */
@@ -90,7 +98,7 @@ class EmbedUtil extends UtilStructure {
     /**
      * Create or edit an error message.
      * 
-     * @param {(Object|string)} message Channel ID or Message Promise
+     * @param {(Object | string)} message Channel ID or Message Promise
      * @param {String} content Error message
      * @returns {Promise} Message Promise
      */

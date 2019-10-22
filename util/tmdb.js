@@ -1,6 +1,17 @@
 import UtilStructure from '../structures/util';
 
+/**
+ * TMDb API util.
+ * 
+ * @prop {String} base API URL base
+ * @prop {Array} posterSizes Available poster sizes
+ */
 class TMDbUtil extends UtilStructure {
+    /**
+     * Create TMDb util structure.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client);
 

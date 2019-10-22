@@ -1,6 +1,16 @@
 import UtilStructure from '../structures/util';
 
+/**
+ * Flags util.
+ * 
+ * @prop {Object} flags Flag options
+ */
 class FlagsUtil extends UtilStructure {
+    /**
+     * Create flags util structure.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client);
 
@@ -14,6 +24,13 @@ class FlagsUtil extends UtilStructure {
         };
     }
 
+    /**
+     * Parse flags in query.
+     * 
+     * @param {string} query Query to parse for flags
+     * @param {Array} possibleFlags Flags to parse
+     * @returns {Object} Parsed flags and updated query
+     */
     parse(query, possibleFlags) {
         const queryArguments = query.split(' ');
         const presentFlags = {};
