@@ -1,10 +1,25 @@
 import EventStructure from '../structures/event';
 
+/**
+ * Ready event.
+ */
 class ReadyEvent extends EventStructure {
+    /**
+     * Create ready event.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client);
     }
 
+    /**
+     * Function to run when event triggers.
+     * 
+     * Starts routines.
+     * 
+     * @returns {undefined}
+     */
     onEvent() {
         this.client.log.success('Connected to Discord.');
 
