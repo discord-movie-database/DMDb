@@ -1,7 +1,14 @@
-import axios from 'axios';
-import consola from 'consola';
-
+/**
+ * Util structure.
+ * 
+ * @prop {Object} client DMDb client extends Eris
+ */
 class UtilStructure {
+    /**
+     * Create util structure.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         this.client = client;
     }
@@ -10,19 +17,19 @@ class UtilStructure {
      * Error message.
      * 
      * @param {string} message Message as string
-     * @returns {Object} Message as object
+     * @returns {Object} Error message
      */
     error(message) {
         return { 'error': message };
     }
 
     /**
-     * API request handler.
+     * API GET request handler.
      * 
-     * @param {string} base Base URL 
-     * @param {string} endpoint Endpoint
+     * @param {string} base API URIL
+     * @param {string} endpoint Request endpoint
      * @param {Object} data Request data
-     * @returns {Object} Response
+     * @returns {Object} API Response
      */
     async get(base, endpoint, data) {
         if (!data) data = {};
@@ -37,9 +44,9 @@ class UtilStructure {
         }
 
         try {
-            return { response: body } = await axios.get(base + endpoint + parsedParams);
+            return { response: body } = await this.client.axios.get(base + endpoint + parsedParams);
         } catch (error) {
-            consola.error(error);
+            this.client.log.error(error);
 
             return this.error('API Error. Try again later.');
         }
