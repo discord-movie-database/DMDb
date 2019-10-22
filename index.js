@@ -12,7 +12,26 @@ import EventHandler from './handlers/event';
 import CommandHandler from './handlers/command';
 import RoutineHandler from './handlers/routine';
 
+/**
+ * DMDb Discord bot.
+ * 
+ * @prop {Boolean} loaded Status
+ * @prop {Object} config Bot settings
+ * @prop {*} log Consola
+ * @prop {*} axios Axios
+ * @prop {*} db Mongoose
+ * @prop {*} repository Repository handler
+ * @prop {*} util Util handler
+ * @prop {*} event Event handler
+ * @prop {*} command Command handler
+ * @prop {*} routine Routine handler
+ */
 class Client extends Eris {
+    /**
+     * Create client.
+     * 
+     * @param {Object} config Bot settings
+     */
     constructor(config) {
         super(config.tokens.discord, config.client);
 
