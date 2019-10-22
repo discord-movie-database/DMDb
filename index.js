@@ -1,5 +1,6 @@
 import Eris from 'eris';
 import consola from 'consola';
+import axios from 'axios';
 
 import _config from './config';
 
@@ -19,6 +20,7 @@ class Client extends Eris {
         this.config = config;
 
         this.log = consola;
+        this.axios = axios;
 
         this.db = databaseService;
         this.db.connection.on('open', () => this.emit('databaseConnect'));
