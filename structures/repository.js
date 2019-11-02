@@ -13,7 +13,7 @@ class RepositoryStructure {
     constructor(client) {
         this.client = client;
 
-        this.db = this.client.db;
+        this.db = this.client.repository.db;
     }
 }
 

@@ -11,12 +11,12 @@ class EventHandler extends HandlerStructure {
      */
     constructor(client) {
         super(client, 'events');
+    }
 
-        this.loadFiles((events) => {
-            for (let eventName in events) {
-                this.client.on(eventName, (event) => events[eventName].onEvent(event));
-            }
-        });
+    onLoad(events) {
+        for (let eventName in events) {
+            this.client.on(eventName, (event) => events[eventName].onEvent(event));
+        }
     }
 
     /**

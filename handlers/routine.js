@@ -11,8 +11,6 @@ class RoutinesHandler extends HandlerStructure {
      */
     constructor(client) {
         super(client, 'routines');
-
-        this.loadFiles();
     }
 
     /**
