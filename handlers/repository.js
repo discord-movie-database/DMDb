@@ -1,3 +1,5 @@
+import mongoose from 'mongoose';
+
 import HandlerStructure from '../structures/handler';
 
 /**
@@ -11,8 +13,25 @@ class RepositoryHandler extends HandlerStructure {
      */
     constructor(client) {
         super(client, 'repository');
+        
+        this.db = mongoose;
 
         this.loadFiles();
+        this.connect();
+    }
+
+    /**
+     * Connects to database.
+     * 
+     * @returns {undefined}
+     */
+    connect() {
+        this.db.set('useFindAndModify', false);
+
+        this.db.connect(
+            `mongodb://${this.client.config.db.host}:${this.client.config.db.port}/` +
+            `${this.client.config.db.name}`, this.client.config.db.options
+        );
     }
 
     /**

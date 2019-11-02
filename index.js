@@ -1,10 +1,9 @@
-import Eris from 'eris';
-import consola from 'consola';
-import axios from 'axios';
-
 import _config from './config';
 
-import databaseService from './services/database';
+import Eris from 'eris';
+
+import consola from 'consola';
+import axios from 'axios';
 
 import RepositoryHandler from './handlers/repository';
 import UtilHandler from './handlers/util';
@@ -41,14 +40,19 @@ class Client extends Eris {
         this.log = consola;
         this.axios = axios;
 
-        this.db = databaseService;
-        this.db.connection.on('open', () => this.emit('databaseConnect'));
-
         this.repository = new RepositoryHandler(this);
         this.util = new UtilHandler(this);
         this.event = new EventHandler(this);
         this.command = new CommandHandler(this);
         this.routine = new RoutineHandler(this);
+
+        this.repository.db.connection.on('open', async () => {
+            await this.event.loadFiles();
+            await this.command.loadFiles();
+            await this.routine.loadFiles();
+
+            this.connect();
+        });
     }
 }
 

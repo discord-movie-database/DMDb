@@ -27,10 +27,9 @@ class HandlerStructure {
     /**
      * Load handler files.
      * 
-     * @param {(Function | undefined)} callback Callback function
      * @returns {undefined}
      */
-    async loadFiles(callback) {
+    async loadFiles() {
         const files = fs.readdirSync(this.directory);
 
         for (let i = 0; i < files.length; i++) {
@@ -45,7 +44,7 @@ class HandlerStructure {
             }
         }
 
-        if (typeof callback === 'function') callback(this[this.handlerName]);
+        if (this.onLoad) this.onLoad(this[this.handlerName]);
 
         consola.success(`Loaded ${this.handlerName}.`);
     }
