@@ -20,7 +20,7 @@ class StatsRoutine extends RoutineStructure {
 
         this.guilds = () => this.client.guilds.size;
         this.channels = () => Object.keys(this.client.channelGuildMap).length;
-        this.users = () => this.client.guilds.size;
+        this.users = () => this.client.users.size;
     }
 
     /**
