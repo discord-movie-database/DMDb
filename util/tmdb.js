@@ -73,7 +73,7 @@ class TMDbUtil extends UtilStructure {
      */
     async get(endpoint, params) {
         return await this._get(this.base, endpoint, {
-            ...params, 'api_key': this.client.config.tokens.api.tmdb });
+            ...params, 'api_key': this.client.config.tokens.tmdb });
     }
 
     /**
@@ -387,7 +387,7 @@ class TMDbUtil extends UtilStructure {
      */
     _credits(info, credits) {
         if (credits.cast.length === 0)
-            return this.error('No cast or crew found.');
+            return this.error('No cast found.');
 
         return {...info, ...credits};
     }
