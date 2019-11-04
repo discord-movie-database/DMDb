@@ -67,6 +67,14 @@ class GuildsRepository extends RepositoryStructure {
     delete(id) {
         return this.model.deleteOne({ id });
     }
+
+    getOrUpdate(id, insert, data) {
+        return this.model.findOneAndUpdate({ id }, data || {}, insert ? {
+            new: true,
+            upsert: true,
+            setDefaultsOnInsert: true,
+        } : {});
+    }
 }
 
 export default GuildsRepository;
