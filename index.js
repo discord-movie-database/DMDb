@@ -46,7 +46,7 @@ class Client extends Eris {
         this.command = new CommandHandler(this);
         this.routine = new RoutineHandler(this);
 
-        this.repository.db.connection.on('open', async () => {
+        this.on('db', async () => {
             await this.event.loadFiles();
             await this.command.loadFiles();
             await this.routine.loadFiles();
