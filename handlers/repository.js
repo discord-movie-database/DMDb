@@ -32,6 +32,12 @@ class RepositoryHandler extends HandlerStructure {
             `mongodb://${this.client.config.db.host}:${this.client.config.db.port}/` +
             `${this.client.config.db.name}`, this.client.config.db.options
         );
+
+        this.db.connection.on('open', () => {
+            this.client.log.success('Connected to database.');
+
+            this.client.emit('db');
+        });
     }
 
     /**
