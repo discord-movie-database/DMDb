@@ -1,65 +1,85 @@
 import CommandStructure from '../structures/command';
 
-class CreditsCommand extends CommandStructure {
+/**
+ * Cast command.
+ */
+class CastCommand extends CommandStructure {
+    /**
+     * Create cast command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
-            description: 'Get the cast and crew for a movie.',
+            description: 'Get the cast for a movie.',
             usage: '<Movie Name or ID>',
             flags: ['page', 'show', 'person'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 350
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const credits = flags.show ? await this.tmdb.getTVShowCredits(query) :
-            flags.person ? await this.tmdb.getPersonCredits(query) :
-            await this.tmdb.getMovieCredits(query);
-        if (credits.error) return this.embed.error(status, credits.error);
+        // Get credits from API.
+        const response = flags.show   ? await this.tmdb.getTVShowCredits(message.content) :
+                         flags.person ? await this.tmdb.getPersonCredits(message.content) :
+                                        await this.tmdb.getMovieCredits(message.content);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        const pages = this.util.chunkArray(credits.cast, 5);
-        if (flags.page > pages.length) return this.embed.error(status, 'No Results Found.');
+        // Put results into correct format.
+        const credits = this.resultStructure(response.cast, flags.page);
 
-        const cast = pages[flags.page];
+        // Edit status message with results.
+        this.embed.edit(statusMessage, {
+            title: response.title || response.name,
+            description: this.resultsDescription(credits),
 
-        this.embed.edit(status, {
-            title: credits.title || credits.name,
-            description: this.joinResult([
-                `Current Page: **${(flags.page + 1)}** `,
-                `Total Pages: ${pages.length}`,
-                `Total Results: ${credits.cast.length}`
-            ]),
+            thumbnail: this.thumbnailURL(credits.results[0].profile_path
+                || credits.results[0].poster_path),
 
-            thumbnail: this.thumbnail(cast[0].profile_path || cast[0].poster_path),
-            
-            fields: cast.map(credit => ({
-                name: this.character(credit.character),
-                value: flags.person ? this.joinResult([
-                    `${this.mediaType(credit.media_type)}`,
-                    `${credit.title || credit.name}`,
-                    `Release: ${this.releaseDate(credit.release_date || credit.first_air_date)}`,
-                    `${this.TMDbID(credit.id)}`]) :
+            // Format results.
+            fields: credits.results.map((credit) => this.resultField(this.check(credit.character),
+                flags.person ? credit.media_type === 'movie' ? [ // Movie
+                    this.mediaType(credit.media_type),
+                    `Name: ${credit.title}`,
+                    `Release: ${this.date(credit.release_date)}`,
+                    this.TMDbID(credit.id),
+                ] : [ // Show
+                    this.mediaType(credit.media_type),
+                    `Name: ${credit.name}`,
+                    `FAD: ${this.date(credit.first_air_date)}`,
+                    this.TMDbID(credit.id),
+                ] : [ // Person
+                    `Name: ${this.check(credit.name)}`,
+                    `Gender: ${this.gender(credit.gender)}`,
+                    this.TMDbID(credit.id),
+                ], credit.index
+            )),
 
-                    this.joinResult([
-                        `Name: ${this.name(credit.name)}`,
-                        `Gender: ${this.gender(credit.gender)}`,
-                        `${this.TMDbID(credit.id)}`
-                    ])
-            })),
-            
-            footer: message.db.guild.tips ?
-                'TIP: Use the flags (--page, ++show, ++person) to get more results.' : ''
+            // Tip option.
+            footer: guildSettings.tips ?
+                'TIP: Use the flags (--page, --show, --person) to get more results.' : '',
         });
     }
 }
 
-export default CreditsCommand;
+export default CastCommand;
