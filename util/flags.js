@@ -14,7 +14,7 @@ class FlagsUtil extends UtilStructure {
     constructor(client) {
         super(client);
 
-        this.flags = {
+        this.flagOptions = {
             page: { argRequired: true, desc: 'Get more results.' },
             year: { argRequired: true, desc: 'Get results from a specific year.' },
             show: { argRequired: false, desc: 'Get a result for a TV show instead of a movie.' },
@@ -43,7 +43,7 @@ class FlagsUtil extends UtilStructure {
     
             if (possibleFlags.indexOf(argument) < 0) continue;
     
-            if (this.flags[argument].argRequired) {
+            if (this.flagOptions[argument].argRequired) {
                 presentFlags[argument] = queryArguments[i + 1];
                 
                 queryArguments.splice(i, 2);
@@ -58,6 +58,16 @@ class FlagsUtil extends UtilStructure {
     
         query = queryArguments.join(' ');
         return { query, ...presentFlags };
+    }
+
+    /**
+     * Checks if year flag is valid.
+     * 
+     * @param {String} value Value
+     * @returns {String} Updated value
+     */
+    year(value) {
+        return value && /^\d{4}$/.test(value) ? value : 'All';
     }
 }
 

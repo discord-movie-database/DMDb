@@ -74,6 +74,8 @@ class EmbedUtil extends UtilStructure {
      */
     edit(messagePromise, embed) {
         try {
+            if (messagePromise.timeout) clearTimeout(messagePromise.timeout);
+
             return messagePromise.edit(this.template(embed));
         } catch (error) {
             consola.error(error);
@@ -89,9 +91,9 @@ class EmbedUtil extends UtilStructure {
      */
     success(message, content) {
         return this.handle(message, {
-            color: 0xFF3232,
+            color: 0x329932,
             title: 'Success',
-            description: content,
+            description: content || 'No success message.',
         });
     }
 
@@ -104,9 +106,9 @@ class EmbedUtil extends UtilStructure {
      */
     error(message, content) {
         return this.handle(message, {
-            color: 0x329932,
+            color: 0xFF3232,
             title: 'Error',
-            description: content,
+            description: content || 'No error message.',
         });
     }
 }
