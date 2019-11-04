@@ -14,8 +14,6 @@ class CommandHandler extends HandlerStructure {
     constructor(client) {
         super(client, 'commands');
 
-        this.loadFiles();
-
         this.commandsExecuted = 0;
     }
 
@@ -36,7 +34,7 @@ class CommandHandler extends HandlerStructure {
      * @returns {Object} Guild settings 
      */
     getGuildSettings(guild) {
-        return this.client.repository.getRepository('guild').get(guild.id);
+        return this.client.repository.getRepository('guilds').getOrUpdate(guild.id, true);
     }
 
     /**
@@ -74,7 +72,7 @@ class CommandHandler extends HandlerStructure {
         if (user.bot) return;
 
         const guildSettings = await this.getGuildSettings(guild);
-        const prefix = guildSettings.prefix || this.client.confg.prefix;
+        const prefix = guildSettings.prefix || this.client.config.prefix;
 
         if (!message.content.startsWith(prefix)) return;
 
@@ -82,7 +80,10 @@ class CommandHandler extends HandlerStructure {
         const commandName = messageArguments[0].slice(prefix.length);
         const commandArguments = messageArguments.slice(1);
 
-        const command = this.commands[CommandName];
+        message.raw = message.content;
+        message.content = commandArguments.join(' ');
+
+        const command = this.commands[commandName];
         if (!command) return;
 
         if (!this.hasPermission(command, user)) return;
