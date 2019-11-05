@@ -361,8 +361,18 @@ class CommandStructure {
     videoSourceURL(site, key) {
         if (site === 'YouTube') return `${this.YouTubeURL}/watch?v=${key}`;
         if (site === 'Vimeo') return `${this.VimeoURL}/${key}`;
-        
-        return 'Video source not supported.';
+    }
+
+    /**
+     * Converts video key to thumbnail URL.
+     * 
+     * @param {String} site Video source
+     * @param {String} key Video key
+     * @returns {String} Video thumbnail URL
+     */
+    videoThumbnailURL(site, key) {
+        if (site === 'YouTube') return `https://img.youtube.com/vi/${key}/mqdefault.jpg`;
+        if (site === 'Vimeo') return `https://i.vimeocdn.com/video/${key}_640.webp`;
     }
 
     /**
