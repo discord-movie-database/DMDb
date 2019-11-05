@@ -416,6 +416,16 @@ class CommandStructure {
     TMDbShowURL(value) {
         return `${this.TMDbURL}/tv/${value}`;
     }
+
+    /**
+     * Capitalise first letter in string.
+     * 
+     * @param {String} value Value
+     * @returns {String} Updated value
+     */
+    titleCase(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+    }
 }
 
 export default CommandStructure;
