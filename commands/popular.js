@@ -46,7 +46,7 @@ class PopularCommand extends CommandStructure {
             title: `Currently Popular ${flags.shows ? 'TV Shows' : 'Movies'}`,
             description: this.resultsDescription(response),
 
-            thumbnail: this.thumbnailURL(response.results[0].poster_path),
+            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
 
             // Format results.
             fields: response.results.map((result) => flags.shows ? this.resultField(result.name, [

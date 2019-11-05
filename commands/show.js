@@ -49,7 +49,7 @@ class ShowCommand extends CommandStructure {
             title: response.name,
             description: this.description(response.overview),
 
-            thumbnail: this.thumbnailURL(response.poster_path),
+            thumbnail: this.thumbnailURL(response.poster_path, true),
 
             // Format result.
             fields: this.fields(flags.more ? [
