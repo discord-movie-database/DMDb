@@ -1,46 +1,67 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Shows command.
+ */
 class ShowsCommand extends CommandStructure {
+    /**
+     * Create shows command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Search for TV shows.',
             usage: '<TV Show Name>',
             flags: ['page', 'year'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 450
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const TVShows = await this.tmdb.getTVShows(flags);
-        if (TVShows.error) return this.embed.error(status, TVShows.error);
+        // Get results from API.
+        const response = await this.tmdb.getTVShows(flags);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        TVShows.year = flags.year && /^\d{4}$/.test(flags.year) ? flags.year : 'All';;
+        // Validate year flags.
+        response.year = this.flags.year(flags.year);
 
-        this.embed.edit(status, {
+        // Edit status message with results.
+        this.embed.edit(statusMessage, {
             title: 'Search Results',
-            description: this.resultDescription(TVShows),
-            
-            fields: TVShows.results.map(TVShow => ({
-                name: TVShow.name,
-                value: this.joinResult([
-                    `**${TVShow.index}**`,
-                    `Vote Average: ${this.voteAverage(TVShow.vote_average)}`,
-                    `First Air Date: ${this.releaseDate(TVShow.first_air_date)}`,
-                    `${this.TMDbID(TVShow.id)}`
-                ])
-            })),
+            description: this.resultsDescription(response),
 
-            footer: message.db.guild.tips ?
+            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
+
+            // Format results.
+            fields: response.results.map(result => this.resultField(result.name, [
+                `Vote Average: ${this.check(result.vote_average)}`,
+                `First Air Date: ${this.date(result.first_air_date)}`,
+                `${this.TMDbID(result.id)}`
+            ], result.index)),
+
+            // Tip option.
+            footer: guildSettings.tips ?
                 `TIP: Use flags (--year, --page) to get more and accurate results.` : ''
         });
     }
