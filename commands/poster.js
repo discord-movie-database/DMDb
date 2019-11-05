@@ -1,35 +1,52 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Poster command.
+ */
 class PosterCommand extends CommandStructure {
+    /**
+     * Create poster command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Get a movie\'s poster.',
             usage: '<Movie Name or ID>',
             flags: ['show', 'person'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 400
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const poster = flags.show ? await this.tmdb.getTVShowPoster(query, 3) :
-            flags.person ? await this.tmdb.getPersonPoster(query, 3) :
-            await this.tmdb.getMoviePoster(query, 3);
-        if (poster.error) return this.embed.error(status, poster);
+        // Get response from API.
+        const response = flags.show   ? await this.tmdb.getTVShowPoster(message.content, 3) :
+                         flags.person ? await this.tmdb.getPersonPoster(message.content, 3) :
+                                        await this.tmdb.getMoviePoster(message.content, 3);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        await this.client.createMessage(message.channel.id, '', {
-            'file': poster, 'name': 'poster.jpg' });
-
-        status.delete();
+        // Edit status message with poster.
+        this.embed.edit(statusMessage, { image: response });
     }
 }
 

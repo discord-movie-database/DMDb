@@ -473,14 +473,7 @@ class TMDbUtil extends UtilStructure {
 
         size = this.posterSizes[size] || this.posterSizes[2];
 
-        const posterURL = `https://image.tmdb.org/t/p/w${size}${posterPath}`;
-        try {
-            const image = await request(posterURL);
-            return image.body;
-        } catch (err) {
-            console.log(err);
-        }
-        return this.error('No poster.');
+        return `https://image.tmdb.org/t/p/w${size}${posterPath}`;
     }
 
     /**
