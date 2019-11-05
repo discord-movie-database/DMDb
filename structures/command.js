@@ -414,7 +414,7 @@ class CommandStructure {
      * @returns {String} Updated value
      */
     TMDbShowURL(value) {
-        return `${this.TMDbURL}/show/${value}`;
+        return `${this.TMDbURL}/tv/${value}`;
     }
 }
 
