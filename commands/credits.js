@@ -47,6 +47,7 @@ class CastCommand extends CommandStructure {
 
         // Put results into correct format.
         const credits = this.resultStructure(response.cast, flags.page);
+        if (!credits) return this.embed.error(statusMessage, 'No results.');
 
         // Edit status message with results.
         this.embed.edit(statusMessage, {
