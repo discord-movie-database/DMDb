@@ -308,11 +308,13 @@ class TMDbUtil extends UtilStructure {
      * @param {string} query Movie name or ID
      * @returns {object} Error or movies
      */
-    async getSimilarMovies(query) {
-        const movieID = await this.getMovieID(query);
+    async getSimilarMovies(flags) {
+        const movieID = await this.getMovieID(flags.query);
         if (movieID.error) return movieID;
 
-        return await this.getResults(`movie/${movieID}/similar`);
+        return await this.getResults(`movie/${movieID}/similar`, {
+            page: flags.page,
+        });
     }
 
     /**
@@ -321,11 +323,13 @@ class TMDbUtil extends UtilStructure {
      * @param {string} query TV show name or ID
      * @returns {object} Error or TV shows
      */
-    async getSimilarTVShows(query) {
-        const TVShowID = await this.getTVShowID(query);
+    async getSimilarTVShows(flags) {
+        const TVShowID = await this.getTVShowID(flags.query);
         if (TVShowID.error) return TVShowID;
 
-        return await this.getResults(`tv/${TVShowID}/similar`);
+        return await this.getResults(`tv/${TVShowID}/similar`, {
+            page: flags.page,
+        });
     }
 
     _videos(info, videos) {
