@@ -82,6 +82,7 @@ class CommandHandler extends HandlerStructure {
 
         message.raw = message.content;
         message.content = commandArguments.join(' ');
+        message.command = commandName;
 
         const command = this.commands[commandName];
         if (!command) return;

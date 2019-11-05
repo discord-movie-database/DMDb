@@ -78,6 +78,8 @@ class CommandStructure {
 
         statusMessage.timeout = setTimeout(() => {
             this.embed.error(statusMessage, 'Bot took to long to respond. Try again later.');
+
+            this.client.log.error(`${message.command} by ${message.author.id} timed out.`);
         }, timeoutDuration || 10000);
 
         return statusMessage;
