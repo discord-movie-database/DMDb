@@ -214,7 +214,7 @@ class CommandStructure {
      * @returns {String} Original value or "N/A"
      */
     check(value) {
-        return value.toString() || 'N/A';
+        return value ? value.toString() : 'N/A';
     }
 
     /**
