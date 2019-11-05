@@ -214,7 +214,7 @@ class CommandStructure {
      * @returns {String} Original value or "N/A"
      */
     check(value) {
-        return value || 'N/A';
+        return value.toString() || 'N/A';
     }
 
     /**
@@ -394,7 +394,7 @@ class CommandStructure {
      * @returns {String} Updated value
      */
     TMDbMovieURL(value) {
-        return `${this.TMDbID}/movie/${value}`;
+        return `${this.TMDbURL}/movie/${value}`;
     }
 
     /**
@@ -404,7 +404,7 @@ class CommandStructure {
      * @returns {String} Updated value
      */
     TMDbPersonURL(value) {
-        return `${this.TMDbID}/person/${value}`;
+        return `${this.TMDbURL}/person/${value}`;
     }
 
     /**
@@ -414,7 +414,7 @@ class CommandStructure {
      * @returns {String} Updated value
      */
     TMDbShowURL(value) {
-        return `${this.TMDbID}/show/${value}`;
+        return `${this.TMDbURL}/show/${value}`;
     }
 }
 
