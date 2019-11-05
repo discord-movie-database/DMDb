@@ -20,6 +20,8 @@ class EmbedUtil extends UtilStructure {
      * @returns {Object} Message Object
      */
     template(embed) {
+        if (typeof embed === 'string') return { content: embed, embed: {} };
+
         return {
             embed: {
                 title: embed.title || '',
@@ -28,11 +30,13 @@ class EmbedUtil extends UtilStructure {
                 color: embed.color || 0xE6B91E,
                 url: embed.url || '',
                 thumbnail: { url: embed.thumbnail || '' },
+                image: { url: embed.image || '' },
                 footer: { text: embed.footer || '' },
+                video: { url: embed.video || '' },
             },
 
-            content: embed.content || ''
-        }
+            content: embed.content || '',
+        };
     }
 
     /**
@@ -68,15 +72,15 @@ class EmbedUtil extends UtilStructure {
     /**
      * Edit a message.
      * 
-     * @param {Promise} messagePromise Message Promise
+     * @param {Promise} message Message to edit
      * @param {Object} embed Embed Data
      * @returns {Promise} Message Promise
      */
-    edit(messagePromise, embed) {
+    edit(message, embed) {
         try {
-            if (messagePromise.timeout) clearTimeout(messagePromise.timeout);
+            if (message.timeout) clearTimeout(message.timeout);
 
-            return messagePromise.edit(this.template(embed));
+            return message.edit(this.template(embed));
         } catch (error) {
             consola.error(error);
         }
