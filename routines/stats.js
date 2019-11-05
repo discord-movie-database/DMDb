@@ -18,9 +18,8 @@ class StatsRoutine extends RoutineStructure {
             runOnIntervalStart: true,
         });
 
-        this.guilds = () => this.client.guilds.size;
-        this.channels = () => Object.keys(this.client.channelGuildMap).length;
-        this.users = () => this.client.users.size;
+        this.statsUtil = this.client.util.getUtil('stats');
+        this.statsRepository = this.client.repository.getRepository('stats');
     }
 
     /**
@@ -30,12 +29,12 @@ class StatsRoutine extends RoutineStructure {
      */
     run() {
         const stats = {
-            guilds: this.guilds(),
-            channels: this.channels(),
-            users: this.users(),
+            guilds: this.statsUtil.getGuilds(),
+            channels: this.statsUtil.getChannels(),
+            users: this.statsUtil.getUsers(),
         };
 
-        this.client.repository.getRepository('stats').insert(stats);
+        this.statsRepository.insert(stats);
 
         this.client.log.info(
             `${stats.guilds} Guilds, ${stats.channels} Channels, ${stats.users} Users.`
