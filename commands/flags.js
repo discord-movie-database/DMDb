@@ -1,24 +1,39 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Flags command. Explains how flags work.
+ */
 class FlagsCommand extends CommandStructure {
+    /**
+     * Create flags command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'What flags do and how to use them.',
             usage: false,
             flags: ['more'],
-            visible: false,
             developerOnly: false,
+            hideInHelp: false,
             weight: 0
         });
 
-        this.flagOptions = this.client.util.getUtil('flags').flags;
+        this.flagOptions = this.flags.flagOptions;
     }
 
-    async executeCommand(message) {
-        const query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
 
-        const flags = this.flags.parse(query, this.meta.flags);
-
+        // Create flag embed.
         this.embed.create(message.channel.id, {
             title: 'Flags',
             description: 'Flags gives you access to more options for more specific results. ' +
@@ -31,8 +46,9 @@ class FlagsCommand extends CommandStructure {
                 '`!?movies Thor --page 2 --year 2017`\n`!?credits --person George Clooney`' +
                 '\n\nUse the `--more` flag with this command to get a list of flags and what they do.'),
 
-            fields: flags.more ? Object.keys(this.flagOptions).map(flag => ({
-                name: this.capitaliseStart(flag), value: this.flagOptions[flag].description })) : []
+            // List flag options.
+            fields: flags.more ? Object.keys(this.flagOptions).map((flag) => ({
+                name: this.titleCase(flag), value: this.flagOptions[flag].desc })) : []
         });
     }
 }
