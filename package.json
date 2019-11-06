@@ -1,7 +1,7 @@
 {
     "name": "dmdb",
     "description": "Discord Movie Database",
-    "version": "2.3.0",
+    "version": "3.0.0",
     "private": true,
     "scripts": {
         "dev": "cross-env NODE_ENV=dev node -r esm index.js",
