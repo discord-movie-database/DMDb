@@ -277,6 +277,16 @@ class TMDbUtil extends UtilStructure {
     }
 
     /**
+     * Get upcoming movies.
+     * 
+     * @param {object} flags Flags
+     * @returns {Object} Movies 
+     */
+    async getUpcomingMovies(flags) {
+        return await this.getResults('movie/upcoming', { page: flags.page });
+    }
+
+    /**
      * Get popular TV shows
      * 
      * @returns {object} Error or TV shows
