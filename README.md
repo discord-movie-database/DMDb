@@ -2,9 +2,10 @@
 An advanced and customisable bot to get information about movies, TV shows and people within
 Discord. It's perfect for servers with a movie channel.
 
-![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/discord-movie-database/DMDb/v2?label=Version&style=flat-square)
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/discord-movie-database/DMDb/master?label=Prod%20Version&style=flat-square)
+![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/discord-movie-database/DMDb/dev?label=Dev%20Version&style=flat-square)
 [![SUpport Server](https://img.shields.io/discord/394643227770093568?label=Support%20Server&style=flat-square)](https://bit.ly/2kYFRPh)
-[![Invite Bot](https://img.shields.io/badge/Invite%20Bot-DMDb-blue?style=flat-square)](https://bit.ly/2PXWYLR)
+[![Invite Bot](https://img.shields.io/badge/Invite%20Bot-DMDb-E6B91E?style=flat-square)](https://bit.ly/2PXWYLR)
 
 ## Features ✔️
 

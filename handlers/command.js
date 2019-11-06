@@ -77,7 +77,7 @@ class CommandHandler extends HandlerStructure {
         if (!message.content.startsWith(prefix)) return;
 
         const messageArguments = message.content.split(' ');
-        const commandName = messageArguments[0].slice(prefix.length);
+        const commandName = messageArguments[0].slice(prefix.length).toLowerCase();
         const commandArguments = messageArguments.slice(1);
 
         message.raw = message.content;

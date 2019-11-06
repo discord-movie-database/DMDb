@@ -1,47 +1,70 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Similar command.
+ */
 class SimilarCommand extends CommandStructure {
+    /**
+     * Create similar command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Get similar movies.',
             usage: '<Movie Name or ID>',
             flags: ['page', 'show'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 250
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const similar = flags.show ? await this.tmdb.getSimilarTVShows(query) :
-            await this.tmdb.getSimilarMovies(query);
-        if (similar.error) return this.embed.error(status, similar);
+        // Get results from API.
+        const response = flags.show ? await this.tmdb.getSimilarTVShows(flags) :
+                                      await this.tmdb.getSimilarMovies(flags);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        this.embed.edit(status, {
+        // Edit status message with results.
+        this.embed.edit(statusMessage, {
             title: `Similar ${flags.show ? 'TV Show' : 'Movie'} Results`,
-            description: this.resultDescription(similar),
+            description: this.resultsDescription(response),
 
-            fields: similar.results.map((result, index) => ({
-                name: result.title || result.name,
-                value: this.joinResult([
-                    `**${(result.index)}**`,
-                    `${flags.show ? 'First Air Date' : 'Release Date'}: ` +
-                        `${this.releaseDate(result.release_date || result.first_air_date)}`,
-                    `Vote Average: ${this.voteAverage(result.vote_average)}`,
-                    `${this.TMDbID(result.id)}`
-                ])
-            })),
+            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
 
-            footer: message.db.guild.tips ?
-                'TIP: Use flags (--page, ++show) to get more results.' : ''
+            // Format results.
+            fields: response.results.map((result) => flags.show ? this.resultField(result.name, [
+                `First Air Date: ${this.date(result.first_air_date)}`, // Show
+                `Vote Average: ${this.check(result.vote_average)}`,
+                this.TMDbID(result.id),
+            ]) : this.resultField(result.title, [ // Movie
+                `Release Date: ${this.date(result.release_date)}`,
+                `Vote Average: ${this.check(result.vote_average)}`,
+                this.TMDbID(result.id),
+            ])),
+
+            // Tip option.
+            footer: guildSettings.tips ?
+                'TIP: Use flags (--page, --show) to get more results.' : ''
         });
     }
 }

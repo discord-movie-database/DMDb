@@ -1,101 +1,159 @@
-import CommandStructure from '../structures/command';
+import CommandStructure from "../structures/command";
 
+/**
+ * Help command.
+ */
 class HelpCommand extends CommandStructure {
+    /**
+     * Create help command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Get a list of commands or information for a specific command.',
             usage: '[Command Name]',
             flags: ['page'],
-            visible: false,
             developerOnly: false,
+            hideInHelp: true,
             weight: 0
         });
-
-        this.flagOptions = this.client.util.getUtil('flags').flags;
     }
 
-    formatFlag(flag) {
-        return `[${this.flagOptions[flag].requiresArguments ? `--${flag} <#>` : `--${flag}`}]`;
-    }
-
+    /**
+     * Format flags into string.
+     * 
+     * @param {Array} flags Flags to format
+     * @returns {(String | Boolean)} Formatted flags
+     */
     formatFlags(flags) {
-        return flags ? flags.map(flag => this.formatFlag(flag)).join(' ') : false;
+        return flags ? flags.map((flag) => {
+            return `[${this.flags.flagOptions[flag].argRequired ? `--${flag} <#>` : `--${flag}`}]`;
+        }).join(' ') : false;
     }
 
-    commandDescription(message) {
-        const commandName = message.arguments[0] ? message.arguments[0].toLowerCase() : false;
+    /**
+     * Get info for a command.
+     * 
+     * @param {*} message Message object
+     * @param {*} commandName Command name
+     */
+    commandInfo(message, commandName) {
+        // Format command name.
+        commandName = message.content.toLowerCase();
 
-        if (!this.client.commands[commandName]) return this.embed.error(message.channel.id, 'Command not found.');
+        // Get command.
+        const command = this.client.command.getCommand(commandName);
+        if (!command) return this.embed.error(message.channel.id, 'Command not found.');
 
-        const command = this.client.commands[commandName].meta;
-
+        // Send command info.
         this.embed.create(message.channel.id, {
-            title: `${this.capitaliseStart(commandName)} Command`,
-            description: `${command.description || 'No description available for this command.'}\n`,
+            title: `${this.titleCase(commandName)} Command`,
+            description: `${command.meta.description || 'No description.'}\n`,
             
             fields: [
-                { name: 'Usage', value: command.usage || 'N/A', inline: false },
-                { name: 'Flags', value: this.formatFlags(command.flags) || 'N/A', inline: false },
-                { name: 'Visible', value: this.yesno(command.visible), inline: true },
-                { name: 'Developer Only', value: this.yesno(command.developerOnly), inline: true },
-                { name: 'Executed', value: `${command.executed}`, inline: true }
-            ]
+                { name: 'Usage', value: command.meta.usage || 'N/A', inline: false },
+                { name: 'Flags', value:
+                    this.formatFlags(command.meta.flags) || 'N/A', inline: false },
+                { name: 'Hide in Help', value: this.yesno(command.meta.hideInHelp), inline: true },
+                { name: 'Developer Only', value:
+                    this.yesno(command.meta.developerOnly), inline: true },
+            ],
         });
     }
 
-    commandList(message, pagePosition) {
-        pagePosition = pagePosition ? parseInt(pagePosition) : 1;
+    /**
+     * Get a list of commands.
+     * 
+     * @param {Object} message Message object
+     * @param {Object} guildSettings Guild settings
+     * @param {Number} page Page number
+     */
+    commandList(message, guildSettings, page) {
+        // Page number.
+        page = page ? page - 1 : 0;
+        
+        // Get commands.
+        const commands = this.client.command.commands;
+        let commandNames = Object.keys(commands);
 
+        // Filter commands.
+        commandNames = commandNames.filter((commandName) => {
+            return !commands[commandName].meta.hideInHelp; });
+
+        // Sort commands.
+        commandNames = commandNames.sort((a, b) => {
+            return commands[b].meta.weight - commands[a].meta.weight; });
+
+        // Put commands into pages.
+        const commandPages = this.splitArray(commandNames, 5);
+
+        // Get commands in page.
+        const pageCommands = commandPages[page];
+        if (!pageCommands) return this.embed.error(message.channel.id, 'Page not found.');
+
+        // Get guild prefix.
+        const prefix = guildSettings.prefix || this.client.config.prefix;
+
+        // Embed object
         const embed = {
             title: 'DMDb - Discord Movie Database',
-            description: `> Use **\`${message.db.guild.prefix}help [Page Number]\`** for more commands.\n` +
-                `> Or **\`${message.db.guild.prefix}help [Command Name]\`** to get more information about a command.\n` +
+            description: `> Use **\`${prefix}help [Page Number]\`** for more commands.\n` +
+                `> Or **\`${prefix}help [Command Name]\`** to get more information about a command.\n` +
                 '\nExample Command: `!?movies thor --page 2 --year 2011`\n' +
-                `Use the \`${message.db.guild.prefix}flags\` command to learn how to use them.\n\nCommand List:`,
-            fields: []
+                `Use the \`${prefix}flags\` command to learn how to use them.\n\nCommand List:`,
+
+            fields: [],
+
+            footer: this.join([
+                `Page: ${page + 1}/${commandPages.length}`,
+                `Commands: ${commandNames.length}`,
+                `Data from The Movie Database (TMDb)`
+            ], true),
         };
 
-        let commands = Object.keys(this.client.commands);
-        commands = commands.filter((command) => this.client.commands[command].meta.visible);
-        commands = commands.sort((a, b) => this.client.commands[b].meta.weight - this.client.commands[a].meta.weight);
-        
-        const pages = this.util.chunkArray(commands, 6);
-        const page = pages[pagePosition - 1];
+        // Put commands into embed fields.
+        for (let i = 0; i < pageCommands.length; i++) {
+            const commandName = pageCommands[i];
+            const commandMeta = commands[commandName].meta;
 
-        if (!page) return this.embed.error(message.channel.id, 'Page not found.');
-
-        for (let i = 0; i < page.length; i++) {
-            const commandName = page[i];
-            const command = this.client.commands[commandName].meta;
-
+            // Format command.
             embed.fields.push({
-                name: `${message.db.guild.prefix}${commandName} ${command.usage || ''} ` +
-                    `${this.formatFlags(command.flags) || ''}`,
-                value: `- ${command.description}`
+                name: `${prefix}${commandName} ${commandMeta.usage || ''} ` +
+                    `${this.formatFlags(commandMeta.flags) || ''}`,
+                value: `**-** ${commandMeta.description}`
             });
         }
 
-        embed.footer = this.joinResult([
-            `Page: ${(pagePosition)}/${pages.length}`,
-            `Commands: ${commands.length}`,
-            `Data from The Movie Database (TMDb)`
-        ], true);
-
+        // Send command list embed.
         this.embed.create(message.channel.id, embed);
     }
 
-    async executeCommand(message) {
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Check for arguments.
+        if (message.content.length > 0) {
+            // Flag page.
+            if (flags.page) return this.commandList(message, guildSettings, flags.page);
+            // Page.
+            if (/\d+/.test(message.content))
+                return this.commandList(message, guildSettings, message.content);
 
-        const page = query.length > 0 ? query : flags.page;
-
-        if (!page) return this.commandList(message);
-        if (/\d+/.test(page)) return this.commandList(message, parseInt(page));
-
-        this.commandDescription(message);
+            // No page.
+            this.commandInfo(message, message.content);
+        } else {
+            // No arguments.
+            this.commandList(message, guildSettings, 1);
+        }
     }
 }
 

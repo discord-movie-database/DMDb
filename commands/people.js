@@ -1,44 +1,64 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * People command. Search for people.
+ */
 class PeopleCommand extends CommandStructure {
+    /**
+     * Create people command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Search for people.',
             usage: '<Person\'s Name>',
             flags: ['page'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 550
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(mesage);
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(mesage);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const people = await this.tmdb.getPeople(flags);
-        if (people.error) return this.embed.error(status, people.error);
-        
-        this.embed.edit(status, {
+        // Get response from API.
+        const response = await this.tmdb.getPeople(flags);
+        if (response.error) return this.embed.error(statusMessage, response.error);
+
+        // Edit status message with response.
+        this.embed.edit(statusMessage, {
             title: 'Search Results',
-            description: this.resultDescription(people),
+            description: this.resultsDescription(response),
 
-            fields: people.results.map(person => ({
-                name: person.name,
-                value: this.joinResult([
-                    `**${person.index}**`,
-                    `Known For: ${this.knownFor(person.known_for)}`,
-                    `${this.TMDbID(person.id)}`
-                ])
-            })),
+            thumbnail: this.thumbnailURL(response.results[0].profile_path, true),
 
-            footer: message.db.guild.tips ?
-                'TIP: Use flags (--page) to get more and accurate results.' : ''
+            // Format results.
+            fields: response.results.map((result) => this.resultField(result.name, [
+                `Known For: ${this.list(result.known_for.slice(0, 2).map((known) => 
+                    known.media_type === 'movie' ? known.title : known.name))}`,
+                this.TMDbID(result.id)
+            ], result.index)),
+
+            // Tip option.
+            footer: guildSettings.tips ? 'TIP: Use flags (--page) to get more results.' : ''
         });
     }
 }

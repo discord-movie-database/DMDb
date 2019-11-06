@@ -1,70 +1,87 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Movie command. Get the primary information about a movie.
+ */
 class MovieCommand extends CommandStructure {
+    /**
+     * Create movie command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Get the primary information about a movie.',
             usage: '<Movie Name or ID>',
             flags: ['more'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 700
         });
-
-        this.tips = [
-            'Not the movie you wanted? Try searching for it using the {prefix}movies command.',
-            'Want more information for this result? Use the ++more flag.'
-        ];
     }
 
-    randomTip(prefix) {
-        return this.random(this.tips).replace('{prefix}', prefix);
-    }
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        let query = message.arguments.join(' ');
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
+        
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const status = await this.searchingMessage(message);
+        // Get response from API.
+        const response = await this.tmdb.getMovie(message.content);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Edit status message with response.
+        this.embed.edit(statusMessage, {
+            url: this.TMDbMovieURL(response.id),
+            title: response.title,
+            description: this.description(response.overview),
 
-        const movie = await this.tmdb.getMovie(query);
-        if (movie.error) return this.embed.error(status, movie.error);
+            thumbnail: this.thumbnailURL(response.poster_path, true),
 
-        this.embed.edit(status, {
-            url: this.tmdbMovieURL(movie.id),
-            title: movie.title,
-            description: this.description(movie.overview),
-
-            thumbnail: this.thumbnail(movie.poster_path),
-
-            fields: this.parseEmbedFields(flags.more ? [
-                { name: 'Status', value: movie.status },
-                { name: 'Release Date', value: this.releaseDate(movie.release_date) },
-                { name: 'Runtime', value: this.runtime(movie.runtime) },
-                { name: 'Popularity', value: this.popularity(movie.popularity) },
-                { name: 'Genres', value: this.genres(movie.genres), inline: false },
-                { name: 'Countries', value: this.countries(movie.production_countries), inline: false },
-                { name: 'Languages', value: this.languages(movie.spoken_languages), inline: false },
-                { name: 'Budget', value: this.budget(movie.budget) },
-                { name: 'Revenue', value: this.revenue(movie.revenue) },
-                { name: 'Homepage', value: this.homepage(movie.homepage), inline: false },
-                { name: 'Vote Average', value: this.voteAverage(movie.vote_average) },
-                { name: 'Votes', value: this.voteCount(movie.vote_count) },
-                { name: 'IMDb ID', value: this.IMDbID(movie.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(movie.id)
+            // Format response.
+            fields: this.fields(flags.more ? [
+                { name: 'Status', value: response.status },
+                { name: 'Release Date', value: this.date(response.release_date) },
+                { name: 'Runtime', value: this.runtime(response.runtime) },
+                { name: 'Popularity', value: this.popularity(response.popularity) },
+                { name: 'Genres', value:
+                    this.list(response.genres.map((genre) => genre.name)), inline: false },
+                { name: 'Countries', value: this.list(response.production_countries.map((country) =>
+                    country.name)), inline: false },
+                { name: 'Languages', value: this.list(response.spoken_languages.map((language) => 
+                    language.name)), inline: false },
+                { name: 'Budget', value: this.money(response.budget) },
+                { name: 'Revenue', value: this.money(response.revenue) },
+                { name: 'Homepage', value: this.check(response.homepage), inline: false },
+                { name: 'Vote Average', value: this.check(response.vote_average) },
+                { name: 'Votes', value: this.check(response.vote_count) },
+                { name: 'IMDb ID', value: this.check(response.imdb_id) },
+                { name: 'TMDb ID', value: this.TMDbID(response.id)
             }] : [
-                { name: 'Release Date', value: this.releaseDate(movie.release_date) },
-                { name: 'Runtime', value: this.runtime(movie.runtime) },
-                { name: 'Revenue', value: this.revenue(movie.revenue) },
-                { name: 'Vote Average', value: this.voteAverage(movie.vote_average) },
-                { name: 'IMDb ID', value: this.IMDbID(movie.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(movie.id) }
+                { name: 'Release Date', value: this.date(response.release_date) },
+                { name: 'Runtime', value: this.runtime(response.runtime) },
+                { name: 'Revenue', value: this.money(response.revenue) },
+                { name: 'Vote Average', value: this.check(response.vote_average) },
+                { name: 'IMDb ID', value: this.check(response.imdb_id) },
+                { name: 'TMDb ID', value: this.TMDbID(response.id) }
             ]),
 
-            footer: message.db.guild.tips ? `TIP: ${this.randomTip(message.db.guild.prefix)}` : ''
+            // Tip option.
+            footer: guildSettings.tips ?
+                'TIP: Want more information for this result? Use the (--more) flag.' : ''
         });
     }
 }

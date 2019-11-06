@@ -1,53 +1,91 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Show command.
+ */
 class ShowCommand extends CommandStructure {
+    /**
+     * Create show command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Get information about a TV show.',
             usage: '<TV Show Name or ID>',
-            flags: false,
-            visible: true,
+            flags: ['more'],
             developerOnly: false,
+            hideInHelp: false,
             weight: 500
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        const query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const TVShow = await this.tmdb.getTVShow(query);
-        if (TVShow.error) return this.embed.error(status, TVShow.error);
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        this.embed.edit(status, {
-            url: this.tmdbShowURL(TVShow.id),
-            title: TVShow.name,
-            description: this.description(TVShow.overview),
+        // Get result from API.
+        const response = await this.tmdb.getTVShow(message.content);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-            thumbnail: this.thumbnail(TVShow.poster_path),
+        // Edit status message with result.
+        this.embed.edit(statusMessage, {
+            url: this.TMDbShowURL(response.id),
+            title: response.name,
+            description: this.description(response.overview),
 
-            fields: this.parseEmbedFields([
-                { name: 'Status', value: TVShow.status },
-                { name: 'Type', value: this.type(TVShow.type) },
-                { name: 'Episode Runtime', value: this.epRuntime(TVShow.episode_run_time) },
-                { name: 'In Production', value: this.yesno(TVShow.in_production) },
-                { name: 'First Air Date', value: this.releaseDate(TVShow.first_air_date) },
-                { name: 'Last Air Date', value: this.releaseDate(TVShow.last_air_date) },
-                { name: 'Genres', value: this.genres(TVShow.genres), inline: false },
-                { name: 'Created By', value: this.createdBy(TVShow.created_by) },
-                { name: 'Networks', value: this.networks(TVShow.networks) },
-                { name: 'Homepage', value: this.homepage(TVShow.homepage), inline: false },
-                { name: 'Vote Average', value: this.voteAverage(TVShow.vote_average) },
-                { name: 'Votes', value: this.voteCount(TVShow.vote_count) },
+            thumbnail: this.thumbnailURL(response.poster_path, true),
+
+            // Format result.
+            fields: this.fields(flags.more ? [
+                { name: 'Status', value: response.status },
+                { name: 'Type', value: this.check(response.type) },
+                { name: 'Episode Runtime', value: this.runtime(response.episode_run_time) },
+                { name: 'In Production', value: this.yesno(response.in_production) },
+                { name: 'First Air Date', value: this.date(response.first_air_date) },
+                { name: 'Last Air Date', value: this.date(response.last_air_date) },
+                { name: 'Genres', value:
+                    this.list(response.genres.map((genre) => genre.name)), inline: false },
+                { name: 'Created By', value:
+                    this.list(response.created_by.map((person) => person.name)) },
+                { name: 'Networks',
+                    value: this.list(response.networks.map((network) => network.name)) },
+                { name: 'Homepage', value: this.check(response.homepage), inline: false },
+                { name: 'Vote Average', value: this.check(response.vote_average) },
+                { name: 'Votes', value: this.check(response.vote_count) },
                 { name: 'Season Count', value:
-                    `${this.seasonCount(TVShow.seasons)} (${this.episodeCount(TVShow.seasons)} Episodes)` },
-                { name: 'TMDb ID', value: this.TMDbID(TVShow.id)
-            }]),
+                    `${this.size(response.seasons)} (${this.size(response.seasons)} Episodes)` },
+                { name: 'TMDb ID', value: this.TMDbID(response.id) },
+            ] : [
+                { name: 'Episode Runtime', value: this.runtime(response.episode_run_time) },
+                { name: 'In Production', value: this.yesno(response.in_production) },
+                { name: 'First Air Date', value: this.date(response.first_air_date) },
+                { name: 'Last Air Date', value: this.date(response.last_air_date) },
+                { name: 'Vote Average', value: this.check(response.vote_average) },
+                { name: 'Votes', value: this.check(response.vote_count) },
+                { name: 'Season Count', value:
+                    `${this.size(response.seasons)} (${this.size(response.seasons)} Episodes)` },
+                { name: 'TMDb ID', value: this.TMDbID(response.id) },
+            ]),
 
-            footer: message.db.guild.tips ? `TIP: Not the TV show you wanted? ` +
-                `Try searching for it using the ${message.db.guild.prefix}shows command.` : ''
+            // Tip option.
+            footer: guildSettings.tips ? `TIP: Not the TV show you wanted? ` +
+                `Try searching for it using the shows command.` : ''
         });
     }
 }

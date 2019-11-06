@@ -1,47 +1,68 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Movies command. Search for movies.
+ */
 class MoviesCommand extends CommandStructure {
+    /**
+     * Create movies command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Search for movies.',
             usage: '<Movie Name>',
             flags: ['page', 'year'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 650
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const movies = await this.tmdb.getMovies(flags);
-        if (movies.error) return this.embed.error(status, movies.error);
+        // Get response from API.
+        const response = await this.tmdb.getMovies(flags);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        movies.year = flags.year && /^\d{4}$/.test(flags.year) ? flags.year : 'All';;
+        // Verify year flag.
+        response.year = this.flags.year(flags.year);
 
-        this.embed.edit(status, {
+        // Edit status message with response.
+        this.embed.edit(statusMessage, {
             title: 'Search Results',
-            description: this.resultDescription(movies),
-            
-            fields: movies.results.map(movie => ({
-                name: movie.title,
-                value: this.joinResult([
-                    `**${movie.index}**`,
-                    `Vote Average: ${this.voteAverage(movie.vote_average)}`,
-                    `Release: ${this.releaseDate(movie.release_date)}`,
-                    `${this.TMDbID(movie.id)}`
-                ])
-            })),
+            description: this.resultsDescription(response),
 
-            footer: message.db.guild.tips ?
-                'TIP: Use flags (--year, --page) to get more results.' : ''
+            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
+            
+            // Format results.
+            fields: response.results.map((result) => this.resultField(result.title, [
+                `Vote Average: ${this.check(result.vote_average)}`,
+                `Release Date: ${this.date(result.release_date)}`,
+                `${this.TMDbID(result.id)}`,
+            ], result.index)),
+
+            // Tip option.
+            footer: guildSettings.tips
+                ? 'TIP: Use flags (--year, --page) to get more results.' : '',
         });
     }
 }

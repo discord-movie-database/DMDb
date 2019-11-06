@@ -1,44 +1,67 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Person command. Get the primary information about a person.
+ */
 class PersonCommand extends CommandStructure {
+    /**
+     * Create person command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Get information about a person.',
             usage: '<Person\'s Name or ID>',
             flags: false,
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 600
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
-        const query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        const status = await this.searchingMessage(message);
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const person = await this.tmdb.getPerson(query);
-        if (person.error) return this.embed.error(status, person);
+        // Get response from API.
+        const response = await this.tmdb.getPerson(message.content);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        this.embed.edit(status, {
-            url: this.tmdbPersonURL(person.id),
-            title: person.name,
-            description: this.description(person.biography),
-            thumbnail: this.thumbnail(person.profile_path),
+        // Edit status message with response.
+        this.embed.edit(statusMessage, {
+            url: this.TMDbPersonURL(response.id),
+            title: response.name,
+            description: this.description(response.biography),
 
-            fields: this.parseEmbedFields([
-                { name: 'Known For', value: this.knownForDep(person.known_for_department) },
-                { name: 'Birthday', value: this.birthday(person.birthday) },
-                { name: 'Deathday', value: this.deathday(person.deathday) },
-                { name: 'Gender', value: this.gender(person.gender) },
-                { name: 'Place of Birth', value: this.placeOfBirth(person.place_of_birth) },
-                { name: 'IMDb ID', value: this.IMDbID(person.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(person.id)
+            thumbnail: this.thumbnailURL(response.profile_path, true),
+
+            // Format response.
+            fields: this.fields([
+                { name: 'Known For', value: this.check(response.known_for_department) },
+                { name: 'Birthday', value: this.year(response.birthday) },
+                { name: 'Deathday', value: this.year(response.deathday) },
+                { name: 'Gender', value: this.gender(response.gender) },
+                { name: 'Place of Birth', value: this.check(response.place_of_birth) },
+                { name: 'Homepage', value: this.check(response.homepage) },
+                { name: 'IMDb ID', value: this.check(response.imdb_id) },
+                { name: 'TMDb ID', value: this.TMDbID(response.id)
             }]),
 
-            footer: message.db.guild.prefix ? 'TIP: Not the person you wanted?' +
-                ` Try searching for them using the ${message.db.guild.prefix}people command.` : ''
+            // Tip option.
+            footer: guildSettings.tips ? 'TIP: Not the person you wanted?' +
+                ` Try searching for them using the people command.` : ''
         });
     }
 }

@@ -1,43 +1,63 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Popular command.
+ */
 class PopularCommand extends CommandStructure {
+    /**
+     * Create popular command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Current popular movies on TMDb.',
             usage: false,
             flags: ['page', 'shows'],
-            visible: true,
             developerOnly: false,
+            hideInHelp: false,
             weight: 100
         });
     }
 
-    async executeCommand(message) {
-        let query = message.arguments.join(' ');
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Status "Searching..." message.
+        const statusMessage = await this.searchingMessage(message);
+        if (!statusMessage) return; // No permission to send messages.
 
-        const status = await this.searchingMessage(message);
+        // Check for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
-        const flags = this.flags.parse(query, this.meta.flags);
-        query = flags.query;
+        // Get results from API.
+        const response = flags.shows ? await this.tmdb.getPopularTVShows(flags) :
+                                      await this.tmdb.getPopularMovies(flags);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
-        const popular = flags.show ? await this.tmdb.getPopularTVShows(flags) :
-            await this.tmdb.getPopularMovies(flags);
-        if (popular.error) return this.embed.error(popular);
+        // Edit status message with response.
+        this.embed.edit(statusMessage, {
+            title: `Currently Popular ${flags.shows ? 'TV Shows' : 'Movies'}`,
+            description: this.resultsDescription(response),
 
-        this.embed.edit(status, {
-            title: `Currently Popular ${flags.show ? 'TV Shows' : 'Movies'}`,
-            description: this.resultDescription(popular),
+            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
 
-            fields: popular.results.map((result) => ({
-                name: result.title || result.name,
-                value: this.joinResult([
-                    `**${result.index}**`,
-                    `${flags.show ? 'First Air Date' : 'Release Date'}: ` +
-                        `${this.releaseDate(result.release_date || result.first_air_date)}`,
-                    `Vote Average: ${this.voteAverage(result.vote_average)}`,
-                    `${this.TMDbID(result.id)}`
-                ])
-            }))
+            // Format results.
+            fields: response.results.map((result) => flags.shows ? this.resultField(result.name, [
+                `First Air Date: ${this.date(result.first_air_date)}`, // Show
+                `Vote Average: ${this.check(result.vote_average)}`,
+                this.TMDbID(result.id),
+            ]) : this.resultField(result.title, [ // Movie
+                `Release Date: ${this.date(result.release_date)}`,
+                `Vote Average: ${this.check(result.vote_average)}`,
+                this.TMDbID(result.id),
+            ])),
         });
     }
 }

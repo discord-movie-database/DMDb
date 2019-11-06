@@ -1,28 +1,46 @@
 import CommandStructure from '../structures/command';
 
+/**
+ * Eval command. Developer command to run simple expressions from a command.
+ */
 class EvalCommand extends CommandStructure {
+    /**
+     * Create eval command.
+     * 
+     * @param {Object} client DMDb client extends Eris
+     */
     constructor(client) {
         super(client, {
             description: 'Developer only command for testing.',
             usage: '<expression>',
             flags: false,
-            visible: false,
             developerOnly: true,
+            hideInHelp: true,
             weight: 0
         });
     }
 
-    async executeCommand(message) {
-        if (!message.arguments[0]) return this.usageMessage(message);
+    /**
+     * Function to run when command is executed.
+     * 
+     * @param {Object} message Message object
+     * @param {*} commandArguments Command arguments
+     * @param {*} guildSettings Guild settings
+     */
+    async executeCommand(message, commandArguments, guildSettings) {
+        // Check for arguments.
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
-        let evaluated;
-        try {
-            evaluated = eval(message.arguments.join(' '));
-        } catch (err) { evaluated = err; }
+        // Evaluate expression.
+        try { // Success
+            const evaluated = eval(message.content);
 
-        const response = typeof evaled === 'object' ? JSON.stringify(evaluated) :
-            [undefined, null].indexOf(evaluated) >= 0 ? 'No Content' : `${evaluated}`;
-        this.embed.success(message.channel.id, `${response}` || 'Unhandled response.');
+            this.embed.success(message.channel.id, `${evaluated}` || 'No Content.');
+        } catch (error) { // Error
+            this.client.log.error(error);
+
+            this.embed.error(message.channel.id, 'There was an error.');
+        }
     }
 }
 
