@@ -65,6 +65,7 @@ class MovieCommand extends CommandStructure {
                     language.name)), inline: false },
                 { name: 'Budget', value: this.money(response.budget) },
                 { name: 'Revenue', value: this.money(response.revenue) },
+                { name: 'Tagline', value: this.check(response.tagline), inline: false },
                 { name: 'Homepage', value: this.check(response.homepage), inline: false },
                 { name: 'Vote Average', value: this.check(response.vote_average) },
                 { name: 'Votes', value: this.check(response.vote_count) },

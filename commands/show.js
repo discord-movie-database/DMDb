@@ -65,6 +65,7 @@ class ShowCommand extends CommandStructure {
                     this.list(response.created_by.map((person) => person.name)) },
                 { name: 'Networks',
                     value: this.list(response.networks.map((network) => network.name)) },
+                { name: 'Tagline', value: this.check(response.tagline), inline: false },
                 { name: 'Homepage', value: this.check(response.homepage), inline: false },
                 { name: 'Vote Average', value: this.check(response.vote_average) },
                 { name: 'Votes', value: this.check(response.vote_count) },
