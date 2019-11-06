@@ -15,7 +15,7 @@ class FlagsCommand extends CommandStructure {
             usage: false,
             flags: ['more'],
             developerOnly: false,
-            hideInHelp: false,
+            hideInHelp: true,
             weight: 0
         });
 
