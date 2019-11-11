@@ -4,7 +4,7 @@ Discord. It's perfect for servers with a movie channel.
 
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/discord-movie-database/DMDb/master?label=Prod%20Version&style=flat-square)
 ![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/discord-movie-database/DMDb/dev?label=Dev%20Version&style=flat-square)
-[![SUpport Server](https://img.shields.io/discord/394643227770093568?label=Support%20Server&style=flat-square)](https://bit.ly/2kYFRPh)
+[![Support Server](https://img.shields.io/discord/394643227770093568?label=Support%20Server&style=flat-square)](https://bit.ly/2kYFRPh)
 [![Invite Bot](https://img.shields.io/badge/Invite%20Bot-DMDb-E6B91E?style=flat-square)](https://bit.ly/2PXWYLR)
 
 ## Features ✔️
@@ -23,5 +23,5 @@ Discord. It's perfect for servers with a movie channel.
 
 ## License 📄
 
-[GNU GPLv3](https://github.com/discord-movie-database/DMDb/blob/v2/LICENSE.md) - Copyright © 2019 Discord
-Movie Database (DMDb).
+[GNU GPLv3](https://github.com/discord-movie-database/DMDb/blob/dev/LICENSE.md) - Copyright © 2019
+Discord Movie Database (DMDb).
