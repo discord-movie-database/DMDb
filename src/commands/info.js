@@ -1,4 +1,4 @@
-import packageInfo from '../package.json';
+import packageInfo from '../../package.json';
 import CommandStructure from '../structures/command';
 
 /**

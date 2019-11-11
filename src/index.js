@@ -1,4 +1,4 @@
-import _config from './config';
+import _config from '../config';
 
 import Eris from 'eris';
 
