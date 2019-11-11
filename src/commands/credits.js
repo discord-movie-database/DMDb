@@ -12,7 +12,7 @@ class CastCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Get the cast for a movie.',
-            usage: '<Movie Name or ID>',
+            usage: '<Query or TMDb/IMDb ID>',
             flags: ['page', 'show', 'person'],
             developerOnly: false,
             hideInHelp: false,

@@ -11,8 +11,8 @@ class PersonCommand extends CommandStructure {
      */
     constructor(client) {
         super(client, {
-            description: 'Get information about a person.',
-            usage: '<Person\'s Name or ID>',
+            description: 'Get the primary information about a person.',
+            usage: '<Query or TMDb/IMDb ID>',
             flags: false,
             developerOnly: false,
             hideInHelp: false,

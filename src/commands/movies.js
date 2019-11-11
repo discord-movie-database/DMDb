@@ -12,7 +12,7 @@ class MoviesCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Search for movies.',
-            usage: '<Movie Name>',
+            usage: '<Query>',
             flags: ['page', 'year'],
             developerOnly: false,
             hideInHelp: false,

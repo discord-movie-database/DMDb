@@ -12,7 +12,7 @@ class SimilarCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Get similar movies.',
-            usage: '<Movie Name or ID>',
+            usage: '<Query or TMDb/IMDb ID>',
             flags: ['page', 'show'],
             developerOnly: false,
             hideInHelp: false,

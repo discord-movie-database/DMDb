@@ -107,7 +107,7 @@ class HelpCommand extends CommandStructure {
 
             footer: this.join([
                 `Page: ${page + 1}/${commandPages.length}`,
-                `Commands: ${commandNames.length}`,
+                `Total Commands: ${commandNames.length}`,
                 `Data from The Movie Database (TMDb)`
             ], true),
         };

@@ -12,7 +12,7 @@ class PeopleCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Search for people.',
-            usage: '<Person\'s Name>',
+            usage: '<Query>',
             flags: ['page'],
             developerOnly: false,
             hideInHelp: false,

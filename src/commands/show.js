@@ -12,7 +12,7 @@ class ShowCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Get information about a TV show.',
-            usage: '<TV Show Name or ID>',
+            usage: '<Query or TMDb/IMDb ID>',
             flags: ['more'],
             developerOnly: false,
             hideInHelp: false,

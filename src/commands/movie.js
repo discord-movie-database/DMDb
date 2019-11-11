@@ -12,7 +12,7 @@ class MovieCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Get the primary information about a movie.',
-            usage: '<Movie Name or ID>',
+            usage: '<Query or TMDb/IMDb ID>',
             flags: ['more'],
             developerOnly: false,
             hideInHelp: false,

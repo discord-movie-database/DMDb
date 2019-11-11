@@ -7,7 +7,7 @@ class TrailerCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Get a trailer for a movie.',
-            usage: '<Movie Name or ID>',
+            usage: '<Query or TMDb/IMDb ID>',
             flags: ['show', 'more', 'page'],
             developerOnly: false,
             hideInHelp: false,

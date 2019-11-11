@@ -12,7 +12,7 @@ class ShowsCommand extends CommandStructure {
     constructor(client) {
         super(client, {
             description: 'Search for TV shows.',
-            usage: '<TV Show Name>',
+            usage: '<Query>',
             flags: ['page', 'year'],
             developerOnly: false,
             hideInHelp: false,
