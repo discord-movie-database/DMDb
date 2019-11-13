@@ -91,7 +91,7 @@ class TMDb extends UtilStructure {
             const index = isTMDb[2];
 
             if (details) {
-                return this.movie.details(index);
+                return this[media].details(index);
             } else {
                 return index;
             }
@@ -117,7 +117,7 @@ class TMDb extends UtilStructure {
         }
 
         // Is not an id.
-        const response = await this.search.movie(query);
+        const response = await this.search[media](query);
         if (response.error) return response;
 
         if (response.results.length > 0) {
