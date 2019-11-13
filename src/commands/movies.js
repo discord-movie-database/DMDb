@@ -40,7 +40,7 @@ class MoviesCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get response from API.
-        const response = await this.tmdb.getMovies(flags);
+        const response = await this.tmdb.search.movie(message.content, flags);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Verify year flag.
