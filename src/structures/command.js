@@ -86,6 +86,17 @@ class CommandStructure {
     }
 
     /**
+     * Creats an object of options.
+     * 
+     * @param {Object} options Default options
+     * @param {Object} custom Custom options
+     * @returns {Object} Options object
+     */
+    options(options, custom) {
+        return { ...custom, language: options.language || 'en', region: options.region || 'us' };
+    }
+
+    /**
      * Returns "s" if value is greater than one.
      * 
      * @param {Number} value Value
@@ -341,6 +352,17 @@ class CommandStructure {
         return value ?
             `https://image.tmdb.org/t/p/w${size}${value}` :
             `https://via.placeholder.com/${size}x${size * 1.5}?text=N/A`;
+    }
+
+    /**
+     * Converts image path to a URL.
+     * 
+     * @param {string} path Image path
+     * @param {number} size Image size
+     * @returns {string} Image URL
+     */
+    imageURL(path, size) {
+        return `https://image.tmdb.org/t/p/w${size || 500}${path}`;
     }
 
     /**
