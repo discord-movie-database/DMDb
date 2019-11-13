@@ -3,7 +3,7 @@ import UtilStructure from '../structures/util';
 /**
  * Flags util.
  * 
- * @prop {Object} flags Flag options
+ * @prop {Object} flagOptions Flag options
  */
 class FlagsUtil extends UtilStructure {
     /**
