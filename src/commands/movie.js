@@ -40,44 +40,44 @@ class MovieCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get response from API.
-        const response = await this.tmdb.getMovie(message.content);
-        if (response.error) return this.embed.error(statusMessage, response.error);
+        const resp = await this.tmdb.movie.details(message.content, this.options(guildSettings));
+        if (resp.error) return this.embed.error(statusMessage, resp.error);
 
         // Edit status message with response.
         this.embed.edit(statusMessage, {
-            url: this.TMDbMovieURL(response.id),
-            title: response.title,
-            description: this.description(response.overview),
+            url: this.TMDbMovieURL(resp.id),
+            title: resp.title,
+            description: this.description(resp.overview),
 
-            thumbnail: this.thumbnailURL(response.poster_path, true),
+            thumbnail: this.thumbnailURL(resp.poster_path, true),
 
-            // Format response.
+            // Format resp.
             fields: this.fields(flags.more ? [
-                { name: 'Status', value: response.status },
-                { name: 'Release Date', value: this.date(response.release_date) },
-                { name: 'Runtime', value: this.runtime(response.runtime) },
-                { name: 'Popularity', value: this.popularity(response.popularity) },
+                { name: 'Status', value: resp.status },
+                { name: 'Release Date', value: this.date(resp.release_date) },
+                { name: 'Runtime', value: this.runtime(resp.runtime) },
+                { name: 'Popularity', value: this.popularity(resp.popularity) },
                 { name: 'Genres', value:
-                    this.list(response.genres.map((genre) => genre.name)), inline: false },
-                { name: 'Countries', value: this.list(response.production_countries.map((country) =>
+                    this.list(resp.genres.map((genre) => genre.name)), inline: false },
+                { name: 'Countries', value: this.list(resp.production_countries.map((country) =>
                     country.name)), inline: false },
-                { name: 'Languages', value: this.list(response.spoken_languages.map((language) => 
+                { name: 'Languages', value: this.list(resp.spoken_languages.map((language) => 
                     language.name)), inline: false },
-                { name: 'Budget', value: this.money(response.budget) },
-                { name: 'Revenue', value: this.money(response.revenue) },
-                { name: 'Tagline', value: this.check(response.tagline), inline: false },
-                { name: 'Homepage', value: this.check(response.homepage), inline: false },
-                { name: 'Vote Average', value: this.check(response.vote_average) },
-                { name: 'Votes', value: this.check(response.vote_count) },
-                { name: 'IMDb ID', value: this.check(response.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(response.id)
+                { name: 'Budget', value: this.money(resp.budget) },
+                { name: 'Revenue', value: this.money(resp.revenue) },
+                { name: 'Tagline', value: this.check(resp.tagline), inline: false },
+                { name: 'Homepage', value: this.check(resp.homepage), inline: false },
+                { name: 'Vote Average', value: this.check(resp.vote_average) },
+                { name: 'Votes', value: this.check(resp.vote_count) },
+                { name: 'IMDb ID', value: this.check(resp.imdb_id) },
+                { name: 'TMDb ID', value: this.TMDbID(resp.id)
             }] : [
-                { name: 'Release Date', value: this.date(response.release_date) },
-                { name: 'Runtime', value: this.runtime(response.runtime) },
-                { name: 'Revenue', value: this.money(response.revenue) },
-                { name: 'Vote Average', value: this.check(response.vote_average) },
-                { name: 'IMDb ID', value: this.check(response.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(response.id) }
+                { name: 'Release Date', value: this.date(resp.release_date) },
+                { name: 'Runtime', value: this.runtime(resp.runtime) },
+                { name: 'Revenue', value: this.money(resp.revenue) },
+                { name: 'Vote Average', value: this.check(resp.vote_average) },
+                { name: 'IMDb ID', value: this.check(resp.imdb_id) },
+                { name: 'TMDb ID', value: this.TMDbID(resp.id) }
             ]),
 
             // Tip option.
