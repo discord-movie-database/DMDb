@@ -40,9 +40,9 @@ class CastCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get credits from API.
-        const response = flags.show   ? await this.tmdb.getTVShowCredits(message.content) :
-                         flags.person ? await this.tmdb.getPersonCredits(message.content) :
-                                        await this.tmdb.getMovieCredits(message.content);
+        const response = flags.show   ? await this.tmdb.tv.credits(message.content) :
+                         flags.person ? await this.tmdb.person.credits(message.content) :
+                                        await this.tmdb.movie.credits(message.content);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Put results into correct format.

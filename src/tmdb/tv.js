@@ -35,6 +35,15 @@ class TvEndpoint {
 
         return this.wrapper.getEndpointResults(`${this.base}/airing_today`, options);
     }
+
+    async credits(query, options) {
+        options = Object.assign({}, options);
+
+        const id = await this.getId(query);
+        if (id.error) return id;
+
+        return this.wrapper.getEndpoint(`${this.base}/${id}/credits`, options);
+    }
 }
 
 export default TvEndpoint;

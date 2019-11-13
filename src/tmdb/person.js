@@ -26,6 +26,15 @@ class PersonEndpoint {
 
         return this.wrapper.getEndpoint(`${this.base}/${id}/images`, options);
     }
+
+    async credits(query, options) {
+        options = Object.assign({}, options);
+
+        const id = await this.getId(query);
+        if (id.error) return id;
+
+        return this.wrapper.getEndpoint(`${this.base}/${id}/credits`, options);
+    }
 }
 
 export default PersonEndpoint;
