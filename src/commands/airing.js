@@ -34,20 +34,21 @@ class AiringCommand extends CommandStructure {
 
         // Check message for flags.
         const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
 
         // Get airing TV shows from API.
-        const airing = await this.tmdb.getTVShowsAiringToday(flags);
-        if (airing.error) return this.embed.error(statusMessage, airing.error);
+        const response = await this.tmdb.tv.airing(flags);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with results.
         this.embed.edit(statusMessage, {
             title: 'TV Shows Airing Today (EST)',
-            description: this.resultsDescription(airing),
+            description: this.resultsDescription(response),
 
-            thumbnail: this.thumbnailURL(airing.results[0].poster_path, true),
+            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
 
             // Format results.
-            fields: airing.results.map((show) => this.resultField(show.name, [
+            fields: response.results.map((show) => this.resultField(show.name, [
                 `Vote Average: ${this.check(show.vote_average)}`,
                 `First Air Date: ${this.date(show.first_air_date)}`,
                 this.TMDbID(show.id)
