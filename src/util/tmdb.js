@@ -55,7 +55,7 @@ class TMDb extends UtilStructure {
         // Set default settings
         options = Object.assign({
             language: 'en', 
-            region: 'en',
+            region: 'us',
             api_key: this.client.config.tokens.tmdb,
         }, options);
 
