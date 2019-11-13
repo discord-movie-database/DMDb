@@ -26,8 +26,6 @@ class MovieEndpoint {
 
         return this.wrapper.getEndpoint(`${this.base}/${id}/images`, options);
     }
-
-    
 }
 
 export default MovieEndpoint;

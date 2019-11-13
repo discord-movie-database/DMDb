@@ -6,9 +6,21 @@ class SearchEndpoint {
     }
 
     movie(query, options) {
-        options = Object.assign({ query, page: 1 }, options);
+        options = Object.assign({ query }, options);
 
-        return this.wrapper.getEndpoint(`${this.base}/movie`, options);
+        return this.wrapper.getEndpointResults(`${this.base}/movie`, options);
+    }
+
+    tv(query, options) {
+        options = Object.assign({ query }, options);
+
+        return this.wrapper.getEndpointResults(`${this.base}/tv`, options);
+    }
+
+    person(query, options) {
+        options = Object.assign({ query }, options);
+
+        return this.wrapper.getEndpointResults(`${this.base}/person`, options);
     }
 }
 

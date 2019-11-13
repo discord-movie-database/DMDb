@@ -40,7 +40,7 @@ class PeopleCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get response from API.
-        const response = await this.tmdb.getPeople(flags);
+        const response = await this.tmdb.search.person(message.content, flags);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.

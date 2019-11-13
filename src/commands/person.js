@@ -36,7 +36,7 @@ class PersonCommand extends CommandStructure {
         if (!statusMessage) return; // No permission to send messages.
 
         // Get response from API.
-        const response = await this.tmdb.getPerson(message.content);
+        const response = await this.tmdb.person.details(message.content);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.
