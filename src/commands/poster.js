@@ -40,13 +40,20 @@ class PosterCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get response from API.
-        const response = flags.show   ? await this.tmdb.getTVShowPoster(message.content, 3) :
-                         flags.person ? await this.tmdb.getPersonPoster(message.content, 3) :
-                                        await this.tmdb.getMoviePoster(message.content, 3);
-        if (response.error) return this.embed.error(statusMessage, response.error);
+        const resp = flags.show   ? await this.tmdb.tv.images(message.content, this.options(guildSettings)) :
+                     flags.person ? await this.tmdb.person.images(message.content, this.options(guildSettings)) :
+                                    await this.tmdb.movie.images(message.content, this.options(guildSettings));
+        if (resp.error) return this.embed.error(statusMessage, resp.error);
+
+        // Sort posters by highest voted.
+        const posters = resp.posters.sort((a, b) => b.vote_count - a.vote_count);
+        if (posters.length === 0) return this.embed.error(statusMessage, 'No posters found.');
+
+        // Get best poster.
+        const poster = posters[0];
 
         // Edit status message with poster.
-        this.embed.edit(statusMessage, { image: response });
+        this.embed.edit(statusMessage, { image: this.imageURL(poster.file_path) });
     }
 }
 
