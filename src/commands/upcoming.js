@@ -37,7 +37,7 @@ class UpcomingCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get response from API.
-        const response = await this.tmdb.getUpcomingMovies(flags);
+        const response = await this.tmdb.movie.upcoming(flags);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with results.

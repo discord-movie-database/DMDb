@@ -59,6 +59,12 @@ class MovieEndpoint {
 
         return this.wrapper.getEndpointResults(`${this.base}/${id}/videos`, options);
     }
+
+    async upcoming(options) {
+        options = Object.assign({}, options);
+
+        return this.wrapper.getEndpointResults(`${this.base}/upcoming`, options);
+    }
 }
 
 export default MovieEndpoint;
