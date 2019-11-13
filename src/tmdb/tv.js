@@ -59,6 +59,15 @@ class TvEndpoint {
 
         return this.wrapper.getEndpointResults(`${this.base}/${id}/similar`, options);
     }
+
+    async videos(query, options) {
+        options = Object.assign({}, options);
+
+        const id = await this.getId(query);
+        if (id.error) return id;
+
+        return this.wrapper.getEndpointResults(`${this.base}/${id}/videos`, options);
+    }
 }
 
 export default TvEndpoint;

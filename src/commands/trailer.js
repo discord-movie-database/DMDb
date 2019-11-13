@@ -35,8 +35,8 @@ class TrailerCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get videos from API.
-        const response = flags.show ? await this.tmdb.getTVShowVideos(message.content) :
-                                      await this.tmdb.getMovieVideos(message.content);
+        const response = flags.show ? await this.tmdb.tv.videos(message.content, flags) :
+                                      await this.tmdb.movie.videos(message.content, flags);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Return all videos.
