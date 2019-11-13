@@ -37,8 +37,8 @@ class PopularCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get results from API.
-        const response = flags.shows ? await this.tmdb.getPopularTVShows(flags) :
-                                      await this.tmdb.getPopularMovies(flags);
+        const response = flags.shows ? await this.tmdb.tv.popular(flags) :
+                                      await this.tmdb.movie.popular(flags);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.

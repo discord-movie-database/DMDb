@@ -44,6 +44,12 @@ class TvEndpoint {
 
         return this.wrapper.getEndpoint(`${this.base}/${id}/credits`, options);
     }
+
+    async popular(options) {
+        options = Object.assign({}, options);
+
+        return this.wrapper.getEndpointResults(`${this.base}/popular`, options);
+    }
 }
 
 export default TvEndpoint;
