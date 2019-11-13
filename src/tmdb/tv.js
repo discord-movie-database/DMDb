@@ -12,7 +12,25 @@ class TvEndpoint {
         }, 'tv', details);
     }
 
-    airing(options) {
+    async details(query, options) {
+        options = Object.assign({}, options);
+
+        const id = await this.getId(query);
+        if (id.error) return id;
+
+        return this.wrapper.getEndpoint(`${this.base}/${id}`, options);
+    }
+
+    async images(query, options) {
+        options = Object.assign({}, options);
+
+        const id = await this.getId(query);
+        if (id.error) return id;
+
+        return this.wrapper.getEndpoint(`${this.base}/${id}/images`, options);
+    }
+
+    async airing(options) {
         options = Object.assign({}, options);
 
         return this.wrapper.getEndpointResults(`${this.base}/airing_today`, options);

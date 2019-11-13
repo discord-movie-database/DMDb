@@ -40,7 +40,7 @@ class ShowsCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get results from API.
-        const response = await this.tmdb.getTVShows(flags);
+        const response = await this.tmdb.search.tv(message.content, flags);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Validate year flags.

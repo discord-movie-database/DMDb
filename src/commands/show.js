@@ -40,7 +40,7 @@ class ShowCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get result from API.
-        const response = await this.tmdb.getTVShow(message.content);
+        const response = await this.tmdb.tv.details(message.content);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with result.
