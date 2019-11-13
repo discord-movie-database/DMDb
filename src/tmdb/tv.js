@@ -50,6 +50,15 @@ class TvEndpoint {
 
         return this.wrapper.getEndpointResults(`${this.base}/popular`, options);
     }
+
+    async similar(query, options) {
+        options = Object.assign({}, options);
+
+        const id = await this.getId(query);
+        if (id.error) return id;
+
+        return this.wrapper.getEndpointResults(`${this.base}/${id}/similar`, options);
+    }
 }
 
 export default TvEndpoint;
