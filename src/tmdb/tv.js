@@ -1,73 +1,167 @@
-class TvEndpoint {
+/**
+ * TV endpoint.
+ * 
+ * @prop {Object} wrapper - API wrapper core
+ * @prop {string} media - Media type
+ * @prop {string} base - Endpoint base
+ */
+class TVEndpoint {
+    /**
+     * Create TV endpoint.
+     * 
+     * @param {Object} wrapper - API wrapper core
+     */
     constructor(wrapper) {
         this.wrapper = wrapper;
 
-        this.base = '/tv';
+        this.media = 'tv';
+        this.base = `/${this.media}`;
     }
 
-    getId(query, details) {
-        return this.wrapper.getId(query, {
-            imdb_id: /^(tt)(\d+)$/,
-            tvdb_id: /^(tv)(\d+)$/
-        }, 'tv', details);
+    /**
+     * Convert a query to a TMDb ID.
+     * 
+     * @param {string} query - Query
+     * @param {boolean} details - Include extra information?
+     * @returns {Promise<(string | Object)>} - TMDb ID or API response
+     */
+    getID(query, details) {
+        const validation = { imdb_id: /^(tt)(\d+)$/, tvdb_id: /^(tv)(\d+)$/ };
+
+        return this.wrapper.getID(query, validation, this.media, details);
     }
 
+    /**
+     * Get the primary information for a TV show.
+     * 
+     * @param {string} query - Query
+     * @param {Object} options - API options
+     * @returns {Promise<Object>} - API response
+     * 
+     * @see https://developers.themoviedb.org/3/tv/get-tv-details
+     */
     async details(query, options) {
-        options = Object.assign({}, options);
+        const ID = await this.getID(query);
+        if (ID.error) return ID;
 
-        const id = await this.getId(query);
-        if (id.error) return id;
-
-        return this.wrapper.getEndpoint(`${this.base}/${id}`, options);
+        return this.wrapper.getEndpoint(`${this.base}/${ID}`, options);
     }
 
+    /**
+     * Get the images that belong to a TV show.
+     * 
+     * @param {string} query - Query
+     * @param {Object} options - API options
+     * @returns {Promise<Object>} - API response
+     * 
+     * @see https://developers.themoviedb.org/3/tv/get-tv-details
+     */
     async images(query, options) {
-        options = Object.assign({}, options);
+        const ID = await this.getID(query);
+        if (ID.error) return ID;
 
-        const id = await this.getId(query);
-        if (id.error) return id;
-
-        return this.wrapper.getEndpoint(`${this.base}/${id}/images`, options);
+        return this.wrapper.getEndpoint(`${this.base}/${ID}/images`, options);
     }
 
-    async airing(options) {
-        options = Object.assign({}, options);
-
-        return this.wrapper.getEndpointResults(`${this.base}/airing_today`, options);
-    }
-
+    /**
+     * Get the cast and crew for a TV show.
+     * 
+     * @param {string} query - Query
+     * @param {Object} options - API options
+     * @returns {Promise<Object>} - API response
+     * 
+     * @see https://developers.themoviedb.org/3/tv/get-tv-credits
+     */
     async credits(query, options) {
-        options = Object.assign({}, options);
+        const ID = await this.getID(query);
+        if (ID.error) return ID;
 
-        const id = await this.getId(query);
-        if (id.error) return id;
-
-        return this.wrapper.getEndpoint(`${this.base}/${id}/credits`, options);
+        return this.wrapper.getEndpoint(`${this.base}/${ID}/credits`, options);
     }
 
-    async popular(options) {
-        options = Object.assign({}, options);
+    /**
+     * Get a list of similar TV shows.
+     * 
+     * @param {string} query - Query
+     * @param {Object} options - API options
+     * @param {boolean} dontMutate - Do not mutate the results?
+     * @returns {Promise<Object>} - API response
+     * 
+     * @see https://developers.themoviedb.org/3/tv/get-similar-tv-shows
+     */
+    async similar(query, options, dontMutate) {
+        const ID = await this.getID(query);
+        if (ID.error) return ID;
 
-        return this.wrapper.getEndpointResults(`${this.base}/popular`, options);
+        const endpoint = `${this.base}/${ID}/similar`;
+
+        if (dontMutate) {
+            return this.wrapper.getEndpoint(endpoint, options);
+        } else {
+            return this.wrapper.mutateResults(endpoint, options);
+        }
     }
 
-    async similar(query, options) {
-        options = Object.assign({}, options);
+    /**
+     * Get the videos that have been added to a movie.
+     * 
+     * @param {string} query - Query
+     * @param {Object} options - API options
+     * @param {boolean} dontMutate - Do not mutate the results?
+     * @returns {Promise<Object>} - API response
+     * 
+     * @see https://developers.themoviedb.org/3/tv/get-tv-videos
+     */
+    async videos(query, options, dontMutate) {
+        const ID = await this.getID(query);
+        if (ID.error) return ID;
 
-        const id = await this.getId(query);
-        if (id.error) return id;
+        const endpoint = `${this.base}/${ID}/videos`;
 
-        return this.wrapper.getEndpointResults(`${this.base}/${id}/similar`, options);
+        if (dontMutate) {
+            return this.wrapper.getEndpoint(endpoint, options);
+        } else {
+            return this.wrapper.mutateResults(endpoint, options);
+        }
+    }
+    
+    /**
+     * Get a list of the current popular TV shows on TMDb.
+     * 
+     * @param {Object} options - API options
+     * @param {boolean} dontMutate - Do not mutate the results?
+     * @returns {Promise<Object>} - API response
+     * 
+     * @see https://developers.themoviedb.org/3/tv/get-popular-tv-shows
+     */
+    async popular(options, dontMutate) {
+        const endpoint = `${this.base}/popular`;
+
+        if (dontMutate) {
+            return this.wrapper.getEndpoint(endpoint, options);
+        } else {
+            return this.wrapper.mutateResults(endpoint, options);
+        }
     }
 
-    async videos(query, options) {
-        options = Object.assign({}, options);
+    /**
+     * Get a list of TV shows that are airing today.
+     * 
+     * @param {Object} options - API options
+     * @param {boolean} dontMutate - Do not mutate the results?
+     * @returns {Promise<Object>} - API response
+     * 
+     * @see https://developers.themoviedb.org/3/tv/get-tv-airing-today
+     */
+    async airing(options, dontMutate) {
+        const endpoint = `${this.base}/airing_today`;
 
-        const id = await this.getId(query);
-        if (id.error) return id;
-
-        return this.wrapper.getEndpointResults(`${this.base}/${id}/videos`, options);
+        if (dontMutate) {
+            return this.wrapper.getEndpoint(endpoint, options);
+        } else {
+            return this.wrapper.mutateResults(endpoint, options);
+        }
     }
 }
 
-export default TvEndpoint;
+export default TVEndpoint;

@@ -1,7 +1,7 @@
 import UtilStructure from '../structures/util';
 
 import MovieEndpoint from '../tmdb/movie';
-import TvEndpoint from '../tmdb/tv';
+import TVEndpoint from '../tmdb/tv';
 import PersonEndpoint from '../tmdb/person';
 import SearchEndpoint from '../tmdb/search';
 import FindEndpoint from '../tmdb/find';
@@ -9,24 +9,25 @@ import FindEndpoint from '../tmdb/find';
 /**
  * TMDb API wrapper.
  * 
- * @prop {Object} movie Movie endpoint
- * @prop {Object} tv TV endpoint
- * @prop {Object} person Person endpoint
- * @prop {Object} search Search endpoint
- * @prop {Object} find Find endpoint
- * @prop {string} base API base URL
+ * @prop {Object} client - DMDb client extends Eris
+ * @prop {Object} movie - Movie endpoint
+ * @prop {Object} tv - TV endpoint
+ * @prop {Object} person - Person endpoint
+ * @prop {Object} search - Search endpoint
+ * @prop {Object} find - Find endpoint
+ * @prop {string} base - API base URL
  */
 class TMDb extends UtilStructure {
     /**
      * Create TMDb API wrapper.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client);
 
         this.movie = new MovieEndpoint(this);
-        this.tv = new TvEndpoint(this);
+        this.tv = new TVEndpoint(this);
         this.person = new PersonEndpoint(this);
         this.search = new SearchEndpoint(this);
         this.find = new FindEndpoint(this);
@@ -35,10 +36,10 @@ class TMDb extends UtilStructure {
     }
 
     /**
-     * Creates error object.
+     * Create error object.
      * 
-     * @param {string} message Error message
-     * @returns {Object} Error object
+     * @param {string} message - Error message
+     * @returns {Object} - Error object
      */
     error(message) {
         return { error: message };
@@ -47,9 +48,9 @@ class TMDb extends UtilStructure {
     /**
      * Get data from API.
      * 
-     * @param {string} endpoint API endpoint
-     * @param {Object} options Request options
-     * @returns {Object} API response
+     * @param {string} endpoint - API endpoint
+     * @param {Object} options - API options
+     * @returns {Promise<Object>} - API response
      */
     async getEndpoint(endpoint, options) {
         // Set default settings
@@ -76,25 +77,22 @@ class TMDb extends UtilStructure {
     }
 
     /**
-     * Gets TMDb id.
+     * Get TMDb ID.
      * 
-     * @param {*} query Query
-     * @param {*} sources External resources
-     * @param {*} media Media type
-     * @param {*} details Include extra information
+     * @param {string} query - Query
+     * @param {Object} sources - External resources
+     * @param {string} media - Media type
+     * @param {boolean} details - Include extra information?
+     * @returns {(Promise<Object> | Object | string)} - TMDb ID
      */
-    async getId(query, sources, media, details) {
+    async getID(query, sources, media, details) {
         const isTMDb = query.match(/^(t)(\d+)$/);
 
         // Is a TMDb id.
         if (isTMDb) {
             const index = isTMDb[2];
 
-            if (details) {
-                return this[media].details(index);
-            } else {
-                return index;
-            }
+            return details ? this[media].details(index) : index;
         }
 
         // Is an external id.
@@ -105,7 +103,7 @@ class TMDb extends UtilStructure {
             const isExternal = query.match(validation);
 
             if (isExternal) {
-                const response = await this.find.byExternalId(query, { external_source: sourceName });
+                const response = await this.find.ID(query, { external_source: sourceName });
                 if (response.error) return response;
 
                 if (response[mediaObject].length > 0) {
@@ -128,48 +126,35 @@ class TMDb extends UtilStructure {
     }
 
     /**
-     * Splits pages into smaller pages to fit in an embed.
-     *
-     * Rushed variable names and comments. Struggling to follow it myself. WIll redo at some point.
+     * Reduce results from 20 to 5 per page.
      * 
-     * @param {string} endpoint Endpoint to get results from
-     * @param {Object} options API options
-     * @returns {Object} Updated results
+     * @param {string} endpoint - Endpoint to get results from
+     * @param {Object} options - API options
+     * @param {boolean} queryRequired - Query required?
+     * @returns {Promise<Object>} - Updated results
      */
-    async getEndpointResults(endpoint, options) {
-        // Check if query is required
-        if (endpoint.includes('search') && !options.query) return this.error('Query required.');
+    async mutateResults(endpoint, options, queryRequired) {
+        if (queryRequired & !options.query) return this.error('Query required.');
 
-        // Update page values
-        const inputPage = options.page > 0 ? options.page : 1; // Input page
-        options.page = Math.ceil(inputPage / 4); // Actual page
+        const inputPage = options.page >= 1 ? options.page : 1;
+        if (inputPage > 4000) return this.error('Page must be less than or equal to 4000.');
 
-        // Check if page number is allowed
-        if (options.page > 1000) return this.error('Page must be less then or equal to 4000.');
+        options.page = Math.ceil(inputPage / 4);
 
-        // Get results from API
         const response = await this.getEndpoint(endpoint, options);
-        if (response.error) return response; // API error
+        if (response.error) return response;
 
-        // Change result data
-        response.page = inputPage; // Update page number
-        response.total_pages = Math.ceil(response.total_results / 5); // Update total pages
+        response.page = inputPage;
 
-        // Check if there are results and input page is within total pages
-        if (response.total_results === 0 || inputPage > response.total_pages)
-            return this.error('No results found.');
+        response.results.total_pages = Math.ceil(response.total_results / 5);
+        if (response.results.total_pages < inputPage) return this.error('No results found.');
 
-        // Offset of the actual page
-        const actualPageOffset = (inputPage - 1) % 4 * 5;
+        const pageOffset = (inputPage - 1) % 4 * 5;
 
-        // Get results from page offset
-        response.results = response.results.slice(actualPageOffset, actualPageOffset + 5);
-        // Change page index
+        response.results = response.results.slice(pageOffset, pageOffset + 5);
         response.results = response.results.map((result, index) => {
-            return { ...result, index: ((options.page - 1) * 20) + actualPageOffset + index + 1 };
-        });
+            return { ...result, index: (options.page - 1) * 20 + pageOffset + index + 1 } });
 
-        // Return updated results
         return response;
     }
 }
