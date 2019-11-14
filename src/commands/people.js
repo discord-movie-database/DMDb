@@ -29,7 +29,7 @@ class PeopleCommand extends CommandStructure {
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for arguments.
-        if (commandArguments.length === 0) return this.usageMessage(mesage);
+        if (commandArguments.length === 0) return this.usageMessage(message);
 
         // Status "Searching..." message.
         const statusMessage = await this.searchingMessage(message);
