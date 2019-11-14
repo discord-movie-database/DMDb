@@ -13,7 +13,7 @@ class MovieCommand extends CommandStructure {
         super(client, {
             description: 'Get the primary information about a movie.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['more'],
+            flags: false,
             developerOnly: false,
             hideInHelp: false,
             weight: 700
@@ -34,55 +34,58 @@ class MovieCommand extends CommandStructure {
         // Status "Searching..." message.
         const statusMessage = await this.searchingMessage(message);
         if (!statusMessage) return; // No permission to send messages.
-        
-        // Check for flags.
-        const flags = this.flags.parse(message.content, this.meta.flags);
-        message.content = flags.query; // Remove flags from query.
 
         // Get response from API.
-        const resp = await this.tmdb.movie.details(message.content, this.options(guildSettings));
-        if (resp.error) return this.embed.error(statusMessage, resp.error);
+        const response = await this.tmdb.movie.details(message.content, this.options(guildSettings));
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.
         this.embed.edit(statusMessage, {
-            url: this.TMDbMovieURL(resp.id),
-            title: resp.title,
-            description: this.description(resp.overview),
+            url: this.TMDbMovieURL(response.id),
+            title: response.title,
+            description: this.description(response.overview),
 
-            thumbnail: this.thumbnailURL(resp.poster_path, true),
+            thumbnail: this.thumbnailURL(response.poster_path, true),
 
-            // Format resp.
-            fields: this.fields(flags.more ? [
-                { name: 'Status', value: resp.status },
-                { name: 'Release Date', value: this.date(resp.release_date) },
-                { name: 'Runtime', value: this.runtime(resp.runtime) },
-                { name: 'Popularity', value: this.popularity(resp.popularity) },
-                { name: 'Genres', value:
-                    this.list(resp.genres.map((genre) => genre.name)), inline: false },
-                { name: 'Countries', value: this.list(resp.production_countries.map((country) =>
-                    country.name)), inline: false },
-                { name: 'Languages', value: this.list(resp.spoken_languages.map((language) => 
-                    language.name)), inline: false },
-                { name: 'Budget', value: this.money(resp.budget) },
-                { name: 'Revenue', value: this.money(resp.revenue) },
-                { name: 'Tagline', value: this.check(resp.tagline), inline: false },
-                { name: 'Homepage', value: this.check(resp.homepage), inline: false },
-                { name: 'Vote Average', value: this.check(resp.vote_average) },
-                { name: 'Votes', value: this.check(resp.vote_count) },
-                { name: 'IMDb ID', value: this.check(resp.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(resp.id)
-            }] : [
-                { name: 'Release Date', value: this.date(resp.release_date) },
-                { name: 'Runtime', value: this.runtime(resp.runtime) },
-                { name: 'Revenue', value: this.money(resp.revenue) },
-                { name: 'Vote Average', value: this.check(resp.vote_average) },
-                { name: 'IMDb ID', value: this.check(resp.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(resp.id) }
-            ]),
-
-            // Tip option.
-            footer: guildSettings.tips ?
-                'TIP: Want more information for this result? Use the (--more) flag.' : ''
+            // Format response.
+            fields: this.fields([{
+                name: 'Status',
+                value: response.status,
+            }, {
+                name: 'Release Date',
+                value: this.date(response.release_date),
+            }, { 
+                name: 'Runtime',
+                value: this.runtime(response.runtime),
+            }, {
+                name: 'Genres',
+                value: this.list(response.genres.map((g) => g.name)),
+            }, {
+                name: 'Budget / Revenue',
+                value: `${this.money(response.budget)} / ${this.money(response.revenue)}`,
+            }, {
+                name: 'Tagline',
+                value: this.check(response.tagline),
+            }, {
+                name: 'Countries',
+                value: this.list(response.production_countries.map((c) => c.name)),
+            }, {
+                name: 'Languages',
+                value: this.list(response.spoken_languages.map((l) => l.name)),
+            }, {
+                name: 'Homepage',
+                value: this.check(response.homepage),
+            }, {
+                name: 'Vote Average',
+                value: `**${this.check(response.vote_average)}** `
+                    + `(${this.check(response.vote_count)} votes)`,
+            }, {
+                name: 'IMDb ID',
+                value: this.check(response.imdb_id),
+            }, {
+                name: 'TMDb ID',
+                value: this.TMDbID(response.id),
+            }]),
         });
     }
 }
