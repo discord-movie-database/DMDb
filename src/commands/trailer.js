@@ -39,6 +39,10 @@ class TrailerCommand extends CommandStructure {
                                       await this.tmdb.movie.videos(message.content, flags);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
+        // Check for trailers.
+        if (response.results.length === 0)
+            return this.embed.error(statusMessage, 'No trailers found.');
+
         // Return all videos.
         if (flags.more) {
             // Put videos into pages.
@@ -65,7 +69,7 @@ class TrailerCommand extends CommandStructure {
 
         // Check for trailers.
         if (response.results.length === 0)
-            return this.embed.error(statusMessage, 'No trailers found. Try the `--more` flag.');
+            return this.embed.error(statusMessage, 'No trailers found.');
 
         // Get first trailer.
         const video = response.results[0];
