@@ -33,6 +33,7 @@ class EmbedUtil extends UtilStructure {
                 image: { url: embed.image || '' },
                 footer: { text: embed.footer || '' },
                 video: { url: embed.video || '' },
+                timestamp: embed.timestamp || '',
             },
 
             content: embed.content || '',
