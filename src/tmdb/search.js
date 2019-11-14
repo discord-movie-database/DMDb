@@ -7,12 +7,14 @@ class SearchEndpoint {
 
     movie(query, options) {
         options = Object.assign({ query }, options);
+        options.primary_release_year = options.year;
 
         return this.wrapper.getEndpointResults(`${this.base}/movie`, options);
     }
 
     tv(query, options) {
         options = Object.assign({ query }, options);
+        options.first_air_date_year = options.year;
 
         return this.wrapper.getEndpointResults(`${this.base}/tv`, options);
     }
