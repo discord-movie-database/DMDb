@@ -48,20 +48,31 @@ class PersonCommand extends CommandStructure {
             thumbnail: this.thumbnailURL(response.profile_path, true),
 
             // Format response.
-            fields: this.fields([
-                { name: 'Known For', value: this.check(response.known_for_department) },
-                { name: 'Birthday', value: this.year(response.birthday) },
-                { name: 'Deathday', value: this.year(response.deathday) },
-                { name: 'Gender', value: this.gender(response.gender) },
-                { name: 'Place of Birth', value: this.check(response.place_of_birth) },
-                { name: 'Homepage', value: this.check(response.homepage) },
-                { name: 'IMDb ID', value: this.check(response.imdb_id) },
-                { name: 'TMDb ID', value: this.TMDbID(response.id)
+            fields: this.fields([{
+                name: 'Known For',
+                value: this.check(response.known_for_department),
+            }, {
+                name: 'Birthday',
+                value: this.date(response.birthday),
+            }, {
+                name: 'Deathday',
+                value: this.date(response.deathday),
+            }, {
+                name: 'Gender',
+                value: this.gender(response.gender),
+            }, {
+                name: 'Place of Birth',
+                value: this.check(response.place_of_birth),
+            }, {
+                name: 'Homepage',
+                value: this.check(response.homepage),
+            }, {
+                name: 'IMDb ID',
+                value: this.check(response.imdb_id)
+            }, {
+                name: 'TMDb ID',
+                value: this.TMDbID(response.id),
             }]),
-
-            // Tip option.
-            footer: guildSettings.tips ? 'TIP: Not the person you wanted?' +
-                ` Try searching for them using the people command.` : ''
         });
     }
 }

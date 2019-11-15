@@ -13,7 +13,7 @@ class ShowCommand extends CommandStructure {
         super(client, {
             description: 'Get information about a TV show.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['more'],
+            flags: false,
             developerOnly: false,
             hideInHelp: false,
             weight: 500
@@ -35,10 +35,6 @@ class ShowCommand extends CommandStructure {
         const statusMessage = await this.searchingMessage(message);
         if (!statusMessage) return; // No permission to send messages.
 
-        // Check for flags.
-        const flags = this.flags.parse(message.content, this.meta.flags);
-        message.content = flags.query; // Remove flags from query.
-
         // Get result from API.
         const response = await this.tmdb.tv.details(message.content);
         if (response.error) return this.embed.error(statusMessage, response.error);
@@ -51,42 +47,56 @@ class ShowCommand extends CommandStructure {
 
             thumbnail: this.thumbnailURL(response.poster_path, true),
 
-            // Format result.
-            fields: this.fields(flags.more ? [
-                { name: 'Status', value: response.status },
-                { name: 'Type', value: this.check(response.type) },
-                { name: 'Episode Runtime', value: this.runtime(response.episode_run_time) },
-                { name: 'In Production', value: this.yesno(response.in_production) },
-                { name: 'First Air Date', value: this.date(response.first_air_date) },
-                { name: 'Last Air Date', value: this.date(response.last_air_date) },
-                { name: 'Genres', value:
-                    this.list(response.genres.map((genre) => genre.name)), inline: false },
-                { name: 'Created By', value:
-                    this.list(response.created_by.map((person) => person.name)) },
-                { name: 'Networks',
-                    value: this.list(response.networks.map((network) => network.name)) },
-                { name: 'Tagline', value: this.check(response.tagline), inline: false },
-                { name: 'Homepage', value: this.check(response.homepage), inline: false },
-                { name: 'Vote Average', value: this.check(response.vote_average) },
-                { name: 'Votes', value: this.check(response.vote_count) },
-                { name: 'Season Count', value:
-                    `${this.size(response.seasons)} (${this.size(response.seasons)} Episodes)` },
-                { name: 'TMDb ID', value: this.TMDbID(response.id) },
-            ] : [
-                { name: 'Episode Runtime', value: this.runtime(response.episode_run_time) },
-                { name: 'In Production', value: this.yesno(response.in_production) },
-                { name: 'First Air Date', value: this.date(response.first_air_date) },
-                { name: 'Last Air Date', value: this.date(response.last_air_date) },
-                { name: 'Vote Average', value: this.check(response.vote_average) },
-                { name: 'Votes', value: this.check(response.vote_count) },
-                { name: 'Season Count', value:
-                    `${this.size(response.seasons)} (${this.size(response.seasons)} Episodes)` },
-                { name: 'TMDb ID', value: this.TMDbID(response.id) },
-            ]),
-
-            // Tip option.
-            footer: guildSettings.tips ? `TIP: Not the TV show you wanted? ` +
-                `Try searching for it using the shows command.` : ''
+            // Format response.
+            fields: this.fields([{
+                name: 'Status',
+                value: response.status,
+            }, {
+                name: 'Type',
+                value: this.check(response.type),
+            }, {
+                name: 'In Production',
+                value: this.yesno(response.in_production),
+            }, {
+                name: 'Episode Runtime',
+                value: this.runtime(response.episode_run_time),
+            }, {
+                name: 'First / Last Air Date',
+                value: `${this.date(response.first_air_date)} `
+                    + `/ ${this.date(response.last_air_date)}`,
+            }, {
+                name: 'Season Count',
+                value: `${this.check(response.number_of_seasons)} `
+                    + `(${this.check(response.number_of_episodes)} episodes)`,
+            }, {
+                name: 'Genres',
+                value: this.list(response.genres.map((g) => g.name)),
+            }, {
+                name: '-',
+                value: '-',
+            }, {
+                name: 'Tagline',
+                value: this.check(response.tagline),
+            }, {
+                name: 'Created By',
+                value: this.list(response.created_by.map((p) => p.name)),
+            }, {
+                name: 'Networks',
+                value: this.list(response.networks.map((n) => n.name)),
+            }, {
+                name: 'Homepage',
+                value: this.check(response.homepage),
+            }, {
+                name: 'Vote Average',
+                value: `**${this.check(response.vote_average)}** `
+                    + `(${this.check(response.vote_count)} votes)\n`,
+            }, {
+                name: 'TMDb ID',
+                value: this.TMDbID(response.id),
+            }, {
+                name: '-',
+                value: '-',
+            }]),
         });
     }
 }
