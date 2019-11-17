@@ -7,17 +7,16 @@ class MessageCreateEvent extends EventStructure {
     /**
      * Create message create event.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client);
     }
 
     /**
-     * Function to run when event triggers.
+     * Function to run when event triggers. Handle commands in command handler.
      * 
-     * Handle commands in command handler.
-     * 
+     * @param {*} event - Event
      * @returns {undefined}
      */
     onEvent(event) {

@@ -7,7 +7,7 @@ class RoutinesHandler extends HandlerStructure {
     /**
      * Create routine handler.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, 'routines');
@@ -16,8 +16,8 @@ class RoutinesHandler extends HandlerStructure {
     /**
      * Get routine.
      * 
-     * @param {String} routineName Routine name
-     * @returns {Object} Routine
+     * @param {string} routineName Routine name
+     * @returns {Object} Routine Object
      */
     getRoutine(routineName) {
         return this.routines[routineName];

@@ -7,11 +7,11 @@ class SimilarCommand extends CommandStructure {
     /**
      * Create similar command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
-            description: 'Get similar movies.',
+            description: 'Get similar movies and TV shows.',
             usage: '<Query or TMDb/IMDb ID>',
             flags: ['page', 'show'],
             developerOnly: false,
@@ -23,9 +23,9 @@ class SimilarCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for arguments.
@@ -39,32 +39,35 @@ class SimilarCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
+        // Get media source.
+        const media = this.mediaSource(flags);
+
+        // Get API options.
+        const options = this.APIOptions(guildSettings, { page: flags.page });
+
         // Get results from API.
-        const response = flags.show ? await this.tmdb.tv.similar(message.content, flags) :
-                                      await this.tmdb.movie.similar(message.content, flags);
+        const response = await this.tmdb[media].similar(message.content, options, true) 
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with results.
         this.embed.edit(statusMessage, {
-            title: `Similar ${flags.show ? 'TV Show' : 'Movie'} Results`,
+            title: `Similar ${flags.show ? 'TV Shows' : 'Movies'} ` +
+                `for ${response.title || response.name}`,
+
+            thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),
 
-            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
-
-            // Format results.
             fields: response.results.map((result) => flags.show ? this.resultField(result.name, [
-                `First Air Date: ${this.date(result.first_air_date)}`, // Show
+                // Show
+                `First Air Date: ${this.date(result.first_air_date)}`,
                 `Vote Average: ${this.check(result.vote_average)}`,
                 this.TMDbID(result.id),
-            ]) : this.resultField(result.title, [ // Movie
+            ]) : this.resultField(result.title, [
+                // Movie
                 `Release Date: ${this.date(result.release_date)}`,
                 `Vote Average: ${this.check(result.vote_average)}`,
                 this.TMDbID(result.id),
             ])),
-
-            // Tip option.
-            footer: guildSettings.tips ?
-                'TIP: Use flags (--page, --show) to get more results.' : ''
         });
     }
 }

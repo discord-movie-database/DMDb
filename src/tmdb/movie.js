@@ -50,15 +50,21 @@ class MovieEndpoint {
      * 
      * @param {string} query - Query
      * @param {Object} options - API options
+     * @param {boolean} details - Include extra information?
      * @returns {Promise<Object>} - API response
      * 
      * @see https://developers.themoviedb.org/3/movies/get-movie-images
      */
-    async images(query, options) {
-        const ID = await this.getID(query);
-        if (ID.error) return ID;
+    async images(query, options, details) {
+        const info = await this.getID(query, details);
+        if (info.error) return info;
 
-        return this.wrapper.getEndpoint(`${this.base}/${ID}/images`, options);
+        const ID = details ? info.id : info;
+
+        const response = await this.wrapper.getEndpoint(`${this.base}/${ID}/images`, options);
+        if (response.error) return response;
+
+        return details ? { ...response, ...info } : response;
     }
 
     /**
@@ -66,15 +72,21 @@ class MovieEndpoint {
      * 
      * @param {string} query - Query
      * @param {Object} options - API options
+     * @param {boolean} details - Include extra information?
      * @returns {Promise<Object>} - API response
      * 
      * @see https://developers.themoviedb.org/3/movies/get-movie-credits
      */
-    async credits(query, options) {
-        const ID = await this.getID(query);
-        if (ID.error) return ID;
+    async credits(query, options, details) {
+        const info = await this.getID(query, details);
+        if (info.error) return info;
 
-        return this.wrapper.getEndpoint(`${this.base}/${ID}/credits`, options);
+        const ID = details ? info.id : info;
+
+        const response = await this.wrapper.getEndpoint(`${this.base}/${ID}/credits`, options);
+        if (response.error) return response;
+
+        return details ? { ...response, ...info } : response;
     }
 
     /**
@@ -82,22 +94,29 @@ class MovieEndpoint {
      * 
      * @param {string} query - Query
      * @param {Object} options - API options
+     * @param {boolean} details - Include extra information?
      * @param {boolean} dontMutate - Do not mutate the results?
      * @returns {Promise<Object>} - API response
      * 
      * @see https://developers.themoviedb.org/3/movies/get-similar-movies
      */
-    async similar(query, options, dontMutate) {
-        const ID = await this.getID(query);
-        if (ID.error) return ID;
+    async similar(query, options, details, dontMutate) {
+        let response;
+
+        const info = await this.getID(query, details);
+        if (info.error) return info;
+
+        const ID = details ? info.id : info;
 
         const endpoint = `${this.base}/${ID}/similar`;
 
         if (dontMutate) {
-            return this.wrapper.getEndpoint(endpoint, options);
+            response = await this.wrapper.getEndpoint(endpoint, options);
         } else {
-            return this.wrapper.mutateResults(endpoint, options);
+            response = await this.wrapper.mutateResults(endpoint, options);
         }
+
+        return details ? { ...response, ...info } : response;
     }
 
     /**
@@ -105,22 +124,29 @@ class MovieEndpoint {
      * 
      * @param {string} query - Query
      * @param {Object} options - API options
+     * @param {boolean} details - Include extra information?
      * @param {boolean} dontMutate - Do not mutate the results?
      * @returns {Promise<Object>} - API response
      * 
      * @see https://developers.themoviedb.org/3/movies/get-movie-videos
      */
-    async videos(query, options, dontMutate) {
-        const ID = await this.getID(query);
-        if (ID.error) return ID;
+    async videos(query, options, details, dontMutate) {
+        let response;
+
+        const info = await this.getID(query, details);
+        if (info.error) return info;
+
+        const ID = details ? info.id : info;
 
         const endpoint = `${this.base}/${ID}/videos`;
 
         if (dontMutate) {
-            return this.wrapper.getEndpoint(endpoint, options);
+            response = await this.wrapper.getEndpoint(endpoint, options);
         } else {
-            return this.wrapper.mutateResults(endpoint, options);
+            response = await this.wrapper.mutateResults(endpoint, options);
         }
+
+        return details ? { ...response, ...info } : response;
     }
 
     /**

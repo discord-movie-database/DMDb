@@ -9,7 +9,7 @@ class ErrorEvent extends EventStructure {
     /**
      * Create error event.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client);
@@ -18,6 +18,7 @@ class ErrorEvent extends EventStructure {
     /**
      * Function to run when event triggers.
      * 
+     * @param {*} event - Event
      * @returns {undefined}
      */
     onEvent(event) {

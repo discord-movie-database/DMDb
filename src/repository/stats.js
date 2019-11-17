@@ -3,13 +3,13 @@ import RepositoryStructure from '../structures/repository';
 /**
  * Stats repository.
  * 
- * @prop {Object} model Stats model
+ * @prop {Object} model - Stats model
  */
 class StatsRepository extends RepositoryStructure {
     /**
      * Create stats repository.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client);
@@ -25,8 +25,8 @@ class StatsRepository extends RepositoryStructure {
     /**
      * Insert stats into database.
      * 
-     * @param {Object} data Stats
-     * @returns {Promise} Stats
+     * @param {Object} data - Stat data
+     * @returns {Promise} - Stats
      */
     insert(data) {
         return this.model.create({ ...data });

@@ -7,7 +7,7 @@ class EvalCommand extends CommandStructure {
     /**
      * Create eval command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
@@ -23,9 +23,9 @@ class EvalCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for arguments.

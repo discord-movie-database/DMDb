@@ -7,7 +7,7 @@ class MoviesCommand extends CommandStructure {
     /**
      * Create movies command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
@@ -23,9 +23,9 @@ class MoviesCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for arguments.
@@ -39,8 +39,11 @@ class MoviesCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
+        // Get API options.
+        const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
+
         // Get response from API.
-        const response = await this.tmdb.search.movie(message.content, flags);
+        const response = await this.tmdb.search.movie(message.content, options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Verify year flag.
@@ -49,20 +52,16 @@ class MoviesCommand extends CommandStructure {
         // Edit status message with response.
         this.embed.edit(statusMessage, {
             title: 'Search Results',
-            description: this.resultsDescription(response),
+            url: 'https://www.themoviedb.org/discover/movie',
 
-            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
+            thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
+            description: this.resultsDescription(response),
             
-            // Format results.
             fields: response.results.map((result) => this.resultField(result.title, [
                 `Vote Average: ${this.check(result.vote_average)}`,
                 `Release Date: ${this.date(result.release_date)}`,
                 `${this.TMDbID(result.id)}`,
             ], result.index)),
-
-            // Tip option.
-            footer: guildSettings.tips
-                ? 'TIP: Use flags (--year, --page) to get more results.' : '',
         });
     }
 }

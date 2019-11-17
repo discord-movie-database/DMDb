@@ -3,13 +3,13 @@ import HandlerStructure from '../structures/handler';
 /**
  * Command handler.
  * 
- * @prop {Number} commandsExecuted Amount of commands executed since last restart.
+ * @prop {number} commandsExecuted - Amount of commands executed since last restart.
  */
 class CommandHandler extends HandlerStructure {
     /**
      * Create command handler.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, 'commands');
@@ -20,8 +20,8 @@ class CommandHandler extends HandlerStructure {
     /**
      * Get command.
      * 
-     * @param {String} commandName Command name
-     * @returns {Object} Command
+     * @param {string} commandName - Command name
+     * @returns {Object} - Command Object
      */
     getCommand(commandName) {
         return this.commands[commandName];
@@ -30,8 +30,8 @@ class CommandHandler extends HandlerStructure {
     /**
      * Get guild settings from database.
      * 
-     * @param {Object} guild Guild Object
-     * @returns {Object} Guild settings 
+     * @param {Object} guild - Guild Object
+     * @returns {Object} - Guild settings 
      */
     getGuildSettings(guild) {
         return this.client.repository.getRepository('guilds').getOrUpdate(guild.id, true);
@@ -40,8 +40,8 @@ class CommandHandler extends HandlerStructure {
     /**
      * Check if user is a developer.
      * 
-     * @param {Object} user User Object
-     * @returns {Boolean}
+     * @param {Object} user - User Object
+     * @returns {boolean} - Is developer?
      */
     isDeveloper(user) {
         return this.client.config.developers.indexOf(user.id) > -1;
@@ -50,9 +50,9 @@ class CommandHandler extends HandlerStructure {
     /**
      * Checks if user has permission to run a command.
      * 
-     * @param {Object} command Command Object 
-     * @param {Object} user User Object
-     * @returns {Boolean}
+     * @param {Object} command - Command Object 
+     * @param {Object} user - User Object
+     * @returns {boolean} - Has permission?
      */
     hasPermission(command, user) {
         return command.meta.developerOnly ? this.isDeveloper(user) : true;
@@ -61,7 +61,7 @@ class CommandHandler extends HandlerStructure {
     /**
      * Handles message event and checks for command.
      * 
-     * @param {Object} message Message Object
+     * @param {Object} message - Message Object
      * @returns {undefined}
      */
     async onMessageEvent(message) {

@@ -3,15 +3,14 @@ import RoutineStructure from '../structures/routine';
 /**
  * Stats routine.
  * 
- * @prop {Function} guilds Guild count
- * @prop {Function} channels Channel count
- * @prop {Function} users User count
+ * @prop {Object} statsUtil - Stats util
+ * @prop {Object} statsRepository - Stats repository
  */
 class StatsRoutine extends RoutineStructure {
     /**
      * Create stats routine.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, 1000 * 60 * 60 * 8, { // 8 hours

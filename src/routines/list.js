@@ -3,13 +3,13 @@ import RoutineStructure from '../structures/routine';
 /**
  * List routine. Updates guild count for bot list sites.
  * 
- * @prop {Function} guilds Guild count
+ * @prop {Function} guilds - Guild count
  */
 class ListRoutine extends RoutineStructure {
     /**
      * Create list routine.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, 1000 * 60 * 60 * 8, { // 8 hours
@@ -39,7 +39,7 @@ class ListRoutine extends RoutineStructure {
     /**
      * Update guilds for discordbots.org.
      * 
-     * @param {Number} guildCount Guild count
+     * @param {number} guildCount - Guild count
      */
     async discordBotList(guildCount) {
         const API = this.client.config.list.discordBotList;
@@ -60,7 +60,7 @@ class ListRoutine extends RoutineStructure {
     /**
      * Update guilds for discord.bots.gg.
      * 
-     * @param {Number} guildCount Guild count
+     * @param {number} guildCount - Guild count
      */
     async discordBots(guildCount) {
         const API = this.client.config.list.discordBots;
@@ -81,7 +81,7 @@ class ListRoutine extends RoutineStructure {
     /**
      * Update guilds for bots.ondiscord.xyz.
      * 
-     * @param {Number} guildCount Guild count
+     * @param {number} guildCount - Guild count
      */
     async botsOnDiscord(guildCount) {
         const API = this.client.config.list.botsOnDiscord;
@@ -102,7 +102,7 @@ class ListRoutine extends RoutineStructure {
     /**
      * Update guilds for carbonitex.net.
      * 
-     * @param {Number} guildCount Guild count
+     * @param {number} guildCount - Guild count
      */
     async carbonitex(guildCount) {
         const API = this.client.config.list.carbonitex;

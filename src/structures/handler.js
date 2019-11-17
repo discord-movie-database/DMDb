@@ -4,16 +4,16 @@ import consola from 'consola';
 /**
  * Handler structure.
  * 
- * @prop {Object} client DMDb client extends Eris
- * @prop {String} handlerName Handler name
- * @prop {String} directory Directory for handler files
+ * @prop {Object} client - DMDb client extends Eris
+ * @prop {string} handlerName - Handler name
+ * @prop {string} directory - Directory for handler files
  */
 class HandlerStructure {
     /**
      * Create handler structure.
      * 
-     * @param {Object} client DMDb client extends Eris
-     * @param {String} handlerName Handler name
+     * @param {Object} client - DMDb client extends Eris
+     * @param {string} handlerName - Handler name
      */
     constructor(client, handlerName) {
         this.client = client;

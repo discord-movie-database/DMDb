@@ -7,17 +7,16 @@ class ReadyEvent extends EventStructure {
     /**
      * Create ready event.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client);
     }
 
     /**
-     * Function to run when event triggers.
+     * Function to run when event triggers. Starts routines.
      * 
-     * Starts routines.
-     * 
+     * @param {*} event - Event
      * @returns {undefined}
      */
     async onEvent() {

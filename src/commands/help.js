@@ -7,7 +7,7 @@ class HelpCommand extends CommandStructure {
     /**
      * Create help command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
@@ -23,8 +23,8 @@ class HelpCommand extends CommandStructure {
     /**
      * Format flags into string.
      * 
-     * @param {Array} flags Flags to format
-     * @returns {(String | Boolean)} Formatted flags
+     * @param {Array} flags - Flags to format
+     * @returns {(string | boolean)} - Formatted flags
      */
     formatFlags(flags) {
         return flags ? flags.map((flag) => {
@@ -35,8 +35,8 @@ class HelpCommand extends CommandStructure {
     /**
      * Get info for a command.
      * 
-     * @param {*} message Message object
-     * @param {*} commandName Command name
+     * @param {Object} message - Message object
+     * @param {string} commandName - Command name
      */
     commandInfo(message, commandName) {
         // Format command name.
@@ -99,14 +99,15 @@ class HelpCommand extends CommandStructure {
         const embed = {
             title: 'DMDb - Discord Movie Database',
             description: `> Use **\`${prefix}help [Page Number]\`** for more commands.\n` +
-                `> Or **\`${prefix}help [Command Name]\`** to get more information about a command.\n` +
-                '\nExample Command: `!?movies thor --page 2 --year 2011`\n' +
-                `Use the \`${prefix}flags\` command to learn how to use them.\n\nCommand List:`,
+                `> Or **\`${prefix}help [Command Name]\`** to get more information about a ` +
+                `command.\n` +
+                '\nExample Command: `!?movies endgame --page 2 --year 2011`\n' +
+                `Use the \`${prefix}flags\` command to learn how to use them.\n` +
+                `\nCommand List - Page: **${page + 1}** / ${commandPages.length}`,
 
             fields: [],
 
             footer: this.join([
-                `Page: ${page + 1}/${commandPages.length}`,
                 `Total Commands: ${commandNames.length}`,
                 `Data from The Movie Database (TMDb)`
             ], true),
@@ -132,9 +133,9 @@ class HelpCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for flags.

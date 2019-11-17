@@ -7,7 +7,7 @@ class UpcomingCommand extends CommandStructure {
     /**
      * Create upcoming command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
@@ -23,9 +23,9 @@ class UpcomingCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Status "Searching..." message.
@@ -36,19 +36,22 @@ class UpcomingCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
+        // Get API options.
+        const options = this.APIOptions(guildSettings, { page: flags.page });
+
         // Get response from API.
-        const response = await this.tmdb.movie.upcoming(flags);
+        const response = await this.tmdb.movie.upcoming(options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
-        // Edit status message with results.
+        // Edit status message with response.
         this.embed.edit(statusMessage, {
             title: 'Upcoming Movies',
+            url: 'https://www.themoviedb.org/movie/upcoming',
+
+            thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),
 
-            thumbnail: this.thumbnailURL(response.results[0].poster_path, true),
-
-            // Format results.
-            fields: response.results.map((result) => this.resultField(result.title, [
+            fields: response.results.map((result) => this.resultField(this.check(result.title), [
                 `Vote Average: ${this.check(result.vote_average)}`,
                 `Release Date: ${this.date(result.release_date)}`,
                 this.TMDbID(result.id)

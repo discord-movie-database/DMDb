@@ -7,7 +7,7 @@ class PeopleCommand extends CommandStructure {
     /**
      * Create people command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
@@ -23,9 +23,9 @@ class PeopleCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for arguments.
@@ -39,26 +39,25 @@ class PeopleCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
+        // Get API options.
+        const options = this.APIOptions(guildSettings, { page: flags.page });
+
         // Get response from API.
-        const response = await this.tmdb.search.person(message.content, flags);
+        const response = await this.tmdb.search.person(message.content, options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.
         this.embed.edit(statusMessage, {
             title: 'Search Results',
+
+            thumbnail: { url: this.thumbnailURL(response.results[0].profile_path) },
             description: this.resultsDescription(response),
 
-            thumbnail: this.thumbnailURL(response.results[0].profile_path, true),
-
-            // Format results.
             fields: response.results.map((result) => this.resultField(result.name, [
                 `Known For: ${this.list(result.known_for.slice(0, 2).map((known) => 
                     known.media_type === 'movie' ? known.title : known.name))}`,
                 this.TMDbID(result.id)
             ], result.index)),
-
-            // Tip option.
-            footer: guildSettings.tips ? 'TIP: Use flags (--page) to get more results.' : ''
         });
     }
 }

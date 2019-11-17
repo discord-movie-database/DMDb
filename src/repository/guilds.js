@@ -3,13 +3,13 @@ import RepositoryStructure from '../structures/repository';
 /**
  * Guilds repository.
  * 
- * @prop {Object} model Guilds model
+ * @prop {Object} model - Guilds model
  */
 class GuildsRepository extends RepositoryStructure {
     /**
      * Create guilds repository.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client);
@@ -29,50 +29,55 @@ class GuildsRepository extends RepositoryStructure {
     /**
      * Get guild from database.
      * 
-     * @param {String} id Guild id
-     * @returns {Promise} Guild settings
+     * @param {string} ID - Guild ID
+     * @returns {Promise} - Guild settings
      */
-    get(id) {
-        return this.model.findOne({ id });
+    get(ID) {
+        return this.model.findOne({ id: ID });
     }
 
     /**
      * Insert guild into database.
      * 
-     * @param {String} id Guild id
-     * @param {Object} data Guild settings
-     * @returns {Promise} Guild settings
+     * @param {string} ID - Guild ID
+     * @param {Object} data - Guild settings
+     * @returns {Promise} - Guild settings
      */
-    insert(id, data) {
-        return this.model.create({ id, ...data });
+    insert(ID, data) {
+        return this.model.create({ id: ID, ...data });
     }
 
     /**
      * Update guild in database.
      * 
-     * @param {String} id Guild id
-     * @param {Object} data Guild settings
-     * @returns {Promise} Guild settings
+     * @param {string} ID - Guild ID
+     * @param {Object} data - Guild settings
+     * @returns {Promise} - Guild settings
      */
-    update(id, data) {
-        return this.model.findOneAndUpdate({ id }, { ...data });
+    update(ID, data) {
+        return this.model.findOneAndUpdate({ id: ID }, { ...data });
     }
 
     /**
      * Delete guild in database.
      * 
-     * @param {String} id Guild id
+     * @param {string} ID - Guild ID
      * @returns {Promise}
      */
-    delete(id) {
-        return this.model.deleteOne({ id });
+    delete(ID) {
+        return this.model.deleteOne({ id: ID });
     }
 
-    getOrUpdate(id, insert, data) {
-        return this.model.findOneAndUpdate({ id }, data || {}, insert ? {
-            new: true,
-            upsert: true,
-            setDefaultsOnInsert: true,
+    /**
+     * Get guild, update or insert (if it doesn't exist) guild.
+     * 
+     * @param {string} ID - Guild ID
+     * @param {boolean} insert - Insert guild if it doesn't exist?
+     * @param {Object} data - Guild settings
+     */
+    getOrUpdate(ID, insert, data) {
+        return this.model.findOneAndUpdate({ id: ID }, data || {}, insert ? {
+            new: true, upsert: true, setDefaultsOnInsert: true,
         } : {});
     }
 }

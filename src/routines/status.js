@@ -3,15 +3,15 @@ import RoutineStructure from '../structures/routine';
 /**
  * Status routine. Updates the bot's status message every 30 seconds.
  * 
- * @prop {Number} position ID of current status value
- * @prop {String} prefix Status message prefix
- * @prop {String} seperator Status message and prefix seperator
+ * @prop {number} position - ID of current status value
+ * @prop {string} prefix - Status message prefix
+ * @prop {string} seperator - Status message and prefix seperator
  */
 class StatusRoutine extends RoutineStructure {
     /**
      * Create status routine.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, 1000 * 60 / 2, { // 30 seconds

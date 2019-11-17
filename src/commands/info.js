@@ -8,7 +8,7 @@ class InfoCommand extends CommandStructure {
     /**
      * Create info command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
@@ -53,9 +53,9 @@ class InfoCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Create embed.
@@ -67,6 +67,8 @@ class InfoCommand extends CommandStructure {
                 '[Source Code](https://github.com/discord-movie-database/)',
                 '[Website](https://dmdb.xyz)'
             ]),
+
+            thumbnail: 'https://i.imgur.com/ogiqJHb.png',
 
             fields: this.fields([{
                 name: 'Bot Version',
@@ -98,7 +100,7 @@ class InfoCommand extends CommandStructure {
             }, {
                 name: 'Uptime',
                 value: this.uptime(),
-            }])
+            }]),
         });
     }
 }

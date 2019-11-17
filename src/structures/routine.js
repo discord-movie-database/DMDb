@@ -1,21 +1,21 @@
 /**
  * Routine structure. Runs a function on an interval.
  * 
- * @prop {Object} client DMDb client extends Eris
- * @prop {Boolean} runOnIntervalStart Run on interval start?
- * @prop {Boolean} prodOnly Run in production only?
- * @prop {Number} intervalDuration Run function every x...
- * @prop {*} interval Interval
+ * @prop {Object} client - DMDb client extends Eris
+ * @prop {boolean} runOnIntervalStart - Run on interval start?
+ * @prop {boolean} prodOnly - Run in production only?
+ * @prop {number} intervalDuration - Run function every x...
+ * @prop {*} interval - Interval
  */
 class RoutineStructure {
     /**
      * Create routine structure.
      * 
-     * @param {Object} client DMDb client extends Eris
-     * @param {Number} intervalDuration Run function every x...
-     * @param {Object} options Routine options
-     * @param {Boolean} [options.runOnIntervalStart] Run on interval start?
-     * @param {Boolean} [options.prodOnly] Run in production only?
+     * @param {Object} client - DMDb client extends Eris
+     * @param {number} intervalDuration - Run function every x...
+     * @param {Object} options - Routine options
+     * @param {boolean} [options.runOnIntervalStart] - Run on interval start?
+     * @param {boolean} [options.prodOnly] - Run in production only?
      */
     constructor(client, intervalDuration, options) {
         this.client = client;

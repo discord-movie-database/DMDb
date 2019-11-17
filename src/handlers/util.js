@@ -7,7 +7,7 @@ class UtilHandler extends HandlerStructure {
     /**
      * Create util handler.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, 'util');
@@ -18,8 +18,8 @@ class UtilHandler extends HandlerStructure {
     /**
      * Get util.
      * 
-     * @param {String} utilName Util name
-     * @returns {Object} Util
+     * @param {string} utilName - Util name
+     * @returns {Object} - Util Object
      */
     getUtil(utilName) {
         return this.util[utilName];

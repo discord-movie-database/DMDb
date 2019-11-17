@@ -1,19 +1,19 @@
 import CommandStructure from '../structures/command';
 
 /**
- * Show command.
+ * Show command. Get the primary information about a TV show.
  */
 class ShowCommand extends CommandStructure {
     /**
      * Create show command.
      * 
-     * @param {Object} client DMDb client extends Eris
+     * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, {
             description: 'Get information about a TV show.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: false,
+            flags: ['more'],
             developerOnly: false,
             hideInHelp: false,
             weight: 500
@@ -23,9 +23,9 @@ class ShowCommand extends CommandStructure {
     /**
      * Function to run when command is executed.
      * 
-     * @param {Object} message Message object
-     * @param {*} commandArguments Command arguments
-     * @param {*} guildSettings Guild settings
+     * @param {Object} message - Message object
+     * @param {Array} commandArguments - Command arguments
+     * @param {Object} guildSettings - Guild settings
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for arguments.
@@ -35,22 +35,32 @@ class ShowCommand extends CommandStructure {
         const statusMessage = await this.searchingMessage(message);
         if (!statusMessage) return; // No permission to send messages.
 
-        // Get result from API.
-        const response = await this.tmdb.tv.details(message.content);
+        // Check message for flags.
+        const flags = this.flags.parse(message.content, this.meta.flags);
+        message.content = flags.query; // Remove flags from query.
+
+        // Set API options.
+        const options = this.APIOptions(guildSettings, {});
+
+        // Get response from API.
+        const response = await this.tmdb.tv.details(message.content, options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
-        // Edit status message with result.
+        // Edit status message with response data.
         this.embed.edit(statusMessage, {
-            url: this.TMDbShowURL(response.id),
             title: response.name,
+            url: this.TMDbShowURL(response.id),
+
+            thumbnail: { url: this.thumbnailURL(response.poster_path) },
             description: this.description(response.overview),
 
-            thumbnail: this.thumbnailURL(response.poster_path, true),
-
-            // Format response.
-            fields: this.fields([{
+            fields: flags.more ? this.fields([{
+                name: 'Tagline',
+                value: this.check(response.tagline),
+                inline: false,
+            }, {
                 name: 'Status',
-                value: response.status,
+                value: this.check(response.status),
             }, {
                 name: 'Type',
                 value: this.check(response.type),
@@ -58,45 +68,73 @@ class ShowCommand extends CommandStructure {
                 name: 'In Production',
                 value: this.yesno(response.in_production),
             }, {
+                name: 'First Air Date',
+                value: this.date(response.first_air_date),
+            }, {
+                name: 'Last Air Date',
+                value: this.date(response.last_air_date),
+            }, {
                 name: 'Episode Runtime',
                 value: this.runtime(response.episode_run_time),
             }, {
-                name: 'First / Last Air Date',
-                value: `${this.date(response.first_air_date)} `
-                    + `/ ${this.date(response.last_air_date)}`,
+                name: 'Last Episode to Air',
+                value: this.date(response.last_episode_to_air
+                    ? response.last_episode_to_air.air_date : false),
             }, {
-                name: 'Season Count',
+                name: 'Next Episode to Air',
+                value: this.date(response.next_episode_to_air
+                    ? response.next_episode_to_air.air_date : false),
+            }, {
+                name: 'Number of Seasons',
                 value: `${this.check(response.number_of_seasons)} `
                     + `(${this.check(response.number_of_episodes)} episodes)`,
             }, {
-                name: 'Genres',
-                value: this.list(response.genres.map((g) => g.name)),
+                name: 'Vote Average',
+                value: this.check(response.vote_average),
+            }, {
+                name: 'Vote Count',
+                value: this.number(response.vote_count),
             }, {
                 name: '-',
                 value: '-',
             }, {
-                name: 'Tagline',
-                value: this.check(response.tagline),
-            }, {
-                name: 'Created By',
-                value: this.list(response.created_by.map((p) => p.name)),
+                name: 'Production Companies',
+                value: this.list(response.production_companies.map((l) => l.name)),
+                inline: false,
             }, {
                 name: 'Networks',
                 value: this.list(response.networks.map((n) => n.name)),
+                inline: false,
             }, {
                 name: 'Homepage',
                 value: this.check(response.homepage),
-            }, {
-                name: 'Vote Average',
+                inline: false,
+            }]) : this.fields([response.tagline ? {
+                name: '💬 — Tagline',
+                value: this.check(response.tagline),
+                inline: false,
+            } : { // Show genres instead of tagline if there isn't one.
+                name: '👽 — Genres',
+                value: this.list(response.genres.map((g) => g.name)),
+                inline: false,
+            }, response.vote_average ? {
+                name: '⭐ — Vote Average',
                 value: `**${this.check(response.vote_average)}** `
-                    + `(${this.check(response.vote_count)} votes)\n`,
+                    + `(${this.number(response.vote_count)} votes)`,
+            } : { // Show status instead of votes if there are none.
+                name: '🗞️ — Status',
+                value: this.check(response.status),
             }, {
-                name: 'TMDb ID',
-                value: this.TMDbID(response.id),
+                name: '📆 — First Air Date',
+                value: this.date(response.first_air_date),
             }, {
-                name: '-',
-                value: '-',
+                name: '🎞️ — Episode Runtime',
+                value: this.runtime(response.episode_run_time),
             }]),
+
+            timestamp: new Date().toISOString(),
+
+            footer: { text: `TMDb ID: ${this.TMDbID(response.id)}` },
         });
     }
 }
