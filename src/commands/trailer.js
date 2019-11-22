@@ -13,7 +13,7 @@ class TrailerCommand extends CommandStructure {
         super(client, {
             description: 'Get trailers for movies and TV shows.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['show', 'more', 'page'],
+            flags: ['tv', 'more', 'page'],
             developerOnly: false,
             hideInHelp: false,
             weight: 200

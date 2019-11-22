@@ -144,10 +144,12 @@ class TMDb extends UtilStructure {
         const response = await this.getEndpoint(endpoint, options);
         if (response.error) return response;
 
+        if (response.total_results === 0) return this.error('No results.');
+
         response.page = inputPage;
 
-        response.results.total_pages = Math.ceil(response.total_results / 5);
-        if (response.results.total_pages < inputPage) return this.error('No results found.');
+        response.total_pages = Math.ceil(response.total_results / 5);
+        if (inputPage > response.total_pages) return this.error('Page not found.');
 
         const pageOffset = (inputPage - 1) % 4 * 5;
 

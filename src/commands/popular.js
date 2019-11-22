@@ -13,7 +13,7 @@ class PopularCommand extends CommandStructure {
         super(client, {
             description: 'Current popular movies and TV shows on TMDb.',
             usage: false,
-            flags: ['page', 'show'],
+            flags: ['page', 'tv'],
             developerOnly: false,
             hideInHelp: false,
             weight: 100

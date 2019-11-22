@@ -17,9 +17,8 @@ class FlagsUtil extends UtilStructure {
         this.flagOptions = {
             page: { argRequired: true, desc: 'Get more results.' },
             year: { argRequired: true, desc: 'Get results from a specific year.' },
-            show: { argRequired: false, desc: 'Get a result for a TV show instead of a movie.' },
-            shows: { argRequired: false, desc: 'Get results for TV shows instead of movies.' },
-            person: { argRequired: false, desc: 'Get a result for a person instead of a movie.' },
+            tv: { argRequired: false, desc: 'Get a results for TV shows.' },
+            person: { argRequired: false, desc: 'Get a results for people.' },
             more: { argRequired: false, desc: 'Get more information for a result.' }
         };
     }

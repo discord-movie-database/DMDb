@@ -13,7 +13,7 @@ class PosterCommand extends CommandStructure {
         super(client, {
             description: 'Get the poster for a movie, TV show or person.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['show', 'person'],
+            flags: ['tv', 'person'],
             developerOnly: false,
             hideInHelp: false,
             weight: 400

@@ -46,7 +46,7 @@ class ListRoutine extends RoutineStructure {
 
         try {
             await this.client.axios({
-                url: `${API.endpoint}/bots/${this.client.bot.id}/stats`,
+                url: `${API.endpoint}/bots/${this.client.user.id}/stats`,
                 headers: { Authorization: API.token },
                 data: { server_count: guildCount },
             });
@@ -67,7 +67,7 @@ class ListRoutine extends RoutineStructure {
 
         try {
             await this.client.axios({
-                url: `${API.endpoint}/bots/${this.client.bot.id}/stats`,
+                url: `${API.endpoint}/bots/${this.client.user.id}/stats`,
                 headers: { Authorization: API.token },
                 data: { guildCount },
             });
@@ -88,7 +88,7 @@ class ListRoutine extends RoutineStructure {
 
         try {
             await this.client.axios({
-                url: `${API.endpoint}/bots/${this.client.bot.id}/guilds`,
+                url: `${API.endpoint}/bots/${this.client.user.id}/guilds`,
                 headers: { Authorization: API.token },
                 data: { guildCount },
             });

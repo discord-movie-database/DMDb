@@ -90,13 +90,14 @@ class EmbedUtil extends UtilStructure {
      * Create or edit a successa message.
      * 
      * @param {(Object | string)} message - Channel ID or Message Promise
-     * @param {String} content - Success message
+     * @param {string} content - Success message
+     * @param {boolean} [title] - Embed title
      * @returns {Promise} - Message Promise
      */
-    success(message, content) {
+    success(message, content, title) {
         return this.handle(message, {
             color: 0x329932,
-            title: 'Success',
+            title: title || 'Success',
             description: content || 'No success message.',
         });
     }
@@ -105,13 +106,14 @@ class EmbedUtil extends UtilStructure {
      * Create or edit an error message.
      * 
      * @param {(Object | string)} message - Channel ID or Message Promise
-     * @param {String} content - Error message
+     * @param {string} content - Error message
+     * @param {boolean} [title] - Embed title
      * @returns {Promise} - Message Promise
      */
-    error(message, content) {
+    error(message, content, title) {
         return this.handle(message, {
             color: 0xFF3232,
-            title: 'Error',
+            title: title || 'Error',
             description: content || 'No error message.',
         });
     }

@@ -65,9 +65,9 @@ class HelpCommand extends CommandStructure {
     /**
      * Get a list of commands.
      * 
-     * @param {Object} message Message object
-     * @param {Object} guildSettings Guild settings
-     * @param {Number} page Page number
+     * @param {Object} message - Message object
+     * @param {Object} guildSettings - Guild settings
+     * @param {number} page - Page number
      */
     commandList(message, guildSettings, page) {
         // Page number.
@@ -107,10 +107,12 @@ class HelpCommand extends CommandStructure {
 
             fields: [],
 
-            footer: this.join([
+            timestamp: new Date().toISOString(),
+
+            footer: { text: this.join([
                 `Total Commands: ${commandNames.length}`,
                 `Data from The Movie Database (TMDb)`
-            ], true),
+            ], true), }
         };
 
         // Put commands into embed fields.

@@ -1,5 +1,7 @@
-import packageInfo from '../../package.json';
 import CommandStructure from '../structures/command';
+
+import os from 'os';
+import packageInfo from '../../package.json';
 
 /**
  * Info command. Get information and stats about the bot.
@@ -51,6 +53,23 @@ class InfoCommand extends CommandStructure {
     }
 
     /**
+     * Converts bytes to human readable version.
+     * 
+     * @param {number} bytes Bytes
+     * @returns {string} Human readable
+     */
+    formatBytes(bytes) {
+        if (bytes === 0) return '0 Bytes';
+    
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    /**
      * Function to run when command is executed.
      * 
      * @param {Object} message - Message object
@@ -68,7 +87,7 @@ class InfoCommand extends CommandStructure {
                 '[Website](https://dmdb.xyz)'
             ]),
 
-            thumbnail: 'https://i.imgur.com/ogiqJHb.png',
+            thumbnail: { url: 'https://i.imgur.com/ogiqJHb.png' },
 
             fields: this.fields([{
                 name: 'Bot Version',
@@ -97,6 +116,15 @@ class InfoCommand extends CommandStructure {
             }, {
                 name: 'Commands Executed',
                 value: this.client.command.commandsExecuted + 1,
+            }, {
+                name: 'OS Platform',
+                value: os.platform(),
+            }, {
+                name: 'OS Free Memory',
+                value: this.formatBytes(os.freemem()),
+            }, {
+                name: 'OS Total Memory',
+                value: this.formatBytes(os.totalmem()),
             }, {
                 name: 'Uptime',
                 value: this.uptime(),
