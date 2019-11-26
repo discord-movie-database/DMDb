@@ -52,13 +52,13 @@ class SimilarCommand extends CommandStructure {
 
         // Edit status message with results.
         this.embed.edit(statusMessage, {
-            title: `Similar ${flags.show ? 'TV Shows' : 'Movies'} ` +
+            title: `Similar ${flags.tv ? 'TV Shows' : 'Movies'} ` +
                 `for ${response.title || response.name}`,
 
             thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),
 
-            fields: response.results.map((result) => flags.show ? this.resultField(result.name, [
+            fields: response.results.map((result) => flags.tv ? this.resultField(result.name, [
                 // Show
                 `First Air Date: ${this.date(result.first_air_date)}`,
                 `Vote Average: ${this.check(result.vote_average)}`,

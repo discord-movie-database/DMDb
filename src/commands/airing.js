@@ -30,7 +30,7 @@ class AiringCommand extends CommandStructure {
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Status "Searching..." message.
-        const statusMessage = await this.searchingMessage(message, guildSettings);
+        const statusMessage = await this.searchingMessage(message);
         if (!statusMessage) return; // No permission to send messages.
 
         // Check message for flags.
@@ -38,7 +38,7 @@ class AiringCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get API options.
-        const options = this.APIOptions(guildSettings, flags);
+        const options = this.APIOptions(guildSettings, { page: flags.page || message.content });
 
         // Get response from API.
         const response = await this.tmdb.tv.airing(options);

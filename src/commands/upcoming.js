@@ -38,7 +38,7 @@ class UpcomingCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get API options.
-        const options = this.APIOptions(guildSettings, { page: flags.page });
+        const options = this.APIOptions(guildSettings, { page: flags.page || message.content });
 
         // Get response from API.
         const response = await this.tmdb.movie.upcoming(options);

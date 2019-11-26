@@ -35,7 +35,7 @@ class ConfigCommand extends CommandStructure {
             },
 
             'toggle-command': {
-                description: 'Disable to enable a command.',
+                description: 'Disable or enable a command.',
                 usage: '<Command Name>',
                 validation: this.disabledCommands,
             },
@@ -110,6 +110,8 @@ class ConfigCommand extends CommandStructure {
         // Check if command exists
         if (Object.keys(this.client.command.commands).indexOf(query) < 0)
             return this.error('Command not found.');
+
+        if (query === 'config') return this.error('This command cannot disable this command.');
 
         // Method type to enable to disable command
         const method = guildSettings.disabledCommands.indexOf(query) < 0 ? 'push' : 'pull';

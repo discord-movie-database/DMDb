@@ -60,7 +60,7 @@ class PosterCommand extends CommandStructure {
         // Edit status message with poster.
         this.embed.edit(statusMessage, {
             title: `${response.title || response.name} Poster`,
-            image: this.imageURL(poster.file_path),
+            image: { url: this.thumbnailURL(poster.file_path, true) },
         });
     }
 }

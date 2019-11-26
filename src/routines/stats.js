@@ -13,7 +13,7 @@ class StatsRoutine extends RoutineStructure {
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
-        super(client, 1000 * 60 * 60 * 8, { // 8 hours
+        super(client, 1000 * 60 * 60 * 2, { // 2 hours
             runOnIntervalStart: true,
         });
 

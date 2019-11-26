@@ -51,8 +51,8 @@ class FlagsCommand extends CommandStructure {
                 'they do.'),
 
             // List flag options.
-            fields: flags.more ? Object.keys(this.flagOptions).map((flag) => ({
-                name: this.titleCase(flag), value: this.flagOptions[flag].desc })) : []
+            fields: flags.more ? Object.keys(this.flagOptions).map((flagName) => ({
+                name: flagName, value: this.flagOptions[flagName].desc })) : []
         });
     }
 }

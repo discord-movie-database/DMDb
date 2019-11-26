@@ -41,7 +41,7 @@ class PopularCommand extends CommandStructure {
         const media = this.mediaSource(flags);
 
         // Get options from API.
-        const options = this.APIOptions(guildSettings, { page: flags.page });
+        const options = this.APIOptions(guildSettings, { page: flags.page || message.content });
 
         // Get results from API.
         const response = await this.tmdb[media].popular(options);
@@ -49,13 +49,13 @@ class PopularCommand extends CommandStructure {
 
         // Edit status message with response.
         this.embed.edit(statusMessage, {
-            title: `Currently Popular ${flags.show ? 'TV Shows' : 'Movies'}`,
-            url: flags.show ? 'https://www.themoviedb.org/tv' : 'https://www.themoviedb.org/movie',
+            title: `Currently Popular ${flags.tv ? 'TV Shows' : 'Movies'}`,
+            url: flags.tv ? 'https://www.themoviedb.org/tv' : 'https://www.themoviedb.org/movie',
 
             thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),
 
-            fields: response.results.map((result) => flags.show ? this.resultField(result.name, [
+            fields: response.results.map((result) => flags.tv ? this.resultField(result.name, [
                 // Show
                 `First Air Date: ${this.date(result.first_air_date)}`,
                 `Vote Average: ${this.check(result.vote_average)}`,
