@@ -17,12 +17,10 @@ class GuildsRepository extends RepositoryStructure {
         this.model = this.db.model('guilds', new this.db.Schema({
             id: { type: String, required: true },
             prefix: { type: String, default: '' },
-            embedColour: { type: String, default: '' },
-            tips: { type: Boolean, default: true },
             commandDisabledMessage: { type: Boolean, default: true },
             disabledCommands: { type: [ String ], default: [] },
             apiLanguage: { type: String, default: 'en' },
-            botLanguage: { type: String, default: 'en' },
+            apiRegion: { type: String, default: 'us' },
         }));
     }
 
@@ -72,11 +70,11 @@ class GuildsRepository extends RepositoryStructure {
      * Get guild, update or insert (if it doesn't exist) guild.
      * 
      * @param {string} ID - Guild ID
-     * @param {boolean} insert - Insert guild if it doesn't exist?
      * @param {Object} data - Guild settings
+     * @param {boolean} insert - Do not insert guild if it doesn't exist?
      */
-    getOrUpdate(ID, insert, data) {
-        return this.model.findOneAndUpdate({ id: ID }, data || {}, insert ? {
+    getOrUpdate(ID, data, insert) {
+        return this.model.findOneAndUpdate({ id: ID }, data || {}, !insert ? {
             new: true, upsert: true, setDefaultsOnInsert: true,
         } : {});
     }

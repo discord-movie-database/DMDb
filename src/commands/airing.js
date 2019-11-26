@@ -26,10 +26,11 @@ class AiringCommand extends CommandStructure {
      * @param {Object} message - Message object
      * @param {Array} commandArguments - Command arguments
      * @param {Object} guildSettings - Guild settings
+     * @returns {*} A bit of everything...
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Status "Searching..." message.
-        const statusMessage = await this.searchingMessage(message);
+        const statusMessage = await this.searchingMessage(message, guildSettings);
         if (!statusMessage) return; // No permission to send messages.
 
         // Check message for flags.

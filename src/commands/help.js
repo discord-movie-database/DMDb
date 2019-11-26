@@ -138,6 +138,7 @@ class HelpCommand extends CommandStructure {
      * @param {Object} message - Message object
      * @param {Array} commandArguments - Command arguments
      * @param {Object} guildSettings - Guild settings
+     * @returns {*} A bit of everything...
      */
     async executeCommand(message, commandArguments, guildSettings) {
         // Check for flags.

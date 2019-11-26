@@ -3,7 +3,7 @@ import HandlerStructure from '../structures/handler';
 /**
  * Command handler.
  * 
- * @prop {number} commandsExecuted - Amount of commands executed since last restart.
+ * @prop {number} commandsExecuted - Amount of commands executed since last restart
  */
 class CommandHandler extends HandlerStructure {
     /**
@@ -34,7 +34,7 @@ class CommandHandler extends HandlerStructure {
      * @returns {Object} - Guild settings 
      */
     getGuildSettings(guild) {
-        return this.client.repository.getRepository('guilds').getOrUpdate(guild.id, true);
+        return this.client.repository.getRepository('guilds').getOrUpdate(guild.id);
     }
 
     /**
@@ -86,6 +86,12 @@ class CommandHandler extends HandlerStructure {
 
         const command = this.commands[commandName];
         if (!command) return;
+
+        if (guildSettings.disabledCommands.indexOf(commandName) > -1) {
+            return guildSettings.commandDisabledMessage
+                ? this.client.util.getUtil('embed').error(message.channel.id, 'Command disabled.')
+                : null;
+        }
 
         if (!this.hasPermission(command, user)) return;
 

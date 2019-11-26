@@ -58,7 +58,7 @@ class EmbedUtil extends UtilStructure {
      * Create a message.
      * 
      * @param {string} channelID - Channel ID
-     * @param {Object} embed - Embed Data
+     * @param {Object} embed - Embed data
      * @returns {Promise} - Message Promise
      */
     create(channelID, embed) {
@@ -73,7 +73,7 @@ class EmbedUtil extends UtilStructure {
      * Edit a message.
      * 
      * @param {Promise} message - Message to edit
-     * @param {Object} embed - Embed Data
+     * @param {Object} embed - Embed data
      * @returns {Promise} - Message Promise
      */
     edit(message, embed) {

@@ -66,6 +66,16 @@ class CommandStructure {
     }
 
     /**
+     * Create success object.
+     * 
+     * @param {string} message - Success message
+     * @returns {Object} - Success object
+     */
+    success(message) {
+        return { success: message };
+    }
+
+    /**
      * Creates incorrect usage error message.
      * 
      * @param {Object} message - Message object
@@ -103,7 +113,7 @@ class CommandStructure {
      * @returns {Object} - Options object
      */
     APIOptions(options, custom) {
-        return { ...custom, language: options.language || 'en', region: options.region || 'us' };
+        return { ...custom, language: options.apiLanguage, region: options.apiRegion };
     }
 
     /**
