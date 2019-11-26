@@ -72,12 +72,19 @@ class CommandHandler extends HandlerStructure {
         if (user.bot) return;
 
         const guildSettings = await this.getGuildSettings(guild);
-        const prefix = guildSettings.prefix || this.client.config.prefix;
+        let prefix = guildSettings.prefix || this.client.config.prefix;
 
-        if (!message.content.startsWith(prefix)) return;
+        if (!message.content.startsWith(prefix)) {
+            const mention = `<@${this.client.user.id}> `;
 
-        const messageArguments = message.content.split(' ');
-        const commandName = messageArguments[0].slice(prefix.length).toLowerCase();
+            if (!message.content.startsWith(mention)) return;
+            prefix = mention;
+        }
+
+        const messageContent = message.content.slice(prefix.length);
+        const messageArguments = messageContent.split(' ');
+
+        const commandName = messageArguments[0].toLowerCase();
         const commandArguments = messageArguments.slice(1);
 
         message.raw = message.content;

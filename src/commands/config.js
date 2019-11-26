@@ -28,7 +28,8 @@ class ConfigCommand extends CommandStructure {
 
         this.options = {
             'prefix': {
-                description: `Change the command prefix. Default: \`${this.client.config.prefix}\``,
+                description: `Change the command prefix. `
+                    + `Default: \`${this.client.config.prefix}\`.`,
                 usage: '<New Prefix>',
                 validation: this.prefix,
             },
@@ -40,20 +41,20 @@ class ConfigCommand extends CommandStructure {
             },
 
             'command-disabled-message': {
-                description: 'Toggle error message if a command is disabled. Default: `enabled`',
+                description: 'Toggle error message if a command is disabled. Default: `enabled`.',
                 validation: this.commandDisabledMessage,
             },
 
             'api-language': {
                 type: 'string',
-                description: 'Change API response language. Default: `en`',
+                description: 'Change API response language. Default: `en`.',
                 usage: '<ISO 639-1 Code>',
                 validation: this.apiLanguage,
             },
 
             'api-region': {
                 type: 'string',
-                description: 'Change API region. Default: `us`',
+                description: 'Change API region. Default: `us`.',
                 usage: '<ISO 3166-1 alpha-2 Code>',
                 validation: this.apiRegion,
             },
