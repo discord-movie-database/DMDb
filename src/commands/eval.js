@@ -20,6 +20,38 @@ class EvalCommand extends CommandStructure {
         });
     }
 
+    getShardInfo() {
+        let shardsInfo = '';
+        let shardsGuildCount = new Array(this.client.shards.size).fill(0);
+
+        this.client.guilds.forEach((guild) => {
+            shardsGuildCount[guild.shard.id]++
+        });
+
+        this.client.shards.forEach((shard) => {
+            shardsInfo += `**${shard.id}** | ${shard.status} | `
+                + `${shard.latency}ms | ${shardsGuildCount[shard.id]} guilds\n`
+        });
+
+        return shardsInfo;
+    }
+
+    getLargeGuilds() {
+        let guildsInfo = '';
+        let largeGuilds = [];
+
+        this.client.guilds.forEach((guild) => {
+            if (guild.large) largeGuilds.push(guild);
+        });
+
+        largeGuilds.forEach((guild) => {
+            guildsInfo += `**${guild.name}** (${guild.id}) | m${guild.memberCount} | `
+                + `s${guild.shard.id}\n`;
+        });
+
+        return guildsInfo;
+    }
+
     /**
      * Function to run when command is executed.
      * 

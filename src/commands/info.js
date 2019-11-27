@@ -109,7 +109,7 @@ class InfoCommand extends CommandStructure {
                 name: 'Users',
                 value: `${this.stats.getUsers()}`,
             }, {
-                name: 'Shards',
+                name: 'Shard Count',
                 value: `${this.client.shards.size}`,
             }, {
                 name: 'Current Shard',
