@@ -333,14 +333,30 @@ class CommandStructure {
     }
 
     /**
+     * Format duration.
+     * 
+     * @param {string} value - Value
+     * @return {string} - Updated value
+     */
+    duration(value) {
+        const hours = Math.floor(value / 60);
+        const minutes = value % 60;
+
+        const _hours = hours ? `${hours} Hour${hours > 1 ? 's' : ''} ` : '';
+        const _minutes = minutes ? `${minutes} Minutes` : '';
+
+        return _hours + _minutes;
+    }
+
+    /**
      * Converts runtime value to readable.
      * 
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
     runtime(value) {
-        return value
-            ? `${Array.isArray(value) ? value.join(', ') : value} Minutes` : this.check(value);
+        return value ? Array.isArray(value) ? value.map((r) => this.duration(r)).join(', ')
+            : this.duration(value) : this.check(value);
     }
 
     /**
