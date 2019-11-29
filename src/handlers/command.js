@@ -66,12 +66,11 @@ class CommandHandler extends HandlerStructure {
      */
     async onMessageEvent(message) {
         const user = message.author;
-        const guild = message.channel.guild;
 
-        if (!guild) return;
+        if (!message.channel.guild) return;
         if (user.bot) return;
 
-        const guildSettings = await this.getGuildSettings(guild);
+        const guildSettings = await this.getGuildSettings(message.channel.guild.id);
         let prefix = guildSettings.prefix || this.client.config.prefix;
 
         if (!message.content.startsWith(prefix)) {
@@ -106,7 +105,10 @@ class CommandHandler extends HandlerStructure {
             command.executeCommand(message, commandArguments, guildSettings);
 
             this.commandsExecuted++;
-            this.client.log.info(`${user.id} executed ${commandName} in ${guild.id}`);
+
+            this.client.log.info(`u${user.id} executed ${commandName} in ` +
+                `c${message.channel.id}/g${message.channel.guild.id}` +
+                `${message.content ? ` with args ${message.content}` : ''}`);
         } catch (error) {
             this.client.log.error(error);
 
