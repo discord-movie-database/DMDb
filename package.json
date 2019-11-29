@@ -1,19 +1,21 @@
 {
+    "private": true,
+    "version": "3.0.1",
     "name": "dmdb",
     "description": "Discord Movie Database",
-    "version": "3.0.0",
-    "private": true,
+    "author": "discord-movie-database",
+    "license": "GPL-3.0",
     "scripts": {
-        "dev": "cross-env NODE_ENV=dev node -r esm index.js",
-        "prod": "cross-env NODE_ENV=prod node -r esm index.js"
+        "dev": "cross-env NODE_ENV=dev node -r esm src/index.js",
+        "prod": "cross-env NODE_ENV=prod node -r esm src/index.js"
     },
     "dependencies": {
         "axios": "^0.19.0",
-        "consola": "^2.10.1",
+        "consola": "^2.11.0",
         "cross-env": "^6.0.3",
         "eris": "^0.11.0",
         "esm": "^3.2.25",
-        "mongoose": "^5.7.7",
+        "mongoose": "^5.7.9",
         "saslprep": "^1.0.3"
     }
 }
