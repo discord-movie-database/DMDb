@@ -99,11 +99,11 @@ class ShowCommand extends CommandStructure {
                 name: '-',
                 value: '-',
             }, {
-                name: 'Production Companies',
+                name: `Production Compan${this.plural(response.production_companies, true)}`,
                 value: this.list(response.production_companies.map((l) => l.name)),
                 inline: false,
             }, {
-                name: 'Networks',
+                name: `Network${this.plural(response.networks)}`,
                 value: this.list(response.networks.map((n) => n.name)),
                 inline: false,
             }, {
@@ -115,7 +115,7 @@ class ShowCommand extends CommandStructure {
                 value: this.check(response.tagline),
                 inline: false,
             } : { // Show genres instead of tagline if there isn't one.
-                name: '👽 — Genres',
+                name: `👽 — Genre${this.plural(response.genres)}`,
                 value: this.list(response.genres.map((g) => g.name)),
                 inline: false,
             }, response.vote_average ? {

@@ -78,19 +78,19 @@ class MovieCommand extends CommandStructure {
                 name: 'IMDb ID',
                 value: this.check(response.imdb_id),
             }, {
-                name: 'Genres',
+                name: `Genre${this.plural(response.genres)}`,
                 value: this.list(response.genres.map((g) => g.name)),
                 inline: false,
             }, {
-                name: 'Languages',
+                name: `Spoken Language${this.plural(response.spoken_languages)}`,
                 value: this.list(response.spoken_languages.map((l) => l.name)),
                 inline: false,
             }, {
-                name: 'Production Countries',
+                name: `Production Countr${this.plural(response.production_countries, true)}`,
                 value: this.list(response.production_countries.map((c) => c.name)),
                 inline: false,
             }, {
-                name: 'Production Companies',
+                name: `Production Compan${this.plural(response.production_companies, true)}`,
                 value: this.list(response.production_companies.map((c) => c.name)),
                 inline: false,
             }, {
@@ -111,7 +111,7 @@ class MovieCommand extends CommandStructure {
                 value: this.check(response.tagline),
                 inline: false,
             } : { // Show genres instead of tagline if there isn't one.
-                name: '👽 — Genres',
+                name: `👽 — Genre${this.plural(response.genres)}`,
                 value: this.list(response.genres.map((g) => g.name)),
                 inline: false,
             }, response.vote_average ? {

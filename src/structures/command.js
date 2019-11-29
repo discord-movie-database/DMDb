@@ -122,8 +122,10 @@ class CommandStructure {
      * @param {number} value - Value
      * @returns {string} - Plural
      */
-    plural(value) {
-        return value > 1 ? 's' : '';
+    plural(value, type) {
+        value = Array.isArray(value) ? value.length : value;
+
+        return value > 1 ? type ? 'ies' : 's' : type ? 'y' : '';
     }
 
     /**
