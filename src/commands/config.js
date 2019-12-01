@@ -16,7 +16,7 @@ class ConfigCommand extends CommandStructure {
      */
     constructor(client) {
         super(client, {
-            description: 'Customise the bot for this guild. Manage guild permission only.',
+            description: 'Customise the bot for this guild. Manage Guild permission only.',
             usage: false,
             flags: false,
             developerOnly: false,
@@ -31,37 +31,37 @@ class ConfigCommand extends CommandStructure {
                 description: `Change the command prefix. `
                     + `Default: \`${this.client.config.prefix}\`.`,
                 usage: '<New Prefix>',
-                validation: this.prefix,
+                run: this.prefix,
             },
 
             'toggle-command': {
                 description: 'Disable or enable a command.',
                 usage: '<Command Name>',
-                validation: this.disabledCommands,
+                run: this.disabledCommands,
             },
 
             'command-disabled-message': {
                 description: 'Toggle error message if a command is disabled. Default: `enabled`.',
-                validation: this.commandDisabledMessage,
+                run: this.commandDisabledMessage,
             },
 
             'api-language': {
                 type: 'string',
                 description: 'Change API response language. Default: `en`.',
                 usage: '<ISO 639-1 Code>',
-                validation: this.apiLanguage,
+                run: this.apiLanguage,
             },
 
             'api-region': {
                 type: 'string',
                 description: 'Change API region. Default: `us`.',
                 usage: '<ISO 3166-1 alpha-2 Code>',
-                validation: this.apiRegion,
+                run: this.apiRegion,
             },
         };
 
         for (let optionName in this.options) {
-            this.options[optionName].validation = this.options[optionName].validation.bind(this);
+            this.options[optionName].run = this.options[optionName].run.bind(this);
         }
 
         this.languages = ['en', 'de', 'fr', 'es', 'ru', 'it', 'pt', 'zh', 'hu', 'ko'];
@@ -223,6 +223,9 @@ class ConfigCommand extends CommandStructure {
      * @returns {*} A bit of everything...
      */
     async executeCommand(message, commandArguments, guildSettings) {
+        if (!message.channel.guild.members.get(message.author.id).permission.has('manageGuild'))
+            return this.embed.error(message.channel.id, 'You do not have the `Manage Guild` permission.');
+
         // If there are no arguments, create option list embed.
         if (commandArguments.length === 0) return this.listOptions(message);
 
@@ -238,7 +241,7 @@ class ConfigCommand extends CommandStructure {
         try {
             // Run option function.
             const guildID = message.channel.guild.id;
-            const response = await option.validation(guildID, optionArguments, guildSettings);
+            const response = await option.run(guildID, optionArguments, guildSettings);
 
             // Success or error
             return response.success
