@@ -30,11 +30,11 @@ class CommandHandler extends HandlerStructure {
     /**
      * Get guild settings from database.
      * 
-     * @param {Object} guild - Guild Object
+     * @param {Object} ID - Guild ID
      * @returns {Object} - Guild settings 
      */
-    getGuildSettings(guild) {
-        return this.client.repository.getRepository('guilds').getOrUpdate(guild.id);
+    getGuildSettings(ID) {
+        return this.client.repository.getRepository('guilds').getOrUpdate(ID);
     }
 
     /**
