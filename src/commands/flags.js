@@ -37,20 +37,22 @@ class FlagsCommand extends CommandStructure {
         // Create flag embed.
         this.embed.create(message.channel.id, {
             title: 'Flags',
-            description: 'Flags gives you access to more options for more specific results. A' +
-                'flag starts with `--` followed by the flag name and somtimes an argument after. ' +
-                'The argument is anything after the flag name seperated by a space and ending by ' +
-                'a space or nothing if it\'s the end of the command. You can place the flag ' +
-                'anywhere in the query and use multiple flags if the flag hasn\'t already been ' +
-                'used.' +
-                
-                (flags.more ? '\n\nList of possible flags:' : '\n\nHere are some examples:\n' +
-                '`!?poster Black Mirror --tv`\n`!?poster George --person Clooney`\n' +
-                '`!?movies Thor --page 2 --year 2017`\n`!?credits --person George Clooney`' +
-                '\n\nUse the `--more` flag with this command to get a list of flags and what ' +
-                'they do.'),
+            description: 'Flags give you an easy command-line style method to filter through ' +
+                'results. A flag starts with a double dash (`--`) followed by the flag name and ' +
+                'sometimes an argument. The argument is anything after the flag name seperated ' +
+                'by a space and ending with a space or nothing if it\'s the end of the message. ' +
+                'You can position the flag anywhere in the message after the command name and ' +
+                'use multiple flags if the flag hasn\'t already been used.' +
 
-            // List flag options.
+                (flags.more ? '\n\nList of possible flags:' : '\n\nHere are some examples:\n' +
+                '`!?movie Endgame --more`\n' +
+                '`!?poster George --person Clooney`\n' +
+                '`!?movies Thor --page 2 --year 2017`' +
+
+                '\n\nUse the `--more` flag with this command to get a full list of flags and ' +
+                'what they do.'),
+
+            // List of flags.
             fields: flags.more ? Object.keys(this.flagOptions).map((flagName) => ({
                 name: flagName, value: this.flagOptions[flagName].desc })) : []
         });
