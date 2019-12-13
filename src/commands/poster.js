@@ -51,7 +51,8 @@ class PosterCommand extends CommandStructure {
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Sort posters by highest voted.
-        const posters = response.posters.sort((a, b) => b.vote_count - a.vote_count);
+        const posters = (response.posters || response.profiles)
+            .sort((a, b) => b.vote_count - a.vote_count);
         if (posters.length === 0) return this.embed.error(statusMessage, 'No posters found.');
 
         // Get best poster.

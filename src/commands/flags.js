@@ -45,7 +45,7 @@ class FlagsCommand extends CommandStructure {
                 'used.' +
                 
                 (flags.more ? '\n\nList of possible flags:' : '\n\nHere are some examples:\n' +
-                '`!?poster Black Mirror --show`\n`!?poster George --person Clooney`\n' +
+                '`!?poster Black Mirror --tv`\n`!?poster George --person Clooney`\n' +
                 '`!?movies Thor --page 2 --year 2017`\n`!?credits --person George Clooney`' +
                 '\n\nUse the `--more` flag with this command to get a list of flags and what ' +
                 'they do.'),
