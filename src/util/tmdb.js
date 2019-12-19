@@ -92,7 +92,7 @@ class TMDb extends UtilStructure {
         if (isTMDb) {
             const index = isTMDb[2];
 
-            return details ? this[media].details(index) : index;
+            return details ? this[media].details(query) : index;
         }
 
         // Is an external id.
