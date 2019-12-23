@@ -13,7 +13,7 @@ class ShowCommand extends CommandStructure {
         super(client, {
             description: 'Get information about a TV show.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['more'],
+            flags: ['more', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 500
@@ -41,7 +41,7 @@ class ShowCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Set API options.
-        const options = this.APIOptions(guildSettings, {});
+        const options = this.APIOptions(guildSettings, { year: flags.year });
 
         // Get response from API.
         const response = await this.tmdb.tv.details(message.content, options);

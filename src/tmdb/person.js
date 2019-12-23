@@ -39,7 +39,7 @@ class PersonEndpoint {
      * @see https://developers.themoviedb.org/3/people/get-person-details
      */
     async details(query, options) {
-        const ID = await this.getID(query);
+        const ID = await this.getID(query, null, options);
         if (ID.error) return ID;
 
         return this.wrapper.getEndpoint(`${this.base}/${ID}`, options);
@@ -56,7 +56,7 @@ class PersonEndpoint {
      * @see https://developers.themoviedb.org/3/people/get-person-images
      */
     async images(query, options, details) {
-        const info = await this.getID(query, details);
+        const info = await this.getID(query, details, options);
         if (info.error) return info;
 
         const ID = details ? info.id : info;

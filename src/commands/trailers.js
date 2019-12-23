@@ -3,7 +3,7 @@ import CommandStructure from '../structures/command';
 /**
  * Trailer command.
  */
-class TrailerCommand extends CommandStructure {
+class TrailersCommand extends CommandStructure {
     /**
      * Create trailer command.
      * 
@@ -13,7 +13,7 @@ class TrailerCommand extends CommandStructure {
         super(client, {
             description: 'Get trailers for movies and TV shows.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['tv', 'more', 'page'],
+            flags: ['page', 'tv', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 200
@@ -44,7 +44,7 @@ class TrailerCommand extends CommandStructure {
         const media = this.mediaSource(flags);
 
         // Get API options.
-        const options = this.APIOptions(guildSettings, { page: flags.page });
+        const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
 
         // Get videos from API.
         const _response = await this.tmdb[media].videos(message.content, options, true);
@@ -72,4 +72,4 @@ class TrailerCommand extends CommandStructure {
     }
 }
 
-export default TrailerCommand;
+export default TrailersCommand;

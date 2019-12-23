@@ -13,7 +13,7 @@ class MovieCommand extends CommandStructure {
         super(client, {
             description: 'Get the primary information about a movie.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['more'],
+            flags: ['more', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 700
@@ -41,7 +41,7 @@ class MovieCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get API options.
-        const options = this.APIOptions(guildSettings, {});
+        const options = this.APIOptions(guildSettings, { year: flags.year });
 
         // Get response from API.
         const response = await this.tmdb.movie.details(message.content, options);

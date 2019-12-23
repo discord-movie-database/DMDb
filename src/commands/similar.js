@@ -13,7 +13,7 @@ class SimilarCommand extends CommandStructure {
         super(client, {
             description: 'Get similar movies and TV shows.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['page', 'tv'],
+            flags: ['page', 'tv', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 250
@@ -44,7 +44,7 @@ class SimilarCommand extends CommandStructure {
         const media = this.mediaSource(flags);
 
         // Get API options.
-        const options = this.APIOptions(guildSettings, { page: flags.page });
+        const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
 
         // Get results from API.
         const response = await this.tmdb[media].similar(message.content, options, true) 

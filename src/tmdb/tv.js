@@ -41,7 +41,7 @@ class TVEndpoint {
      * @see https://developers.themoviedb.org/3/tv/get-tv-details
      */
     async details(query, options) {
-        const ID = await this.getID(query);
+        const ID = await this.getID(query, null, options);
         if (ID.error) return ID;
 
         return this.wrapper.getEndpoint(`${this.base}/${ID}`, options);
@@ -80,7 +80,7 @@ class TVEndpoint {
      * @see https://developers.themoviedb.org/3/tv/get-tv-credits
      */
     async credits(query, options, details) {
-        const info = await this.getID(query, details);
+        const info = await this.getID(query, details, options);
         if (info.error) return info;
 
         const ID = details ? info.id : info;
@@ -105,7 +105,7 @@ class TVEndpoint {
     async similar(query, options, details, dontMutate) {
         let response;
 
-        const info = await this.getID(query, details);
+        const info = await this.getID(query, details, options);
         if (info.error) return info;
 
         const ID = details ? info.id : info;
@@ -135,7 +135,7 @@ class TVEndpoint {
     async videos(query, options, details, dontMutate) {
         let response;
 
-        const info = await this.getID(query, details);
+        const info = await this.getID(query, details, options);
         if (info.error) return info;
 
         const ID = details ? info.id : info;

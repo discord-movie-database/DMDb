@@ -13,7 +13,7 @@ class CreditsCommand extends CommandStructure {
         super(client, {
             description: 'Get the cast for a movie, TV show or person.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['page', 'tv', 'person'],
+            flags: ['page', 'tv', 'person', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 350
@@ -44,7 +44,7 @@ class CreditsCommand extends CommandStructure {
         const media = this.mediaSource(flags);
 
         // Get API options.
-        const options = this.APIOptions(guildSettings, { page: flags.page });
+        const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
 
         // Get response from API.
         const _response = await this.tmdb[media].credits(message.content, options, true);
