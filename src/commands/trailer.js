@@ -13,7 +13,7 @@ class TrailersCommand extends CommandStructure {
         super(client, {
             description: 'Get trailers for movies and TV shows.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['page', 'tv', 'year'],
+            flags: ['more', 'page', 'tv', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 200
@@ -57,8 +57,8 @@ class TrailersCommand extends CommandStructure {
         const response = this.resultStructure(_response.results, flags.page);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
-        // Return videos.
-        return this.embed.edit(statusMessage, {
+        // Return all videos.
+        if (flags.more) return this.embed.edit(statusMessage, {
             title: `Trailers & More for ${_response.title || _response.name}`,
 
             thumbnail: {
@@ -69,6 +69,10 @@ class TrailersCommand extends CommandStructure {
                 this.videoSourceURL(result.site, result.key),
             ], result.index)),
         });
+
+        // Return first video with big preview.
+        return this.embed.edit(statusMessage,
+            this.videoSourceURL(response.results[0].site, response.results[0].key));
     }
 }
 
