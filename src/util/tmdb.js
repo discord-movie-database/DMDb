@@ -85,7 +85,7 @@ class TMDb extends UtilStructure {
      * @param {boolean} details - Include extra information?
      * @returns {(Promise<Object> | Object | string)} - TMDb ID
      */
-    async getID(query, sources, media, details) {
+    async getID(query, sources, media, details, options) {
         const isTMDb = query.match(/^(t)(\d+)$/);
 
         // Is a TMDb id.
@@ -115,7 +115,7 @@ class TMDb extends UtilStructure {
         }
 
         // Is not an id.
-        const response = await this.search[media](query);
+        const response = await this.search[media](query, options);
         if (response.error) return response;
 
         if (response.results.length > 0) {

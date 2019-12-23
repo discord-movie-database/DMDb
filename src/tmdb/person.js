@@ -25,8 +25,8 @@ class PersonEndpoint {
      * @param {boolean} details - Include extra information?
      * @returns {Promise<(string | Object)>} - TMDb ID or API response
      */
-    getID(query, details) {
-        return this.wrapper.getID(query, { imdb_id: /^(nm)(\d+)$/ }, this.media, details);
+    getID(query, details, options) {
+        return this.wrapper.getID(query, { imdb_id: /^(nm)(\d+)$/ }, this.media, details, options);
     }
 
     /**
@@ -78,7 +78,7 @@ class PersonEndpoint {
      * @see https://developers.themoviedb.org/3/people/get-person-combined-credits
      */
     async credits(query, options, details) {
-        const info = await this.getID(query, details);
+        const info = await this.getID(query, details, options);
         if (info.error) return info;
 
         const ID = details ? info.id : info;

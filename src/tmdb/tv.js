@@ -25,10 +25,10 @@ class TVEndpoint {
      * @param {boolean} details - Include extra information?
      * @returns {Promise<(string | Object)>} - TMDb ID or API response
      */
-    getID(query, details) {
+    getID(query, details, options) {
         const validation = { imdb_id: /^(tt)(\d+)$/, tvdb_id: /^(tv)(\d+)$/ };
 
-        return this.wrapper.getID(query, validation, this.media, details);
+        return this.wrapper.getID(query, validation, this.media, details, options);
     }
 
     /**
@@ -58,7 +58,7 @@ class TVEndpoint {
      * @see https://developers.themoviedb.org/3/tv/get-tv-details
      */
     async images(query, options, details) {
-        const info = await this.getID(query, details);
+        const info = await this.getID(query, details, options);
         if (info.error) return info;
 
         const ID = details ? info.id : info;

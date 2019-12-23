@@ -13,7 +13,7 @@ class PosterCommand extends CommandStructure {
         super(client, {
             description: 'Get the poster for a movie, TV show or person.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['tv', 'person'],
+            flags: ['tv', 'person', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 400
@@ -44,7 +44,7 @@ class PosterCommand extends CommandStructure {
         const media = this.mediaSource(flags);
 
         // Get API options.
-        const options = this.APIOptions(guildSettings, {});
+        const options = this.APIOptions(guildSettings, { year: flags.year });
 
         // Get response from API.
         const response = await this.tmdb[media].images(message.content, options, true);
@@ -60,7 +60,8 @@ class PosterCommand extends CommandStructure {
 
         // Edit status message with poster.
         this.embed.edit(statusMessage, {
-            title: `Poster for ${response.title || response.name}`,
+            title: `${response.title || response.name}${!flags.person ?
+                ` (${this.year(response.release_date || response.first_air_date)})` : ''}`,
             image: { url: this.thumbnailURL(poster.file_path, true) },
         });
     }

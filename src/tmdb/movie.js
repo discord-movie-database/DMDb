@@ -25,8 +25,8 @@ class MovieEndpoint {
      * @param {boolean} details - Include extra information?
      * @returns {Promise<(string | Object)>} - TMDb ID or API response
      */
-    getID(query, details) {
-        return this.wrapper.getID(query, { imdb_id: /^(tt)(\d+)$/ }, this.media, details);
+    getID(query, details, options) {
+        return this.wrapper.getID(query, { imdb_id: /^(tt)(\d+)$/ }, this.media, details, options);
     }
 
     /**
@@ -56,7 +56,7 @@ class MovieEndpoint {
      * @see https://developers.themoviedb.org/3/movies/get-movie-images
      */
     async images(query, options, details) {
-        const info = await this.getID(query, details);
+        const info = await this.getID(query, details, options);
         if (info.error) return info;
 
         const ID = details ? info.id : info;
