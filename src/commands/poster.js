@@ -47,22 +47,17 @@ class PosterCommand extends CommandStructure {
         const options = this.APIOptions(guildSettings, { year: flags.year });
 
         // Get response from API.
-        const response = await this.tmdb[media].images(message.content, options, true);
-        if (response.error) return this.embed.error(statusMessage, response.error);
+        const response = await this.tmdb[media].details(message.content, options);
+        if (response.error) return this.embed.error(statusMessage, repsonse.error);
 
-        // Sort posters by highest voted.
-        const posters = (response.posters || response.profiles)
-            .sort((a, b) => b.vote_count - a.vote_count);
-        if (posters.length === 0) return this.embed.error(statusMessage, 'No posters found.');
-
-        // Get best poster.
-        const poster = posters[0];
+        // Check for poster.
+        if (!response.poster_path) return this.embed.error(statusMessage, 'No posters found.');
 
         // Edit status message with poster.
         this.embed.edit(statusMessage, {
             title: `${response.title || response.name}${!flags.person ?
                 ` (${this.year(response.release_date || response.first_air_date)})` : ''}`,
-            image: { url: this.thumbnailURL(poster.file_path, true) },
+            image: { url: this.thumbnailURL(response.poster_path, true) },
         });
     }
 }
