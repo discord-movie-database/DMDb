@@ -48,7 +48,7 @@ class PosterCommand extends CommandStructure {
 
         // Get response from API.
         const response = await this.tmdb[media].details(message.content, options);
-        if (response.error) return this.embed.error(statusMessage, repsonse.error);
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Check for poster.
         if (!response.poster_path) return this.embed.error(statusMessage, 'No posters found.');
