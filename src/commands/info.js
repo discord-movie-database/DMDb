@@ -85,7 +85,6 @@ class InfoCommand extends CommandStructure {
                 '[Invite Bot](https://bit.ly/2PXWYLR)',
                 '[Support Server]( https://bit.ly/2kYFRPh)',
                 '[Source Code](https://github.com/discord-movie-database/)',
-                '[Website](https://dmdb.xyz)'
             ]),
 
             thumbnail: { url: 'https://i.imgur.com/ogiqJHb.png' },
