@@ -345,7 +345,7 @@ class CommandStructure {
         const minutes = value % 60;
 
         const _hours = hours ? `${hours} Hour${hours > 1 ? 's' : ''} ` : '';
-        const _minutes = minutes ? `${minutes} Minutes` : '';
+        const _minutes = minutes ? `${minutes} Minute${minutes > 1 ? 's' : ''}` : '';
 
         return _hours + _minutes;
     }
