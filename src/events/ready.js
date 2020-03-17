@@ -22,8 +22,12 @@ class ReadyEvent extends EventStructure {
     async onEvent() {
         this.client.log.success('Connected to Discord.');
 
-        for (let routineName in this.client.routine.routines) {
-            this.client.routine.getRoutine(routineName).start();
+        if (this.client.loaded) {
+            this.client.reconnect = new Date();
+        } else {
+            for (let routineName in this.client.routine.routines) {
+                this.client.routine.getRoutine(routineName).start();
+            }
         }
 
         this.client.loaded = true;

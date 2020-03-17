@@ -11,8 +11,6 @@ class UtilHandler extends HandlerStructure {
      */
     constructor(client) {
         super(client, 'util');
-
-        this.loadFiles();
     }
 
     /**

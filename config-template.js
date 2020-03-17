@@ -19,6 +19,7 @@ const envConfig = {
             port: 27017,
             name: 'dmdb',
             options: {
+                useUnifiedTopology: true,
                 useNewUrlParser: true,
                 auth: { authSource: 'admin' },
                 user: 'admin',
@@ -38,6 +39,7 @@ const envConfig = {
             port: 27017,
             name: 'dmdb',
             options: {
+                useUnifiedTopology: true,
                 useNewUrlParser: true,
                 auth: { authSource: 'admin' },
                 user: 'admin',

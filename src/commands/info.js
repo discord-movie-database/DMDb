@@ -31,7 +31,7 @@ class InfoCommand extends CommandStructure {
      * @returns {undefined}
      */
     uptime() {
-        const uptime = new Date(this.client.uptime);
+        const uptime = new Date(new Date() - this.client.start);
 
         const years = uptime.getUTCFullYear() - 1970;
         const months = uptime.getUTCMonth();

@@ -34,11 +34,13 @@ class Client extends Eris {
     constructor(config) {
         super(config.tokens.discord, config.client);
 
-        this.loaded = false;
-        this.config = config;
-
         this.log = consola;
         this.axios = axios;
+
+        this.config = config;
+
+        this.loaded = false;
+        this.start = new Date();
 
         this.repository = new RepositoryHandler(this);
         this.util = new UtilHandler(this);
@@ -46,13 +48,26 @@ class Client extends Eris {
         this.command = new CommandHandler(this);
         this.routine = new RoutineHandler(this);
 
+        this.load = async () => {
+            await this.util.loadFiles();
+            await this.repository.loadFiles();
+    
+            this.repository.connect();
+        }
+
         this.on('db', async () => {
             await this.event.loadFiles();
             await this.command.loadFiles();
             await this.routine.loadFiles();
 
+            const time = new Date(new Date() - this.start).getTime() / 1000;
+
+            this.log.success(`Finished loading. Took ${time}s.`);
+
             this.connect();
         });
+
+        this.load();
     }
 }
 

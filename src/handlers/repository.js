@@ -17,9 +17,6 @@ class RepositoryHandler extends HandlerStructure {
         super(client, 'repository');
         
         this.db = mongoose;
-
-        this.loadFiles();
-        this.connect();
     }
 
     /**

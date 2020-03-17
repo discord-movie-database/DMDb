@@ -46,7 +46,7 @@ class HandlerStructure {
 
         if (this.onLoad) this.onLoad(this[this.handlerName]);
 
-        consola.success(`Loaded ${this.handlerName}.`);
+        consola.info(`Loaded ${this.handlerName}.`);
     }
 
     /**
@@ -64,7 +64,7 @@ class HandlerStructure {
             delete this.client.commands[commandName];
         }
 
-        consola.success(`Unloaded ${this.handlerName}.`);
+        consola.info(`Unloaded ${this.handlerName}.`);
     }
 
     /**
