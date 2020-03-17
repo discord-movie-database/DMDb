@@ -100,13 +100,13 @@ class InfoCommand extends CommandStructure {
                 value: `${process.versions.node}`,
             }, {
                 name: 'Guilds',
-                value: `${this.stats.getGuilds()}`,
+                value: `${this.number(this.stats.getGuilds())}`,
             }, {
                 name: 'Channels',
-                value: `${this.stats.getChannels()}`,
+                value: `${this.number(this.stats.getChannels())}`,
             }, {
                 name: 'Users',
-                value: `${this.stats.getUsers()}`,
+                value: `${this.number(this.stats.getUsers())}`,
             }, {
                 name: 'Shard Count',
                 value: `${this.client.shards.size}`,
