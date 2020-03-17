@@ -10,12 +10,12 @@
         "prod": "cross-env NODE_ENV=prod node -r esm src/index.js"
     },
     "dependencies": {
-        "axios": "^0.19.1",
+        "axios": "^0.19.2",
         "consola": "^2.11.3",
         "cross-env": "^6.0.3",
         "eris": "^0.11.2",
         "esm": "^3.2.25",
-        "mongoose": "^5.8.7",
+        "mongoose": "^5.9.5",
         "saslprep": "^1.0.3"
     }
 }
