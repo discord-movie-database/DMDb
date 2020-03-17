@@ -15,7 +15,7 @@ class StatsRepository extends RepositoryStructure {
         super(client);
 
         this.model = this.db.model('stats', new this.db.Schema({
-            time: { type: Date, default: new Date() },
+            time: { type: Date, default: Date.now },
             guilds: { type: Number, required: true },
             channels: { type: Number, required: true },
             users: { type: Number, required: true },
