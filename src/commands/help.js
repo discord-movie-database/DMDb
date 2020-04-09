@@ -1,4 +1,4 @@
-import CommandStructure from "../structures/command";
+import CommandStructure from '../structures/command';
 
 /**
  * Help command.
@@ -6,7 +6,7 @@ import CommandStructure from "../structures/command";
 class HelpCommand extends CommandStructure {
     /**
      * Create help command.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
@@ -22,7 +22,7 @@ class HelpCommand extends CommandStructure {
 
     /**
      * Format flags into string.
-     * 
+     *
      * @param {Array} flags - Flags to format
      * @returns {(string | boolean)} - Formatted flags
      */
@@ -34,7 +34,7 @@ class HelpCommand extends CommandStructure {
 
     /**
      * Get info for a command.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {string} commandName - Command name
      */
@@ -50,7 +50,7 @@ class HelpCommand extends CommandStructure {
         this.embed.create(message.channel.id, {
             title: `${this.titleCase(commandName)} Command`,
             description: `${command.meta.description || 'No description.'}\n`,
-            
+
             fields: [
                 { name: 'Usage', value: command.meta.usage || 'N/A', inline: false },
                 { name: 'Aliases', value: this.list(command.meta.aliases.map((alias) => this.titleCase(alias))) || 'N/A', inline: false },
@@ -65,7 +65,7 @@ class HelpCommand extends CommandStructure {
 
     /**
      * Get a list of commands.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {Object} guildSettings - Guild settings
      * @param {number} page - Page number
@@ -73,7 +73,7 @@ class HelpCommand extends CommandStructure {
     commandList(message, guildSettings, page) {
         // Page number.
         page = page ? page - 1 : 0;
-        
+
         // Get commands.
         const commands = this.client.command.commands;
         let commandNames = Object.keys(commands);
@@ -135,7 +135,7 @@ class HelpCommand extends CommandStructure {
 
     /**
      * Function to run when command is executed.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {Array} commandArguments - Command arguments
      * @param {Object} guildSettings - Guild settings
