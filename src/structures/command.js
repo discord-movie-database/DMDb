@@ -362,16 +362,6 @@ class CommandStructure {
     }
 
     /**
-     * Converts money value to readable.
-     *
-     * @param {string} value - Value
-     * @returns {string} - Updated value
-     */
-    money(value) {
-        return value ? `$${value.toLocaleString()}` : 'N/A';
-    }
-
-    /**
      * Resizes description to fit in embed.
      *
      * @param {string} value - Value
