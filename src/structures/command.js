@@ -1,6 +1,6 @@
 /**
  * Command structure.
- * 
+ *
  * @prop {Object} client - DMDb client extends Eris
  * @prop {Object} meta - Command meta
  * @prop {boolean} [meta.description] - Command description
@@ -18,7 +18,7 @@
 class CommandStructure {
     /**
      * Create command structure.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      * @param {Object} meta - Command meta
      * @param {boolean} [meta.description] - Command description
@@ -46,7 +46,7 @@ class CommandStructure {
 
         this.TMDbURL = 'https://www.themoviedb.org';
         this.IMDbURL = 'https://www.imdb.com';
-        
+
         this.YouTubeURL = 'https://youtube.com';
         this.VimeoURL = 'https://vimeo.com';
 
@@ -58,7 +58,7 @@ class CommandStructure {
 
     /**
      * Create error object.
-     * 
+     *
      * @param {string} message - Error message
      * @returns {Object} - Error object
      */
@@ -68,7 +68,7 @@ class CommandStructure {
 
     /**
      * Create success object.
-     * 
+     *
      * @param {string} message - Success message
      * @returns {Object} - Success object
      */
@@ -78,9 +78,9 @@ class CommandStructure {
 
     /**
      * Creates incorrect usage error message.
-     * 
+     *
      * @param {Object} message - Message object
-     * @returns {Promise} - Message promise 
+     * @returns {Promise} - Message promise
      */
     usageMessage(message) {
         return this.embed.error(message.channel.id, `Command usage: \`${this.meta.usage}\`.`);
@@ -88,7 +88,7 @@ class CommandStructure {
 
     /**
      * Creates status message.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {number} timeoutDuration - Time before editing message with error
      * @returns {Promise} - Message object
@@ -108,7 +108,7 @@ class CommandStructure {
 
     /**
      * Creats an object with default API options.
-     * 
+     *
      * @param {Object} options - Default options
      * @param {Object} custom - Custom options
      * @returns {Object} - Options object
@@ -119,7 +119,7 @@ class CommandStructure {
 
     /**
      * Returns "s" if value is greater than one.
-     * 
+     *
      * @param {number} value - Value
      * @returns {string} - Plural
      */
@@ -131,7 +131,7 @@ class CommandStructure {
 
     /**
      * Splits array into chunks.
-     * 
+     *
      * @param {Array} array - Original array
      * @param {number} size - Chunk size
      * @returns {Array} - Array of arrays
@@ -149,7 +149,7 @@ class CommandStructure {
 
     /**
      * Converts array into string.
-     * 
+     *
      * @param {Array} array - List items
      * @returns {string} - List seperated by commas
      */
@@ -159,7 +159,7 @@ class CommandStructure {
 
     /**
      * Join array with a seperator.
-     * 
+     *
      * @param {Array} array - Array
      * @param {boolean} thin - Light seperator?
      * @returns {string} - Connected string
@@ -170,7 +170,7 @@ class CommandStructure {
 
     /**
      * Converts array into a response similar to the TMDb API.
-     * 
+     *
      * @param {Array} results - Results
      * @param {number} page - Page position
      * @param {number} size - Page size
@@ -197,9 +197,9 @@ class CommandStructure {
 
     /**
      * Converts result structure into a string.
-     * 
+     *
      * @param {Object} result - Result
-     * @returns {string} - Result string 
+     * @returns {string} - Result string
      */
     resultsDescription(result) {
         const description = [
@@ -215,8 +215,8 @@ class CommandStructure {
 
     /**
      * Format field.
-     * 
-     * @param {string} name - Field name 
+     *
+     * @param {string} name - Field name
      * @param {Array} values - Field values
      * @param {number} index - Field index
      * @returns {Object} - Field
@@ -230,7 +230,7 @@ class CommandStructure {
 
     /**
      * Checks field values and sets them as inline by default.
-     * 
+     *
      * @param {Array} fields - Fields
      * @param {boolean} notInline - Disable default inline?
      * @returns {Array} - Fields
@@ -245,7 +245,7 @@ class CommandStructure {
 
     /**
      * Returns "N/A" if there is no value.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Original value or "N/A"
      */
@@ -255,7 +255,7 @@ class CommandStructure {
 
     /**
      * Returns size of array.
-     * 
+     *
      * @param {boolean} value - Value
      * @returns {string} - Updated value
      */
@@ -265,7 +265,7 @@ class CommandStructure {
 
     /**
      * Converts boolean to yes or no.
-     * 
+     *
      * @param {boolean} value - Value
      * @returns {string} - Updated value
      */
@@ -275,7 +275,7 @@ class CommandStructure {
 
     /**
      * Converts time into human readable.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -297,9 +297,9 @@ class CommandStructure {
 
     /**
      * Get year from date.
-     * 
+     *
      * @param {string} value - Value
-     * @returns {string} - Updated value 
+     * @returns {string} - Updated value
      */
     year(value) {
         return value ? new Date(value).getFullYear() : this.check(value);
@@ -307,7 +307,7 @@ class CommandStructure {
 
     /**
      * Converts money value to readable.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -317,7 +317,7 @@ class CommandStructure {
 
     /**
      * Converts number to readable.
-     * 
+     *
      * @param {number} value - Value
      * @returns {string} - - Updated value
      */
@@ -327,8 +327,8 @@ class CommandStructure {
 
     /**
      * Converts gender value to readable.
-     * 
-     * @param {number} value - Value 
+     *
+     * @param {number} value - Value
      * @returns {string} - Updated value
      */
     gender(value) {
@@ -337,7 +337,7 @@ class CommandStructure {
 
     /**
      * Format duration.
-     * 
+     *
      * @param {string} value - Value
      * @return {string} - Updated value
      */
@@ -353,7 +353,7 @@ class CommandStructure {
 
     /**
      * Converts runtime value to readable.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -363,18 +363,8 @@ class CommandStructure {
     }
 
     /**
-     * Converts money value to readable.
-     * 
-     * @param {string} value - Value
-     * @returns {string} - Updated value
-     */
-    money(value) {
-        return value ? `$${value.toLocaleString()}` : 'N/A';
-    }
-
-    /**
      * Resizes description to fit in embed.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -384,7 +374,7 @@ class CommandStructure {
 
     /**
      * Converts thumbnail ID to a URL.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -398,7 +388,7 @@ class CommandStructure {
 
     /**
      * Converts media type value to readable.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -408,7 +398,7 @@ class CommandStructure {
 
     /**
      * Get media source from flags.
-     * 
+     *
      * @param {Object} flags - Flags
      * @returns {string} - Media source
      */
@@ -418,7 +408,7 @@ class CommandStructure {
 
     /**
      * Converts video key to URL.
-     * 
+     *
      * @param {string} site - Video source
      * @param {string} key - Video key
      * @returns {string} - Video URL
@@ -430,7 +420,7 @@ class CommandStructure {
 
     /**
      * Converts video key to thumbnail URL.
-     * 
+     *
      * @param {string} site - Video source
      * @param {string} key - Video key
      * @returns {string} - Video thumbnail URL
@@ -442,7 +432,7 @@ class CommandStructure {
 
     /**
      * Converts TMDb ID value to readable.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -452,7 +442,7 @@ class CommandStructure {
 
     /**
      * Converts TMDb ID to a movie URL.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -462,7 +452,7 @@ class CommandStructure {
 
     /**
      * Converts TMDb ID to a person URL.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -472,7 +462,7 @@ class CommandStructure {
 
     /**
      * Converts TMDb ID to a show URL.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
@@ -482,7 +472,7 @@ class CommandStructure {
 
     /**
      * Capitalise first letter in string.
-     * 
+     *
      * @param {string} value - Value
      * @returns {string} - Updated value
      */
