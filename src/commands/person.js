@@ -59,7 +59,7 @@ class PersonCommand extends CommandStructure {
                 name: 'Gender',
                 value: this.gender(response.gender),
             }, {
-                name: 'Birthday', 
+                name: 'Birthday',
                 value: this.date(response.birthday),
             }, {
                 name: 'Deathday',

@@ -95,7 +95,7 @@ class ListRoutine extends RoutineStructure {
                 headers: { Authorization: API.token },
                 data: { guildCount },
             });
-            
+
             this.client.log.success(`Updated ${API.endpoint}`);
         } catch (error) {
             this.client.log.error(error);
@@ -116,7 +116,7 @@ class ListRoutine extends RoutineStructure {
                 url: API.endpoint,
                 data: { key: API.token, servercount: guildCount },
             });
-            
+
             this.client.log.success(`Updated ${API.endpoint}`);
         } catch (error) {
             this.client.log.error(error);

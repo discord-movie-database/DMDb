@@ -81,25 +81,25 @@ class CreditsCommand extends CommandStructure {
           flags.person
             ? credit.media_type === "movie"
               ? [
-                  // Media source is person and credit is movie
-                  this.mediaType(credit.media_type),
-                  `Name: ${credit.title}`,
-                  `Release: ${this.date(credit.release_date)}`,
-                  this.TMDbID(credit.id),
-                ]
-              : [
-                  // Media source is person and credit is TV show
-                  this.mediaType(credit.media_type),
-                  `Name: ${credit.name}`,
-                  `FAD: ${this.date(credit.first_air_date)}`,
-                  this.TMDbID(credit.id),
-                ]
-            : [
-                // Media source is TV show or person
-                `Name: ${this.check(credit.name)}`,
-                `Gender: ${this.gender(credit.gender)}`,
+                // Media source is person and credit is movie
+                this.mediaType(credit.media_type),
+                `Name: ${credit.title}`,
+                `Release: ${this.date(credit.release_date)}`,
                 this.TMDbID(credit.id),
-              ],
+              ]
+              : [
+                // Media source is person and credit is TV show
+                this.mediaType(credit.media_type),
+                `Name: ${credit.name}`,
+                `FAD: ${this.date(credit.first_air_date)}`,
+                this.TMDbID(credit.id),
+              ]
+            : [
+              // Media source is TV show or person
+              `Name: ${this.check(credit.name)}`,
+              `Gender: ${this.gender(credit.gender)}`,
+              this.TMDbID(credit.id),
+            ],
           credit.index
         )
       ),

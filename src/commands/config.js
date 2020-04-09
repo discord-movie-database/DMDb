@@ -123,7 +123,7 @@ class ConfigCommand extends CommandStructure {
         // Update disabled commands in database
         await this.repository.getOrUpdate(guildID,
             { $set: { disabledCommands: guildSettings.disabledCommands } });
-        
+
         // Success
         return this.success(`\`${method === 'push' ? 'Disabled' : 'Enabled'}\` `
             + `the command \`${query}\``);

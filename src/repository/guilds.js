@@ -18,7 +18,7 @@ class GuildsRepository extends RepositoryStructure {
             id: { type: String, required: true },
             prefix: { type: String, default: '' },
             commandDisabledMessage: { type: Boolean, default: true },
-            disabledCommands: { type: [ String ], default: [] },
+            disabledCommands: { type: [String], default: [] },
             apiLanguage: { type: String, default: 'en' },
             apiRegion: { type: String, default: 'us' },
         }));

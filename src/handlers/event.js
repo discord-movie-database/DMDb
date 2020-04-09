@@ -1,4 +1,4 @@
-import HandlerStructure from '../structures/handler';
+import HandlerStructure from "../structures/handler";
 
 /**
  * Event handler.
@@ -6,16 +6,16 @@ import HandlerStructure from '../structures/handler';
 class EventHandler extends HandlerStructure {
     /**
      * Create event handler.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
-        super(client, 'events');
+        super(client, "events");
     }
 
     /**
      * Runs when handlers have finished loading.
-     * 
+     *
      * @param {Object} events - Events
      * @returns {undefined}
      */
@@ -27,7 +27,7 @@ class EventHandler extends HandlerStructure {
 
     /**
      * Get event.
-     * 
+     *
      * @param {string} eventName - Event name
      * @returns {Object} - Event Object
      */

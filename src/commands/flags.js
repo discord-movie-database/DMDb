@@ -45,16 +45,17 @@ class FlagsCommand extends CommandStructure {
                 'use multiple flags if the flag hasn\'t already been used.' +
 
                 (flags.more ? '\n\nList of possible flags:' : '\n\nHere are some examples:\n' +
-                '`!?movie Endgame --more`\n' +
-                '`!?poster George --person Clooney`\n' +
-                '`!?movies Thor --page 2 --year 2017`' +
+                    '`!?movie Endgame --more`\n' +
+                    '`!?poster George --person Clooney`\n' +
+                    '`!?movies Thor --page 2 --year 2017`' +
 
-                '\n\nUse the `--more` flag with this command to get a full list of flags and ' +
-                'what they do.'),
+                    '\n\nUse the `--more` flag with this command to get a full list of flags and ' +
+                    'what they do.'),
 
             // List of flags.
             fields: flags.more ? Object.keys(this.flagOptions).map((flagName) => ({
-                name: flagName, value: this.flagOptions[flagName].desc })) : []
+                name: flagName, value: this.flagOptions[flagName].desc
+            })) : []
         });
     }
 }
