@@ -16,7 +16,8 @@ class ShowsCommand extends CommandStructure {
             flags: ['page', 'year'],
             developerOnly: false,
             hideInHelp: false,
-            weight: 450
+            weight: 450,
+            aliases: ['programs']
         });
     }
 

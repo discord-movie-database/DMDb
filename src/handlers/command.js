@@ -48,6 +48,22 @@ class CommandHandler extends HandlerStructure {
     }
 
     /**
+     * Check if command name is an alias.
+     * 
+     * @param {string} commandName - Command name
+     * @returns {Object} Command
+     */
+    checkAlias(commandName){
+        for (const command in this.commands) {
+            const aliases = this.commands[command].meta.aliases;
+
+            for (let i = 0; i < aliases.length; i++) {
+                if (aliases[i] === commandName) return this.commands[command];
+            }
+        }
+    }
+
+    /**
      * Checks if user has permission to run a command.
      * 
      * @param {Object} command - Command Object 
@@ -90,7 +106,7 @@ class CommandHandler extends HandlerStructure {
         message.content = commandArguments.join(' ');
         message.command = commandName;
 
-        const command = this.commands[commandName];
+        const command = this.commands[commandName] || this.checkAlias(commandName);
         if (!command) return;
 
         if (guildSettings.disabledCommands.indexOf(commandName) > -1) {

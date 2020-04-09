@@ -36,6 +36,7 @@ class CommandStructure {
         this.tmdb = this.client.util.getUtil('tmdb');
 
         this.meta = {};
+        this.meta.aliases = meta.aliases || [];
         this.meta.description = meta.description || false;
         this.meta.usage = meta.usage || false;
         this.meta.flags = meta.flags || false;

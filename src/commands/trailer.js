@@ -16,7 +16,8 @@ class TrailersCommand extends CommandStructure {
             flags: ['more', 'page', 'tv', 'year'],
             developerOnly: false,
             hideInHelp: false,
-            weight: 200
+            weight: 200,
+            aliases: ['video']
         });
     }
 
