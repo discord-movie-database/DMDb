@@ -52,7 +52,6 @@ class CommandHandler extends HandlerStructure {
         for(var i = 0; i < commandList.length; i++){
             const aliases = this.commands[commandList[i]].meta.aliases;
             for(var j = 0; j<aliases.length;j++){
-                this.client.log.info(aliases[j]);
                 if(aliases[j] == commandName){
                     return this.commands[commandList[i]]
                 }
