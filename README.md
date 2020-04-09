@@ -21,6 +21,37 @@ Discord. It's perfect for servers with a movie channel.
 | Top Rated      | Top Rated      | -              | -              |
 | Upcoming       | -              | -              | -              |
 
+## Commands
+
+
+
+## Contributing
+
+### Requirements:
+
+ - A TMDB API Key 
+ - 
+
+### Configuration
+
+Rename `config-template.js` -> `config.js`
+
+### MongoDB
+Install 
+
+run with auth
+
+run without auth
+
+For development purposes it may simpler to run MongoDB without authentication
+```bash
+mongod --port 27017 --dbpath /tmp/mongodb
+```
+ 
+Run as a service
+
+View official documentation
+
 ## License 📄
 
 [GNU GPLv3](https://github.com/discord-movie-database/DMDb/blob/dev/LICENSE.md) - Copyright © 2019

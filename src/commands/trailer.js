@@ -6,7 +6,7 @@ import CommandStructure from '../structures/command';
 class TrailersCommand extends CommandStructure {
     /**
      * Create trailer command.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
@@ -22,7 +22,7 @@ class TrailersCommand extends CommandStructure {
 
     /**
      * Function to run when command is executed.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {Array} commandArguments - Command arguments
      * @param {Object} guildSettings - Guild settings

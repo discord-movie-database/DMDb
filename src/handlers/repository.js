@@ -4,24 +4,24 @@ import HandlerStructure from '../structures/handler';
 
 /**
  * Repository handler.
- * 
+ *
  * @prop {*} db - Mongoose module
  */
 class RepositoryHandler extends HandlerStructure {
     /**
      * Create repository handler.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
         super(client, 'repository');
-        
+
         this.db = mongoose;
     }
 
     /**
      * Connects to database.
-     * 
+     *
      * @returns {undefined}
      */
     connect() {
@@ -41,7 +41,7 @@ class RepositoryHandler extends HandlerStructure {
 
     /**
      * Get repository.
-     * 
+     *
      * @param {string} repositoryName - Repository name
      * @returns {Object} Repository Object
      */
