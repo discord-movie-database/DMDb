@@ -17,7 +17,7 @@ class TrailersCommand extends CommandStructure {
             developerOnly: false,
             hideInHelp: false,
             weight: 200,
-            aliases:['video']
+            aliases: ['video']
         });
     }
 

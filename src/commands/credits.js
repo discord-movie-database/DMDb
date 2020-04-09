@@ -17,7 +17,7 @@ class CreditsCommand extends CommandStructure {
             developerOnly: false,
             hideInHelp: false,
             weight: 350,
-            aliases:['cast']
+            aliases: ['cast']
         });
     }
 

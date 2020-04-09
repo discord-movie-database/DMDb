@@ -17,7 +17,7 @@ class ShowsCommand extends CommandStructure {
             developerOnly: false,
             hideInHelp: false,
             weight: 450,
-            aliases:['programs']
+            aliases: ['programs']
         });
     }
 

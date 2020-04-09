@@ -17,7 +17,7 @@ class PosterCommand extends CommandStructure {
             developerOnly: false,
             hideInHelp: false,
             weight: 400,
-            aliases:['image','picture']
+            aliases: ['image','picture']
         });
     }
 

@@ -47,18 +47,22 @@ class CommandHandler extends HandlerStructure {
         return this.client.config.developers.indexOf(user.id) > -1;
     }
 
+    /**
+     * Check if command name is an alias.
+     * 
+     * @param {string} commandName - Command name
+     * @returns {Object} Command
+     */
     checkAlias(commandName){
-        const commandList = Object.keys(this.commands)
-        for(var i = 0; i < commandList.length; i++){
-            const aliases = this.commands[commandList[i]].meta.aliases;
-            for(var j = 0; j<aliases.length;j++){
-                if(aliases[j] == commandName){
-                    return this.commands[commandList[i]]
-                }
+        for (const command in this.commands) {
+            const aliases = this.commands[command].meta.aliases;
+
+            for (let i = 0; i < aliases.length; i++) {
+                if (aliases[i] === commandName) return this.commands[command];
             }
         }
-
     }
+
     /**
      * Checks if user has permission to run a command.
      * 

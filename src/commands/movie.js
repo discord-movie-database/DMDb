@@ -17,7 +17,7 @@ class MovieCommand extends CommandStructure {
             developerOnly: false,
             hideInHelp: false,
             weight: 700,
-            aliases:['film']
+            aliases: ['film']
         });
     }
 
