@@ -47,6 +47,19 @@ class CommandHandler extends HandlerStructure {
         return this.client.config.developers.indexOf(user.id) > -1;
     }
 
+    checkAlias(commandName){
+        const commandList = Object.keys(this.commands)
+        for(var i = 0; i < commandList.length; i++){
+            const aliases = this.commands[commandList[i]].meta.aliases;
+            for(var j = 0; j<aliases.length;j++){
+                this.client.log.info(aliases[j]);
+                if(aliases[j] == commandName){
+                    return this.commands[commandList[i]]
+                }
+            }
+        }
+
+    }
     /**
      * Checks if user has permission to run a command.
      * 
@@ -90,7 +103,7 @@ class CommandHandler extends HandlerStructure {
         message.content = commandArguments.join(' ');
         message.command = commandName;
 
-        const command = this.commands[commandName];
+        const command = this.commands[commandName] || this.checkAlias(commandName);
         if (!command) return;
 
         if (guildSettings.disabledCommands.indexOf(commandName) > -1) {

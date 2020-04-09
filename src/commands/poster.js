@@ -16,7 +16,8 @@ class PosterCommand extends CommandStructure {
             flags: ['tv', 'person', 'year'],
             developerOnly: false,
             hideInHelp: false,
-            weight: 400
+            weight: 400,
+            aliases:['image','picture']
         });
     }
 

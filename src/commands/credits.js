@@ -16,7 +16,8 @@ class CreditsCommand extends CommandStructure {
             flags: ['page', 'tv', 'person', 'year'],
             developerOnly: false,
             hideInHelp: false,
-            weight: 350
+            weight: 350,
+            aliases:['cast']
         });
     }
 

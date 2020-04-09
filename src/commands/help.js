@@ -53,11 +53,12 @@ class HelpCommand extends CommandStructure {
             
             fields: [
                 { name: 'Usage', value: command.meta.usage || 'N/A', inline: false },
+                { name: 'Aliases', value: this.list(command.meta.aliases.map((alias) => this.titleCase(alias))) || 'N/A', inline: false },
                 { name: 'Flags', value:
                     this.formatFlags(command.meta.flags) || 'N/A', inline: false },
                 { name: 'Hide in Help', value: this.yesno(command.meta.hideInHelp), inline: true },
                 { name: 'Developer Only', value:
-                    this.yesno(command.meta.developerOnly), inline: true },
+                    this.yesno(command.meta.developerOnly), inline: true }
             ],
         });
     }

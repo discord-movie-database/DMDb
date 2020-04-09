@@ -16,7 +16,8 @@ class ShowCommand extends CommandStructure {
             flags: ['more', 'year'],
             developerOnly: false,
             hideInHelp: false,
-            weight: 500
+            weight: 500,
+            aliases:['tv','program']
         });
     }
 
