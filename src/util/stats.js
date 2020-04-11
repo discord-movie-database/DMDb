@@ -1,4 +1,4 @@
-import UtilStructure from "../structures/util";
+import UtilStructure from '../structures/util';
 
 /**
  * Stats util.
@@ -6,7 +6,7 @@ import UtilStructure from "../structures/util";
 class StatsUtil extends UtilStructure {
     /**
      * Create stats util.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
@@ -15,16 +15,16 @@ class StatsUtil extends UtilStructure {
 
     /**
      * Get guild count.
-     * 
+     *
      * @returns {number} - Guild count
      */
     getGuilds() {
         return this.client.guilds.size;
     }
-    
+
     /**
      * Get channel count.
-     * 
+     *
      * @returns {number} - Channel count
      */
     getChannels() {
@@ -33,7 +33,7 @@ class StatsUtil extends UtilStructure {
 
     /**
      * Get user count.
-     * 
+     *
      * @returns {number} - User count
      */
     getUsers() {
