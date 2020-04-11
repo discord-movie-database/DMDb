@@ -54,7 +54,7 @@ class ShowsCommand extends CommandStructure {
         // Edit status message with results.
         this.embed.edit(statusMessage, {
             title: 'Search Results',
-            url: `https://www.themoviedb.org/search?query=${encodeURIComponent(message.content)}`,
+            url: `https://www.themoviedb.org/search/tv?query=${encodeURIComponent(message.content)}`,
 
             thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),
