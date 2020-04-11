@@ -6,7 +6,7 @@ import CommandStructure from '../structures/command';
 class ShowsCommand extends CommandStructure {
     /**
      * Create shows command.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
@@ -23,7 +23,7 @@ class ShowsCommand extends CommandStructure {
 
     /**
      * Function to run when command is executed.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {Array} commandArguments - Command arguments
      * @param {Object} guildSettings - Guild settings
@@ -54,7 +54,7 @@ class ShowsCommand extends CommandStructure {
         // Edit status message with results.
         this.embed.edit(statusMessage, {
             title: 'Search Results',
-            url: 'https://www.themoviedb.org/discover/tv',
+            url: `https://www.themoviedb.org/search?query=${encodeURIComponent(message.content)}`,
 
             thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),

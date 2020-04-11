@@ -6,7 +6,7 @@ import CommandStructure from '../structures/command';
 class PeopleCommand extends CommandStructure {
     /**
      * Create people command.
-     * 
+     *
      * @param {Object} client - DMDb client extends Eris
      */
     constructor(client) {
@@ -22,7 +22,7 @@ class PeopleCommand extends CommandStructure {
 
     /**
      * Function to run when command is executed.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {Array} commandArguments - Command arguments
      * @param {Object} guildSettings - Guild settings
@@ -50,6 +50,7 @@ class PeopleCommand extends CommandStructure {
         // Edit status message with response.
         this.embed.edit(statusMessage, {
             title: 'Search Results',
+            url: `https://www.themoviedb.org/search?query=${encodeURIComponent(message.content)}`,
 
             thumbnail: { url: this.thumbnailURL(response.results[0].profile_path) },
             description: this.resultsDescription(response),
