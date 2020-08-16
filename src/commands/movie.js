@@ -48,6 +48,10 @@ class MovieCommand extends CommandStructure {
         const response = await this.tmdb.movie.details(message.content, options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
+        // Prepare fields based on user-defined or default templates
+        this.client.field.setData(response);
+        let fields = this.client.field.getTemplate('movie');
+
         // Edit status message with response data.
         this.embed.edit(statusMessage, {
             title: response.title,
@@ -56,6 +60,8 @@ class MovieCommand extends CommandStructure {
             thumbnail: { url: this.thumbnailURL(response.poster_path) },
             description: this.description(response.overview),
 
+            fields: this.fields(fields),
+/*
             fields: flags.more ? this.fields([{
                 name: 'Tagline',
                 value: this.check(response.tagline),
@@ -132,7 +138,7 @@ class MovieCommand extends CommandStructure {
                 name: '🗣️ — Language',
                 value: this.list(response.spoken_languages.slice(0, 1).map((l) => l.name)),
             }]),
-
+*/
             timestamp: new Date().toISOString(),
 
             footer: { text: `TMDb ID: ${this.TMDbID(response.id)}` },

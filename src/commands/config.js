@@ -7,6 +7,7 @@ import CommandStructure from '../structures/command';
  * @prop {Object} options - Config options
  * @prop {Array<string>} languages - ISO 639-1 Codes
  * @prop {Array<string>} countries - ISO 3166-1 alpha-2 Codes
+ * @prop {Object} templateParts - Keyed arrays of configurable template parts
  */
 class ConfigCommand extends CommandStructure {
     /**
@@ -33,6 +34,16 @@ class ConfigCommand extends CommandStructure {
                 usage: '<New Prefix>',
                 run: this.prefix,
             },
+
+            'movie-fields': {
+                description: 'Configure what results are returned. '
+                    + 'Does not apply to `--more`.',
+                usage: '<some,movie,fields,in,order>',
+                run: this.setMovieTemplate,
+            },
+
+            // TODO: show-fields
+            // (and maybe eventually abstract into a generic `fields <scope/command> <template,parts>`)
 
             'toggle-command': {
                 description: 'Disable or enable a command.',
@@ -66,6 +77,11 @@ class ConfigCommand extends CommandStructure {
 
         this.languages = ['en', 'de', 'fr', 'es', 'ru', 'it', 'pt', 'zh', 'hu', 'ko'];
         this.countries = ['us', 'gb', 'de', 'fr', 'es', 'ru', 'it', 'pt', 'cn', 'hu', 'kr'];
+        this.templateParts = {
+            // TODO: generate these automatically from this.client.field._fields and "supports" checks
+            movie: ['cast','crew','genre','language','meta','tagline','votes'],
+            show: []
+        };
     }
 
     /**
@@ -90,6 +106,34 @@ class ConfigCommand extends CommandStructure {
         return query === 'reset'
             ? this.success('Reset prefix.')
             : this.success(`Updated prefix to \`${query}\`.`);
+    }
+
+    /**
+     * Update return template for a given command.
+     *
+     * @param {string} guildID - Guild ID
+     * @param {string} query - Query
+     * @param {Object} guildSettings - Guild settings
+     * @returns {Object} - Success or error message
+     */
+    async setMovieTemplate(guildID, query, guildSettings) {
+        // Check for template parts
+        if (!query) return this.error('Template parts cannot be empty.');
+
+        // Format query
+        query = query.toLowerCase().split(',');
+
+        // Check if template contains valid fields
+        let invalid = query.filter(t => !this.templateParts.movie.includes(t));
+        if (invalid.length)
+            return this.error(`Invalid template part${this.plural(invalid)}: ${this.join(invalid)}. Valid parts: ${this.join(this.templateParts.movie)}.`);
+
+        // Update template parts in database
+        await this.repository.getOrUpdate(guildID,
+            { $set: { movieTemplate: query } });
+
+        // Success
+        return this.success(`Updated movie template to: ${this.join(query)}.`);
     }
 
     /**
