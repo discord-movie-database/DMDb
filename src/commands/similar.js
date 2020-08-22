@@ -41,13 +41,13 @@ class SimilarCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get media source.
-        const media = this.mediaSource(flags);
+        const media = this.flags.mediaSource(flags);
 
         // Get API options.
         const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
 
         // Get results from API.
-        const response = await this.tmdb[media].similar(message.content, options, true) 
+        const response = await this.tmdb[media].similar(message.content, options, true)
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with results.
@@ -58,16 +58,16 @@ class SimilarCommand extends CommandStructure {
             thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),
 
-            fields: response.results.map((result) => flags.tv ? this.resultField(result.name, [
+            fields: response.results.map((result) => flags.tv ? this.fields.renderResult(result.name, [
                 // Show
-                `First Air Date: ${this.date(result.first_air_date)}`,
-                `Vote Average: ${this.check(result.vote_average)}`,
-                this.TMDbID(result.id),
-            ]) : this.resultField(result.title, [
+                `First Air Date: ${this.fields.date(result.first_air_date)}`,
+                `Vote Average: ${this.fields.check(result.vote_average)}`,
+                this.fields.TMDbID(result.id),
+            ]) : this.fields.renderResult(result.title, [
                 // Movie
-                `Release Date: ${this.date(result.release_date)}`,
-                `Vote Average: ${this.check(result.vote_average)}`,
-                this.TMDbID(result.id),
+                `Release Date: ${this.fields.date(result.release_date)}`,
+                `Vote Average: ${this.fields.check(result.vote_average)}`,
+                this.fields.TMDbID(result.id),
             ])),
         });
     }

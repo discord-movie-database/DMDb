@@ -10,7 +10,6 @@ import UtilHandler from './handlers/util';
 import EventHandler from './handlers/event';
 import CommandHandler from './handlers/command';
 import RoutineHandler from './handlers/routine';
-import FieldHandler from './handlers/field';
 
 /**
  * DMDb Discord bot.
@@ -48,7 +47,6 @@ class Client extends Eris {
         this.event = new EventHandler(this);
         this.command = new CommandHandler(this);
         this.routine = new RoutineHandler(this);
-        this.field = new FieldHandler(this);
 
         this.load = async () => {
             await this.util.loadFiles();
@@ -61,7 +59,6 @@ class Client extends Eris {
             await this.event.loadFiles();
             await this.command.loadFiles();
             await this.routine.loadFiles();
-            await this.field.loadFiles();
 
             const time = new Date(new Date() - this.start).getTime() / 1000;
 

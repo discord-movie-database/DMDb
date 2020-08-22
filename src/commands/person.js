@@ -47,54 +47,21 @@ class PersonCommand extends CommandStructure {
         const response = await this.tmdb.person.details(message.content, options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
+        // Prepare fields based on user-defined or default templates
+        const fields = this.fields.renderTemplate('person', response, flags.more);
+
         // Edit status message with response.
         this.embed.edit(statusMessage, {
             title: response.name,
-            url: this.TMDbPersonURL(response.id),
+            url: this.fields.TMDbPersonURL(response.id),
 
             thumbnail: { url: this.thumbnailURL(response.profile_path) },
             description: this.description(response.biography),
-
-            fields: flags.more ? this.fields([{
-                name: 'Gender',
-                value: this.gender(response.gender),
-            }, {
-                name: 'Birthday', 
-                value: this.date(response.birthday),
-            }, {
-                name: 'Deathday',
-                value: this.date(response.deathday),
-            }, {
-                name: 'Known For',
-                value: this.check(response.known_for_department),
-            }, {
-                name: 'IMDb ID',
-                value: this.check(response.imdb_id),
-            }, {
-                name: '-',
-                value: '-',
-            }, {
-                name: 'Place of Birth',
-                value: this.check(response.place_of_birth),
-                inline: false,
-            }, {
-                name: 'Homepage',
-                value: this.check(response.homepage),
-                inline: false,
-            }]) : this.fields([{
-                name: '🎬 — Known For',
-                value: this.check(response.known_for_department),
-            }, {
-                name: '🎉 — Birthday',
-                value: this.date(response.birthday),
-            }, {
-                name: `${response.gender ? response.gender === 2 ? '♂️' : '♀️' : '❓'} — Gender`,
-                value: this.gender(response.gender),
-            }]),
+            fields: fields,
 
             timestamp: new Date().toISOString(),
 
-            footer: { text: `TMDb ID: ${this.TMDbID(response.id)}` },
+            footer: { text: `TMDb ID: ${this.fields.TMDbID(response.id)}` },
         });
     }
 }

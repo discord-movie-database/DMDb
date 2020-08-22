@@ -68,6 +68,26 @@ class FlagsUtil extends UtilStructure {
     year(value) {
         return value && /^\d{4}$/.test(value) ? value : 'All';
     }
+
+    /**
+     * Get media source from flags.
+     *
+     * @param {Object} flags - Flags
+     * @returns {string} - Media source
+     */
+    mediaSource(flags) {
+        return flags.tv ? 'tv' : flags.person ? 'person' : 'movie';
+    }
+
+    /**
+     * Converts media type value to readable.
+     *
+     * @param {string} value - Value
+     * @returns {string} - Updated value
+     */
+    mediaType(value) {
+        return value === 'tv' ? 'TV' : value === 'movie' ? 'Movie' : this.check(value);
+    }
 }
 
 export default FlagsUtil;

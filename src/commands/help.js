@@ -48,17 +48,17 @@ class HelpCommand extends CommandStructure {
 
         // Send command info.
         this.embed.create(message.channel.id, {
-            title: `${this.titleCase(commandName)} Command`,
+            title: `${this.fields.titleCase(commandName)} Command`,
             description: `${command.meta.description || 'No description.'}\n`,
 
             fields: [
                 { name: 'Usage', value: command.meta.usage || 'N/A', inline: false },
-                { name: 'Aliases', value: this.list(command.meta.aliases.map((alias) => this.titleCase(alias))) || 'N/A', inline: false },
+                { name: 'Aliases', value: this.fields.list(command.meta.aliases.map((alias) => this.fields.titleCase(alias))) || 'N/A', inline: false },
                 { name: 'Flags', value:
                     this.formatFlags(command.meta.flags) || 'N/A', inline: false },
-                { name: 'Hide in Help', value: this.yesno(command.meta.hideInHelp), inline: true },
+                { name: 'Hide in Help', value: this.fields.yesno(command.meta.hideInHelp), inline: true },
                 { name: 'Developer Only', value:
-                    this.yesno(command.meta.developerOnly), inline: true }
+                    this.fields.yesno(command.meta.developerOnly), inline: true }
             ],
         });
     }
@@ -87,7 +87,7 @@ class HelpCommand extends CommandStructure {
             return commands[b].meta.weight - commands[a].meta.weight; });
 
         // Put commands into pages.
-        const commandPages = this.splitArray(commandNames, 5);
+        const commandPages = this.fields.splitArray(commandNames, 5);
 
         // Get commands in page.
         const pageCommands = commandPages[page];
@@ -110,7 +110,7 @@ class HelpCommand extends CommandStructure {
 
             timestamp: new Date().toISOString(),
 
-            footer: { text: this.join([
+            footer: { text: this.fields.join([
                 `Total Commands: ${commandNames.length}`,
                 `Data from The Movie Database (TMDb)`
             ], true), }

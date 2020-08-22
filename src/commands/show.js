@@ -48,95 +48,21 @@ class ShowCommand extends CommandStructure {
         const response = await this.tmdb.tv.details(message.content, options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
+        // Prepare fields based on user-defined or default templates
+        const fields = this.fields.renderTemplate('show', response, flags.more);
+
         // Edit status message with response data.
         this.embed.edit(statusMessage, {
             title: response.name,
-            url: this.TMDbShowURL(response.id),
+            url: this.fields.TMDbShowURL(response.id),
 
             thumbnail: { url: this.thumbnailURL(response.poster_path) },
             description: this.description(response.overview),
-
-            fields: flags.more ? this.fields([{
-                name: 'Tagline',
-                value: this.check(response.tagline),
-                inline: false,
-            }, {
-                name: 'Status',
-                value: this.check(response.status),
-            }, {
-                name: 'Type',
-                value: this.check(response.type),
-            }, {
-                name: 'In Production',
-                value: this.yesno(response.in_production),
-            }, {
-                name: 'First Air Date',
-                value: this.date(response.first_air_date),
-            }, {
-                name: 'Last Air Date',
-                value: this.date(response.last_air_date),
-            }, {
-                name: 'Episode Runtime',
-                value: this.runtime(response.episode_run_time),
-            }, {
-                name: 'Last Episode to Air',
-                value: this.date(response.last_episode_to_air
-                    ? response.last_episode_to_air.air_date : false),
-            }, {
-                name: 'Next Episode to Air',
-                value: this.date(response.next_episode_to_air
-                    ? response.next_episode_to_air.air_date : false),
-            }, {
-                name: 'Number of Seasons',
-                value: `${this.check(response.number_of_seasons)} `
-                    + `(${this.check(response.number_of_episodes)} episodes)`,
-            }, {
-                name: 'Vote Average',
-                value: this.check(response.vote_average),
-            }, {
-                name: 'Vote Count',
-                value: this.number(response.vote_count),
-            }, {
-                name: '-',
-                value: '-',
-            }, {
-                name: `Production Compan${this.plural(response.production_companies, true)}`,
-                value: this.list(response.production_companies.map((l) => l.name)),
-                inline: false,
-            }, {
-                name: `Network${this.plural(response.networks)}`,
-                value: this.list(response.networks.map((n) => n.name)),
-                inline: false,
-            }, {
-                name: 'Homepage',
-                value: this.check(response.homepage),
-                inline: false,
-            }]) : this.fields([response.tagline ? {
-                name: '💬 — Tagline',
-                value: this.check(response.tagline),
-                inline: false,
-            } : { // Show genres instead of tagline if there isn't one.
-                name: `👽 — Genre${this.plural(response.genres)}`,
-                value: this.list(response.genres.map((g) => g.name)),
-                inline: false,
-            }, response.vote_average ? {
-                name: '⭐ — Vote Average',
-                value: `**${this.check(response.vote_average)}** `
-                    + `(${this.number(response.vote_count)} votes)`,
-            } : { // Show status instead of votes if there are none.
-                name: '🗞️ — Status',
-                value: this.check(response.status),
-            }, {
-                name: '📆 — First Air Date',
-                value: this.date(response.first_air_date),
-            }, {
-                name: '🎞️ — Episode Runtime',
-                value: this.runtime(response.episode_run_time),
-            }]),
+            fields: fields,
 
             timestamp: new Date().toISOString(),
 
-            footer: { text: `TMDb ID: ${this.TMDbID(response.id)}` },
+            footer: { text: `TMDb ID: ${this.fields.TMDbID(response.id)}` },
         });
     }
 }

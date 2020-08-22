@@ -42,7 +42,7 @@ class PosterCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get media source.
-        const media = this.mediaSource(flags);
+        const media = this.flags.mediaSource(flags);
 
         // Get API options.
         const options = this.APIOptions(guildSettings, { year: flags.year });
@@ -57,7 +57,7 @@ class PosterCommand extends CommandStructure {
         // Edit status message with poster.
         this.embed.edit(statusMessage, {
             title: `${response.title || response.name}${!flags.person ?
-                ` (${this.year(response.release_date || response.first_air_date)})` : ''}`,
+                ` (${this.fields.year(response.release_date || response.first_air_date)})` : ''}`,
             image: { url: this.thumbnailURL(response.poster_path, true) },
         });
     }
