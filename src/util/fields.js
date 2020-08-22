@@ -324,6 +324,37 @@ class FieldsUtil extends UtilStructure {
     }
 
     /**
+     * Stub some fake data so we can grab this.fields from anywhere without errors.
+     */
+    stubDataForSupports() {
+        this.setData({
+            // optional inclusions
+            belongs_to_collection: 1,
+            deathday: 1,
+            gender: 1,
+            homepage: 1,
+            imdb_id: 'tt123',
+            next_episode_to_air: 1,
+
+            // arrayable function calls
+            created_by: [],
+            genres: [],
+            spoken_languages: [],
+            networks: [],
+            origin_country: [],
+            production_companies: [],
+            production_countries: [],
+        });
+    }
+
+    /**
+     * Clear any set data.
+     */
+    clearData() {
+        this.setData({});
+    }
+
+    /**
      * Checks field values and sets them as inline by default.
      *
      * @param {Array} fields - Fields
@@ -357,12 +388,15 @@ class FieldsUtil extends UtilStructure {
         };
 
         let template = (more ? mores[type] : defaults[type]) || [];
+
         // TODO: get user-defined template from settings
 
         this.setData(data);
 
         const fields = [];
         template.forEach(f => fields.push(this.renderField(f)));
+
+        this.clearData();
 
         // Filter out any empty objects renderField() might have included on errors
         return this.checkFields(fields.filter(o => Object.keys(o).length));

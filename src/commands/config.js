@@ -77,11 +77,32 @@ class ConfigCommand extends CommandStructure {
 
         this.languages = ['en', 'de', 'fr', 'es', 'ru', 'it', 'pt', 'zh', 'hu', 'ko'];
         this.countries = ['us', 'gb', 'de', 'fr', 'es', 'ru', 'it', 'pt', 'cn', 'hu', 'kr'];
-        this.templateParts = {
-            // TODO: generate these automatically from this.client.field._fields and "supports" checks
-            movie: ['cast','crew','genre','language','meta','tagline','votes'],
-            show: []
+        this.templateParts = this.discoverFieldSupports();
+    }
+
+    /**
+     * Autodiscover template parts by parsing field supports.
+     *
+     * @returns {Object} - Keyed arrays of supported fields
+     */
+    discoverFieldSupports() {
+        const supports = {
+            movie: [],
+            person: [],
+            show: [],
         };
+
+        this.fields.stubDataForSupports();
+
+        Object.keys(this.fields.fields).map((field) => {
+            this.fields.fields[field]().supports.map((f) => supports[f].push(field));
+        });
+
+        // this.client.log.info('found fields', supports);
+
+        this.fields.clearData();
+
+        return supports;
     }
 
     /**
@@ -118,22 +139,25 @@ class ConfigCommand extends CommandStructure {
      */
     async setMovieTemplate(guildID, query, guildSettings) {
         // Check for template parts
-        if (!query) return this.error('Template parts cannot be empty.');
+        if (!query) return this.error(`Template parts cannot be empty. Valid parts: \`${this.fields.join(this.templateParts.movie, true)}\`.`);
+
+        // TODO: provide some "reset" query to unset and go back to defaults?
+        // TODO: provide the currently-saved template somewhere?
 
         // Format query
-        query = query.toLowerCase().split(',');
+        query = query.replace(' ', '').split(',');
 
         // Check if template contains valid fields
         let invalid = query.filter(t => !this.templateParts.movie.includes(t));
         if (invalid.length)
-            return this.error(`Invalid template part${this.plural(invalid)}: ${this.join(invalid)}. Valid parts: ${this.join(this.templateParts.movie)}.`);
+            return this.error(`Invalid template part${this.fields.plural(invalid)}: ${this.fields.join(invalid)}. Valid parts: \`${this.fields.join(this.templateParts.movie, true)}\`.`);
 
         // Update template parts in database
         await this.repository.getOrUpdate(guildID,
             { $set: { movieTemplate: query } });
 
         // Success
-        return this.success(`Updated movie template to: ${this.join(query)}.`);
+        return this.success(`Updated movie template to: \`${this.fields.join(query, true)}\`.`);
     }
 
     /**
@@ -204,7 +228,7 @@ class ConfigCommand extends CommandStructure {
 
         // Check if language code is valid and exists
         if (this.languages.indexOf(query) < 0)
-            return this.error(`Invalid language code. Valid codes: ${this.join(this.languages)}.`);
+            return this.error(`Invalid language code. Valid codes: ${this.fields.join(this.languages)}.`);
 
         // Update API language in database
         await this.repository.getOrUpdate(guildID, { $set: { apiLanguage: query } });
@@ -227,7 +251,7 @@ class ConfigCommand extends CommandStructure {
 
         // Check if language code is valid and exists
         if (this.countries.indexOf(query) < 0)
-            return this.error(`Invalid country code. Valid codes: ${this.join(this.countries)}.`);
+            return this.error(`Invalid country code. Valid codes: ${this.fields.join(this.countries)}.`);
 
         // Update API language in database
         await this.repository.getOrUpdate(guildID, { $set: { apiRegion: query } });
