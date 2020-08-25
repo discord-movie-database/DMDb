@@ -49,7 +49,7 @@ class ShowCommand extends CommandStructure {
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates
-        const fields = this.fields.renderTemplate('show', response, flags.more);
+        const fields = this.fields.renderTemplate('show', response, flags.more, guildSettings);
 
         // Edit status message with response data.
         this.embed.edit(statusMessage, {

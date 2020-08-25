@@ -48,7 +48,7 @@ class PersonCommand extends CommandStructure {
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates
-        const fields = this.fields.renderTemplate('person', response, flags.more);
+        const fields = this.fields.renderTemplate('person', response, flags.more, guildSettings);
 
         // Edit status message with response.
         this.embed.edit(statusMessage, {

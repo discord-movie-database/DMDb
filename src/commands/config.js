@@ -42,8 +42,21 @@ class ConfigCommand extends CommandStructure {
                 run: this.setMovieTemplate,
             },
 
-            // TODO: show-fields
-            // (and maybe eventually abstract into a generic `fields <scope/command> <template,parts>`)
+            'person-fields': {
+                description: 'Configure what results are returned. '
+                    + 'Does not apply to `--more`.',
+                usage: '<some,person,fields,in,order>',
+                run: this.setPersonTemplate,
+            },
+
+            'show-fields': {
+                description: 'Configure what results are returned. '
+                    + 'Does not apply to `--more`.',
+                usage: '<some,show,fields,in,order>',
+                run: this.setShowTemplate,
+            },
+
+            // TODO: maybe abstract field templates into a generic `fields <scope/command> <template,parts>`)
 
             'toggle-command': {
                 description: 'Disable or enable a command.',
@@ -128,7 +141,7 @@ class ConfigCommand extends CommandStructure {
     }
 
     /**
-     * Update return template for a given command.
+     * Update return template for the `movie` command.
      *
      * @param {string} guildID - Guild ID
      * @param {string} query - Query
@@ -136,23 +149,63 @@ class ConfigCommand extends CommandStructure {
      * @returns {Object} - Success or error message
      */
     async setMovieTemplate(guildID, query, guildSettings) {
+        return this.setTemplate(guildID, 'movie', query);
+    }
+
+    /**
+     * Update return template for the `person` command.
+     *
+     * @param {string} guildID - Guild ID
+     * @param {string} query - Query
+     * @param {Object} guildSettings - Guild settings
+     * @returns {Object} - Success or error message
+     */
+    async setPersonTemplate(guildID, query, guildSettings) {
+        return this.setTemplate(guildID, 'person', query);
+    }
+
+    /**
+     * Update return template for the `show` command.
+     *
+     * @param {string} guildID - Guild ID
+     * @param {string} query - Query
+     * @param {Object} guildSettings - Guild settings
+     * @returns {Object} - Success or error message
+     */
+    async setShowTemplate(guildID, query, guildSettings) {
+        return this.setTemplate(guildID, 'show', query);
+    }
+
+    /**
+     * Update return template for a given command.
+     *
+     * @param {string} guildID - Guild ID
+     * @param {string} type - What command's template we're setting
+     * @param {string} query - Query
+     * @returns {Object} - Success or error message
+     */
+    async setTemplate(guildID, type, query) {
+        if (!this.templateParts[type]) { return this.error(`Unknown command: \`${type}\`.`); }
+
         // Check for template parts
-        if (!query) return this.error(`Template parts cannot be empty. Valid parts: \`${this.fields.join(this.templateParts.movie, true)}\`.`);
+        if (!query) return this.error(`Template parts cannot be empty. Valid parts: \`${this.fields.join(this.templateParts[type], true)}\`.`);
 
         // TODO: provide some "reset" query to unset and go back to defaults?
         // TODO: provide the currently-saved template somewhere?
 
         // Format query
-        query = query.replace(' ', '').split(',');
+        query = query.replace(/ /g, '').split(',');
 
         // Check if template contains valid fields
-        let invalid = query.filter(t => !this.templateParts.movie.includes(t));
+        let invalid = query.filter(t => !this.templateParts[type].includes(t));
         if (invalid.length)
-            return this.error(`Invalid template part${this.fields.plural(invalid)}: ${this.fields.join(invalid)}. Valid parts: \`${this.fields.join(this.templateParts.movie, true)}\`.`);
+            return this.error(`Invalid template part${this.fields.plural(invalid)}: ${this.fields.join(invalid)}. Valid parts: \`${this.fields.join(this.templateParts[type], true)}\`.`);
 
         // Update template parts in database
-        await this.repository.getOrUpdate(guildID,
-            { $set: { movieTemplate: query.join(',') } });
+        const settingsKey = `${type}Template`;
+        const settingsObj = {};
+        settingsObj[settingsKey] = query.join(',');
+        await this.repository.getOrUpdate(guildID, { $set: settingsObj });
 
         // Success
         return this.success(`Updated movie template to: \`${this.fields.join(query, true)}\`.`);
