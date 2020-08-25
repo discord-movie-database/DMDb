@@ -31,258 +31,258 @@ class FieldsUtil extends UtilStructure {
 
         this.fields = {
             // API Fields
-            birthday: () => ({
+            birthday: (data) => ({
                 icon: '🎉', // '🎂'
                 name: 'Birthday',
-                value: this.date(this.data.birthday),
+                value: this.date(data.birthday),
                 supports: ['person'],
             }),
 
-            budget: () => ({
+            budget: (data) => ({
                 icon: '💸',
                 name: 'Budget',
-                value: this.money(this.data.budget),
+                value: this.money(data.budget),
                 supports: ['movie'],
             }),
 
-            collection: () => (this.data.belongs_to_collection ? {
+            collection: (data) => (data.belongs_to_collection ? {
                 icon: '🗃️',
                 name: 'Collection',
-                value: `[${this.data.belongs_to_collection.name}](${this.TMDbCollectionURL(this.data.belongs_to_collection.id)})`,
+                value: `[${data.belongs_to_collection.name}](${this.TMDbCollectionURL(data.belongs_to_collection.id)})`,
                 supports: ['movie'],
             } : {}),
 
-            createdBy: () => ({
+            createdBy: (data) => ({
                 icon: '🌱',
                 name: 'Created By',
-                value: this.list(this.data.created_by.map((n) => n.name)),
+                value: this.list(data.created_by.map((n) => n.name)),
                 supports: ['show'],
             }),
 
-            death: () => (this.data.deathday ? {
+            death: (data) => (data.deathday ? {
                 icon: '🥀', // '🪦'
                 name: 'Died',
-                value: this.date(this.data.deathday),
+                value: this.date(data.deathday),
                 supports: ['person'],
             } : {}),
 
-            episodeRuntime: () => ({
+            episodeRuntime: (data) => ({
                 icon: '🎞',
                 name: 'Episode Runtime',
-                value: this.runtime(this.data.episode_run_time),
+                value: this.runtime(data.episode_run_time),
                 supports: ['show'],
             }),
 
-            firstAired: () => ({
+            firstAired: (data) => ({
                 icon: '📆',
                 name: 'First Air Date',
-                value: this.date(this.data.first_air_date),
+                value: this.date(data.first_air_date),
                 supports: ['show'],
             }),
 
-            gender: () => ({
-                icon: this.gender(this.data.gender, true),
+            gender: (data) => ({
+                icon: this.gender(data.gender, true),
                 name: 'Gender',
-                value: this.gender(this.data.gender),
+                value: this.gender(data.gender),
                 supports: ['person'],
             }),
 
-            genre: () => ({
+            genre: (data) => ({
                 icon: '👽', // '🏷️'
-                name: `Genre${this.plural(this.data.genres)}`,
-                value: this.list(this.data.genres.map((g) => g.name)),
+                name: `Genre${this.plural(data.genres)}`,
+                value: this.list(data.genres.map((g) => g.name)),
                 inline: false,
                 supports: ['movie', 'show'],
             }),
 
-            homepage: () => (this.data.homepage ? {
+            homepage: (data) => (data.homepage ? {
                 icon: '🌐',
                 name: 'Homepage',
-                value: this.check(this.data.homepage),
+                value: this.check(data.homepage),
                 inline: false,
                 supports: ['movie', 'person', 'show'],
             } : {}),
 
-            imdb: () => ({
+            imdb: (data) => ({
                 // TODO: Inline SVG favicon?
                 name: 'IMDb',
-                value: this.IMDbURLMaker(this.data.imdb_id),
+                value: this.IMDbURLMaker(data.imdb_id),
                 supports: ['movie', 'person'],
             }),
 
-            inProduction: () => ({
+            inProduction: (data) => ({
                 icon: '🚦',
                 name: 'In Production',
-                value: this.yesno(this.data.in_production),
+                value: this.yesno(data.in_production),
                 supports: ['show'],
             }),
 
-            knownFor: () => ({
+            knownFor: (data) => ({
                 icon: '🎬',
                 name: 'Known For',
-                value: this.check(this.data.known_for_department),
+                value: this.check(data.known_for_department),
                 supports: ['person'],
             }),
 
-            language: () => ({
+            language: (data) => ({
                 icon: '🗣',
                 name: 'Language',
-                value: this.list(this.data.spoken_languages.slice(0, 1).map((l) => l.name)),
+                value: this.list(data.spoken_languages.slice(0, 1).map((l) => l.name)),
                 supports: ['movie'],
             }),
 
-            languages: () => ({
+            languages: (data) => ({
                 icon: '🗣',
                 name: 'Language',
-                value: this.list(this.data.spoken_languages.map((l) => l.name)),
+                value: this.list(data.spoken_languages.map((l) => l.name)),
                 supports: ['movie'],
             }),
 
-            lastAired: () => ({
+            lastAired: (data) => ({
                 icon: '📅',
                 name: 'Last Air Date',
-                value: this.date(this.data.last_air_date),
+                value: this.date(data.last_air_date),
                 supports: ['show'],
             }),
 
-            lastEpisode: () => ({
+            lastEpisode: (data) => ({
                 icon: '📆',
                 name: 'Last Episode Air Date',
-                value: this.date(this.data.last_episode_to_air
-                    ? this.data.last_episode_to_air.air_date : false),
+                value: this.date(data.last_episode_to_air
+                    ? data.last_episode_to_air.air_date : false),
                 supports: ['show'],
             }),
 
-            network: () => ({
+            network: (data) => ({
                 icon: '📡',
-                name: `Network${this.plural(this.data.networks)}`,
-                value: this.list(this.data.networks.map((n) => n.name)),
+                name: `Network${this.plural(data.networks)}`,
+                value: this.list(data.networks.map((n) => n.name)),
                 inline: false,
                 supports: ['show'],
             }),
 
-            nextEpisode: () => (this.data.next_episode_to_air ? {
+            nextEpisode: (data) => (data.next_episode_to_air ? {
                 icon: '🗓️',
                 name: 'Next Episode Air Date',
-                value: this.date(this.data.next_episode_to_air
-                    ? this.data.next_episode_to_air.air_date : false),
+                value: this.date(data.next_episode_to_air
+                    ? data.next_episode_to_air.air_date : false),
                 supports: ['show'],
             } : {}),
 
-            originCountry: () => ({
+            originCountry: (data) => ({
                 icon: '🗺️',
-                name: `Origin Countr${this.plural(this.data.origin_country, true)}`,
-                value: this.list(this.data.origin_country),
+                name: `Origin Countr${this.plural(data.origin_country, true)}`,
+                value: this.list(data.origin_country),
                 inline: false,
                 supports: ['show'],
             }),
 
-            originCountryFlag: () => ({
+            originCountryFlag: (data) => ({
                 icon: '🗺️',
-                name: `Origin Countr${this.plural(this.data.origin_country, true)}`,
-                value: this.flags(this.data.origin_country),
+                name: `Origin Countr${this.plural(data.origin_country, true)}`,
+                value: this.flags(data.origin_country),
                 inline: false,
                 supports: ['show'],
             }),
 
-            placeOfBirth: () => ({
+            placeOfBirth: (data) => ({
                 icon: '📍',
                 name: 'Place of Birth',
-                value: this.check(this.data.place_of_birth),
+                value: this.check(data.place_of_birth),
                 inline: false,
                 supports: ['person'],
             }),
 
-            productionCompany: () => ({
+            productionCompany: (data) => ({
                 icon: '🏢',
-                name: `Production Compan${this.plural(this.data.production_companies, true)}`,
-                value: this.list(this.data.production_companies.map((c) => c.name)),
+                name: `Production Compan${this.plural(data.production_companies, true)}`,
+                value: this.list(data.production_companies.map((c) => c.name)),
                 inline: false,
                 supports: ['movie','show'],
             }),
 
-            productionCountry: () => ({
+            productionCountry: (data) => ({
                 icon: '🗺️',
-                name: `Production Countr${this.plural(this.data.production_countries, true)}`,
-                value: this.list(this.data.production_countries.map((c) => c.name)),
+                name: `Production Countr${this.plural(data.production_countries, true)}`,
+                value: this.list(data.production_countries.map((c) => c.name)),
                 inline: false,
                 supports: ['movie'],
             }),
 
-            productionCountryFlag: () => ({
+            productionCountryFlag: (data) => ({
                 icon: '🗺️',
-                name: `Production Countr${this.plural(this.data.production_countries, true)}`,
-                value: this.flags(this.data.production_countries.map((c) => c.iso_3166_1)),
+                name: `Production Countr${this.plural(data.production_countries, true)}`,
+                value: this.flags(data.production_countries.map((c) => c.iso_3166_1)),
                 inline: false,
                 supports: ['movie'],
             }),
 
-            releaseDate: () => ({
+            releaseDate: (data) => ({
                 // TODO: allow to filter by country?
                 // https://developers.themoviedb.org/3/movies/get-movie-release-date({
                 icon: '📆',
                 name: 'Release Date',
-                value: this.date(this.data.release_date),
+                value: this.date(data.release_date),
                 supports: ['movie'],
             }),
 
-            revenue: () => ({
+            revenue: (data) => ({
                 icon: '💰',
                 name: 'Revenue',
-                value: this.money(this.data.revenue),
+                value: this.money(data.revenue),
                 supports: ['movie'],
             }),
 
-            runtime: () => ({
+            runtime: (data) => ({
                 icon: '🎞',
                 name: 'Runtime',
-                value: this.runtime(this.data.runtime),
+                value: this.runtime(data.runtime),
                 supports: ['movie'],
             }),
 
-            score: () => ({
+            score: (data) => ({
                 icon: '⭐',
                 name: 'User Score',
-                value: `**${this.score(this.data.vote_average)}** `
-                    + `(${this.number(this.data.vote_count)} votes)`,
+                value: `**${this.score(data.vote_average)}** `
+                    + `(${this.number(data.vote_count)} votes)`,
                 supports: ['movie', 'show'],
             }),
 
-            seasons: () => ({
+            seasons: (data) => ({
                 icon: '🧮',
                 name: 'Number of Seasons',
-                value: `${this.check(this.data.number_of_seasons)} `
-                    + `(${this.check(this.data.number_of_episodes)} episodes)`,
+                value: `${this.check(data.number_of_seasons)} `
+                    + `(${this.check(data.number_of_episodes)} episodes)`,
                 supports: ['show'],
             }),
 
-            status: () => ({
+            status: (data) => ({
                 icon: '🗞',
                 name: 'Status',
-                value: this.check(this.data.status),
+                value: this.check(data.status),
                 supports: ['movie', 'show'],
             }),
 
-            tagline: () => ({
+            tagline: (data) => ({
                 icon: '💬',
                 name: 'Tagline',
-                value: this.check(this.data.tagline),
+                value: this.check(data.tagline),
                 inline: false,
                 supports: ['movie', 'show'],
             }),
 
-            type: () => ({
+            type: (data) => ({
                 icon: '📒', // '�'️
                 name: 'Type',
-                value: this.check(this.data.type),
+                value: this.check(data.type),
                 supports: ['show'],
             }),
 
-            vote: () => ({
+            vote: (data) => ({
                 icon: '⭐',
                 name: 'Vote Average',
-                value: `**${this.check(this.data.vote_average)}** `
-                    + `(${this.number(this.data.vote_count)} votes)`,
+                value: `**${this.check(data.vote_average)}** `
+                    + `(${this.number(data.vote_count)} votes)`,
                 supports: ['movie', 'show'],
             }),
 
@@ -290,22 +290,22 @@ class FieldsUtil extends UtilStructure {
 
             // Fallbacks
 
-            taglineOrGenre: () => (
+            taglineOrGenre: (data) => (
                 // Show genres instead of tagline if there isn't one.
-                this.data.tagline ? this.fields.tagline() : this.fields.genre()
+                data.tagline ? this.fields.tagline(data) : this.fields.genre(data)
             ),
-            voteOrStatus: () => (
+            voteOrStatus: (data) => (
                 // Show status instead of votes if there are none.
-                this.data.vote_average ? this.fields.vote() : this.fields.status()
+                data.vote_average ? this.fields.vote(data) : this.fields.status(data)
             ),
-            runtimeOrLanguage: () => (
+            runtimeOrLanguage: (data) => (
                 // Show language instead of runtime if not released yet.
-                this.data.status === 'Released' ? this.fields.runtime() : this.fields.language()
+                data.status === 'Released' ? this.fields.runtime(data) : this.fields.language(data)
             ),
 
             // Misc
 
-            spacer: () => ({
+            spacer: (data) => ({
                 name: '—',
                 value: '—',
                 supports: ['movie', 'person', 'show'],
@@ -314,20 +314,12 @@ class FieldsUtil extends UtilStructure {
     }
 
     /**
-     * Set data.
-     *
-     * @param {Object} data - Keyed data for filling field templates
-     */
-    setData(data) {
-        // this.client.log.info('setting data', data);
-        this.data = data;
-    }
-
-    /**
      * Stub some fake data so we can grab this.fields from anywhere without errors.
+     *
+     * @returns {object} - keyed data similar to the API return
      */
     stubDataForSupports() {
-        this.setData({
+        return {
             // optional inclusions
             belongs_to_collection: 1,
             deathday: 1,
@@ -344,14 +336,7 @@ class FieldsUtil extends UtilStructure {
             origin_country: [],
             production_companies: [],
             production_countries: [],
-        });
-    }
-
-    /**
-     * Clear any set data.
-     */
-    clearData() {
-        this.setData({});
+        };
     }
 
     /**
@@ -391,27 +376,10 @@ class FieldsUtil extends UtilStructure {
 
         // TODO: get user-defined template from settings
 
-        this.setData(data);
-
-        const fields = [];
-        template.forEach(f => fields.push(this.renderField(f)));
-
-        this.clearData();
+        const fields = template.map((fieldName) => this.fields[fieldName](data));
 
         // Filter out any empty objects renderField() might have included on errors
         return this.checkFields(fields.filter(o => Object.keys(o).length));
-    }
-
-    /**
-     * Run a field template if it's defined.
-     *
-     * @param {string} template - Template
-     * @returns {object} - A {fields} field, or empty object
-     */
-    renderField(field) {
-        const r = this.fields[field];
-
-        return r ? r() : {};
     }
 
     /**

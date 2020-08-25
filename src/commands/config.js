@@ -92,15 +92,13 @@ class ConfigCommand extends CommandStructure {
             show: [],
         };
 
-        this.fields.stubDataForSupports();
+        const stubData = this.fields.stubDataForSupports();
 
         Object.keys(this.fields.fields).map((field) => {
-            this.fields.fields[field]().supports.map((f) => supports[f].push(field));
+            this.fields.fields[field](stubData).supports.map((f) => supports[f].push(field));
         });
 
         // this.client.log.info('found fields', supports);
-
-        this.fields.clearData();
 
         return supports;
     }
