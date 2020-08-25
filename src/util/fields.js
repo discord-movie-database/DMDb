@@ -75,7 +75,7 @@ class FieldsUtil extends UtilStructure {
 
             firstAired: (data) => ({
                 icon: '📆',
-                name: 'First Air Date',
+                name: 'First Aired',
                 value: this.date(data.first_air_date),
                 supports: ['show'],
             }),
@@ -140,14 +140,14 @@ class FieldsUtil extends UtilStructure {
 
             lastAired: (data) => ({
                 icon: '📅',
-                name: 'Last Air Date',
+                name: 'Last Aired',
                 value: this.date(data.last_air_date),
                 supports: ['show'],
             }),
 
             lastEpisode: (data) => ({
                 icon: '📆',
-                name: 'Last Episode Air Date',
+                name: 'Last Episode',
                 value: this.date(data.last_episode_to_air
                     ? data.last_episode_to_air.air_date : false),
                 supports: ['show'],
@@ -157,13 +157,12 @@ class FieldsUtil extends UtilStructure {
                 icon: '📡',
                 name: `Network${this.plural(data.networks)}`,
                 value: this.list(data.networks.map((n) => n.name)),
-                inline: false,
                 supports: ['show'],
             }),
 
             nextEpisode: (data) => (data.next_episode_to_air ? {
                 icon: '🗓️',
-                name: 'Next Episode Air Date',
+                name: 'Next Episode',
                 value: this.date(data.next_episode_to_air
                     ? data.next_episode_to_air.air_date : false),
                 supports: ['show'],
@@ -181,7 +180,6 @@ class FieldsUtil extends UtilStructure {
                 icon: '🗺️',
                 name: `Origin Countr${this.plural(data.origin_country, true)}`,
                 value: this.flags(data.origin_country),
-                inline: false,
                 supports: ['show'],
             }),
 
@@ -213,7 +211,6 @@ class FieldsUtil extends UtilStructure {
                 icon: '🗺️',
                 name: `Production Countr${this.plural(data.production_countries, true)}`,
                 value: this.flags(data.production_countries.map((c) => c.iso_3166_1)),
-                inline: false,
                 supports: ['movie'],
             }),
 
@@ -250,7 +247,7 @@ class FieldsUtil extends UtilStructure {
 
             seasons: (data) => ({
                 icon: '🧮',
-                name: 'Number of Seasons',
+                name: 'Seasons',
                 value: `${this.check(data.number_of_seasons)} `
                     + `(${this.check(data.number_of_episodes)} episodes)`,
                 supports: ['show'],
