@@ -152,7 +152,7 @@ class ConfigCommand extends CommandStructure {
 
         // Update template parts in database
         await this.repository.getOrUpdate(guildID,
-            { $set: { movieTemplate: query } });
+            { $set: { movieTemplate: query.join(',') } });
 
         // Success
         return this.success(`Updated movie template to: \`${this.fields.join(query, true)}\`.`);

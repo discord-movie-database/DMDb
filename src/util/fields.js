@@ -358,9 +358,13 @@ class FieldsUtil extends UtilStructure {
      * Run a field template if it's defined.
      *
      * @param {string} type - Type of template we want
+     * @param {object} data - Keyed data as returned from the API
+     * @param {undefined|true} more - Whether the --more flag was passed
+     * @param {object} config - guildSettings to check for saved templates
      * @returns {object} - A {fields} field, or empty object
      */
-    renderTemplate(type, data, more) {
+    renderTemplate(type, data, more, config) {
+        const settingsKey = `${type}Template`;
         const defaults = {
             movie: ['taglineOrGenre', 'voteOrStatus', 'releaseDate', 'runtimeOrLanguage', 'collection'],
             person: ['knownFor', 'birthday', 'gender'],
@@ -372,10 +376,7 @@ class FieldsUtil extends UtilStructure {
             show: ['tagline', 'status', 'type', 'inProduction', 'firstAired', 'lastAired', 'episodeRuntime', 'lastEpisode', 'nextEpisode', 'seasons', 'vote', 'createdBy', 'productionCompany', 'network', 'homepage'],
         };
 
-        let template = (more ? mores[type] : defaults[type]) || [];
-
-        // TODO: get user-defined template from settings
-
+        const template = (config && config[settingsKey]) ? config[settingsKey].split(',') : (more ? mores[type] : defaults[type]) || [];
         const fields = template.map((fieldName) => this.fields[fieldName](data));
 
         // Filter out any empty objects renderField() might have included on errors

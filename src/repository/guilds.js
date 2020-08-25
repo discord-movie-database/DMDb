@@ -17,6 +17,7 @@ class GuildsRepository extends RepositoryStructure {
         this.model = this.db.model('guilds', new this.db.Schema({
             id: { type: String, required: true },
             prefix: { type: String, default: '' },
+            movieTemplate: { type: String, default: null },
             commandDisabledMessage: { type: Boolean, default: true },
             disabledCommands: { type: [ String ], default: [] },
             apiLanguage: { type: String, default: 'en' },

@@ -49,7 +49,7 @@ class MovieCommand extends CommandStructure {
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates
-        const fields = this.fields.renderTemplate('movie', response, flags.more);
+        const fields = this.fields.renderTemplate('movie', response, flags.more, guildSettings);
 
         // Edit status message with response data.
         this.embed.edit(statusMessage, {
