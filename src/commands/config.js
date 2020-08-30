@@ -149,7 +149,7 @@ class ConfigCommand extends CommandStructure {
      * @returns {Object} - Success or error message
      */
     async setMovieTemplate(guildID, query, guildSettings) {
-        return this.setTemplate(guildID, 'movie', query);
+        return this.setTemplate(guildID, 'movie', query, guildSettings);
     }
 
     /**
@@ -161,7 +161,7 @@ class ConfigCommand extends CommandStructure {
      * @returns {Object} - Success or error message
      */
     async setPersonTemplate(guildID, query, guildSettings) {
-        return this.setTemplate(guildID, 'person', query);
+        return this.setTemplate(guildID, 'person', query, guildSettings);
     }
 
     /**
@@ -173,7 +173,7 @@ class ConfigCommand extends CommandStructure {
      * @returns {Object} - Success or error message
      */
     async setShowTemplate(guildID, query, guildSettings) {
-        return this.setTemplate(guildID, 'show', query);
+        return this.setTemplate(guildID, 'show', query, guildSettings);
     }
 
     /**
@@ -182,16 +182,19 @@ class ConfigCommand extends CommandStructure {
      * @param {string} guildID - Guild ID
      * @param {string} type - What command's template we're setting
      * @param {string} query - Query
+     * @param {Object} guildSettings - Guild settings
      * @returns {Object} - Success or error message
      */
-    async setTemplate(guildID, type, query) {
-        if (!this.templateParts[type]) { return this.error(`Unknown command: \`${type}\`.`); }
+    async setTemplate(guildID, type, query, guildSettings) {
+        if (!this.templateParts[type])
+            return this.error(`Unknown command: \`${type}\`.`);
+
 
         // Check for template parts
-        if (!query) return this.error(`Template parts cannot be empty. Valid parts: \`${this.fields.join(this.templateParts[type], true)}\`.`);
+        if (!query)
+            return this.templateErrorMessage('Template parts cannot be empty.', type, guildSettings);
 
         // TODO: provide some "reset" query to unset and go back to defaults?
-        // TODO: provide the currently-saved template somewhere?
 
         // Format query
         query = query.replace(/[ ,|]+/g, ',').split(',');
@@ -199,16 +202,38 @@ class ConfigCommand extends CommandStructure {
         // Check if template contains valid fields
         let invalid = query.filter(t => !this.templateParts[type].includes(t));
         if (invalid.length)
-            return this.error(`Invalid template part${this.fields.plural(invalid)}: ${this.fields.join(invalid)}. Valid parts: \`${this.fields.join(this.templateParts[type], true)}\`.`);
+            return this.templateErrorMessage(`Invalid template part${this.fields.plural(invalid)}: \`${this.fields.join(invalid, true)}\`.`, type);
 
         // Update template parts in database
-        const settingsKey = `${type}Template`;
         const settingsObj = {};
-        settingsObj[settingsKey] = query.join(',');
+        settingsObj[`${type}Template`] = query.join(',');
         await this.repository.getOrUpdate(guildID, { $set: settingsObj });
 
         // Success
-        return this.success(`Updated movie template to: \`${this.fields.join(query, true)}\`.`);
+        return this.success(`Updated ${type} template to: \`${this.fields.join(query, true)}\`.`);
+    }
+
+    /**
+     * Format a return message from the setTemplate command.
+     *
+     * @param {string} msg - The main message to show
+     * @param {string} type - The command template to be set (triggers showing valid parts)
+     * @param {Object} config - Guild settings (triggers showing current template)
+     * @returns {Object} - Success or error message
+     */
+    templateErrorMessage(msg, type, config) {
+        let message = [msg];
+
+        if ( type ) {
+            message.push(`Valid parts: \`${this.fields.join(this.templateParts[type], true)}\``);
+
+            const settingsKey = `${type}Template`;
+            if ( config && config[settingsKey]) {
+                message.push(`Current template: \`${this.fields.join(config[settingsKey].split(','), true)}\``);
+            }
+        }
+
+        return this.error(message.join(`\n\n`));
     }
 
     /**
