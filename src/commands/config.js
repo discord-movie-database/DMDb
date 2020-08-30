@@ -106,20 +106,23 @@ class ConfigCommand extends CommandStructure {
      * @param {string} guildID - Guild ID
      * @param {string} query - Query
      * @param {Object} guildSettings - Guild settings
+     * @param {Object} flags - Flags object
      * @returns {Object} - Success or error message
      */
-    async prefix(guildID, query, guildSettings) {
+    async prefix(guildID, query, guildSettings, flags) {
+        const reset = (flags.reset || query === 'reset');
+
         // Check if prefix is valid
-        if (!/^(.+){1,32}$/.test(query))
+        if (!reset && !/^(.+){1,32}$/.test(query))
             return this.error('Prefix must be between 1 and 32 characters.');
 
         // Update prefix in database
         await this.repository.getOrUpdate(guildID, {
-            $set: { prefix: query === 'reset' ? '' : query }
+            $set: { prefix: reset ? '' : query }
         });
 
         // Success
-        return query === 'reset'
+        return reset
             ? this.success('Reset prefix.')
             : this.success(`Updated prefix to \`${query}\`.`);
     }
