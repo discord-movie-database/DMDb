@@ -368,12 +368,12 @@ class FieldsUtil extends UtilStructure {
             show: ['taglineOrGenre', 'voteOrStatus', 'firstAired', 'episodeRuntime'],
         };
         const mores = {
-            movie: ['tagline', 'status', 'releaseDate', 'runtime', 'vote', 'imdb', 'genre', 'languages', 'productionCountry', 'productionCompany', 'homepage', 'budget', 'revenue', 'spacer'],
+            movie: ['collection', 'tagline', 'status', 'releaseDate', 'runtime', 'vote', 'imdb', 'genre', 'languages', 'productionCountry', 'productionCompany', 'homepage', 'budget', 'revenue', 'spacer'],
             person: ['gender', 'birthday', 'death', 'knownFor', 'imdb', 'placeOfBirth', 'homepage'],
             show: ['tagline', 'status', 'type', 'inProduction', 'firstAired', 'lastAired', 'episodeRuntime', 'lastEpisode', 'nextEpisode', 'seasons', 'vote', 'createdBy', 'productionCompany', 'network', 'homepage'],
         };
 
-        const template = (config && config[settingsKey]) ? config[settingsKey].split(',') : (more ? mores[type] : defaults[type]) || [];
+        const template = (more ? mores[type] : (config && config[settingsKey]) ? config[settingsKey].split(',') : defaults[type]) || [];
         const fields = template.map((fieldName) => this.fields[fieldName](data));
 
         // Filter out any empty objects renderField() might have included on errors
