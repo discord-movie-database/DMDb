@@ -96,7 +96,7 @@ class FieldsUtil extends UtilStructure {
             }),
 
             homepage: (data) => (data.homepage ? {
-                icon: '🌐',
+                icon: '🏠',
                 name: 'Homepage',
                 value: this.check(data.homepage),
                 inline: false,
@@ -104,7 +104,7 @@ class FieldsUtil extends UtilStructure {
             } : {}),
 
             imdb: (data) => ({
-                // TODO: Inline SVG favicon?
+                icon: '🌐',
                 name: 'IMDb',
                 value: this.IMDbURLMaker(data.imdb_id),
                 supports: ['movie', 'person'],
@@ -685,7 +685,7 @@ class FieldsUtil extends UtilStructure {
             nm: 'name/',
         };
         const slug = slugs.hasOwnProperty(prefix) ? slugs[prefix] : 'find?q=';
-        return `${this.IMDbURL}/${slug}${encodeURIComponent(value)}`;
+        return `[${value}](${this.IMDbURL}/${slug}${encodeURIComponent(value)})`;
     }
 
     /**
