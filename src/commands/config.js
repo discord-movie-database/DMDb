@@ -19,7 +19,7 @@ class ConfigCommand extends CommandStructure {
         super(client, {
             description: 'Customise the bot for this guild. Manage Guild permission only.',
             usage: false,
-            flags: false,
+            flags: ['reset'],
             developerOnly: false,
             hideInHelp: false,
             weight: 0
@@ -130,9 +130,10 @@ class ConfigCommand extends CommandStructure {
      * @param {string} guildID - Guild ID
      * @param {string} query - Query
      * @param {Object} guildSettings - Guild settings
+     * @param {Object} flags - Flags object
      * @returns {Object} - Success or error message
      */
-    async setTemplate(guildID, query, guildSettings) {
+    async setTemplate(guildID, query, guildSettings, flags) {
         // Parse the command out the first position of our query.
         query = query.split(' ');
         const type = query[0].toLowerCase();
@@ -141,14 +142,19 @@ class ConfigCommand extends CommandStructure {
         if (!type)
             return this.error('Please pass a command and a set of template parts. Valid commands are: `movie | person | show`. Valid template parts will be returned if you pass a command.');
 
+        if (flags.reset || query === 'reset') {
+            const settingsObj = {};
+            settingsObj[`${type}Template`] = null;
+            await this.repository.getOrUpdate(guildID, { $set: settingsObj });
+            return this.success(`Reset ${type} template to default.`);
+        }
+
         if (!this.templateParts[type])
             return this.error(`Invalid command: \`${type}\`. You can only set templates on \`movie\`, \`person\`, or \`show\` commands.`);
 
         // Check for template parts
         if (!query)
             return this.templateErrorMessage('Template parts cannot be empty.', type, guildSettings);
-
-        // TODO: provide some "reset" query to unset and go back to defaults?
 
         // Format query
         query = query.replace(/[ ,|]+/g, ',').split(',');
@@ -329,17 +335,21 @@ class ConfigCommand extends CommandStructure {
 
         // Get option info
         const optionName = commandArguments[0].toLowerCase();
-        const optionArguments = commandArguments.slice(1).join(' ');
+        let optionArguments = commandArguments.slice(1).join(' ');
 
         // Check if option exists.
         const option = this.options[optionName];
         if (!option) return this.embed.error(message.channel.id, 'Option not found.');
 
+        // Check message for flags.
+        const flags = this.flags.parse(optionArguments, this.meta.flags);
+        optionArguments = flags.query; // Remove flags from query.
+
         // Try and run option function.
         try {
             // Run option function.
             const guildID = message.channel.guild.id;
-            const response = await option.run(guildID, optionArguments, guildSettings);
+            const response = await option.run(guildID, optionArguments, guildSettings, flags);
 
             // Success or error
             return response.success

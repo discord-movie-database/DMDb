@@ -19,7 +19,8 @@ class FlagsUtil extends UtilStructure {
             year: { argRequired: true, desc: 'Get results from a specific year.' },
             tv: { argRequired: false, desc: 'Get a results for TV shows.' },
             person: { argRequired: false, desc: 'Get a results for people.' },
-            more: { argRequired: false, desc: 'Get more information for a result.' }
+            more: { argRequired: false, desc: 'Get more information for a result.' },
+            reset: { argRequired: false, desc: 'Reset some config options.' }
         };
     }
 
