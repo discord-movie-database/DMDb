@@ -35,28 +35,12 @@ class ConfigCommand extends CommandStructure {
                 run: this.prefix,
             },
 
-            'movie-fields': {
-                description: 'Configure what results are returned. '
-                    + 'Does not apply to `--more`.',
-                usage: '<some,movie,fields,in,order>',
-                run: this.setMovieTemplate,
+            'template': {
+                description: 'Configure what results are returned for some commands. '
+                    + 'Will be overridden when using `--more`.',
+                usage: '<movie | person | show> <some, valid, fields, in, order>',
+                run: this.setTemplate,
             },
-
-            'person-fields': {
-                description: 'Configure what results are returned. '
-                    + 'Does not apply to `--more`.',
-                usage: '<some,person,fields,in,order>',
-                run: this.setPersonTemplate,
-            },
-
-            'show-fields': {
-                description: 'Configure what results are returned. '
-                    + 'Does not apply to `--more`.',
-                usage: '<some,show,fields,in,order>',
-                run: this.setShowTemplate,
-            },
-
-            // TODO: maybe abstract field templates into a generic `fields <scope/command> <template,parts>`)
 
             'toggle-command': {
                 description: 'Disable or enable a command.',
@@ -141,54 +125,24 @@ class ConfigCommand extends CommandStructure {
     }
 
     /**
-     * Update return template for the `movie` command.
-     *
-     * @param {string} guildID - Guild ID
-     * @param {string} query - Query
-     * @param {Object} guildSettings - Guild settings
-     * @returns {Object} - Success or error message
-     */
-    async setMovieTemplate(guildID, query, guildSettings) {
-        return this.setTemplate(guildID, 'movie', query, guildSettings);
-    }
-
-    /**
-     * Update return template for the `person` command.
-     *
-     * @param {string} guildID - Guild ID
-     * @param {string} query - Query
-     * @param {Object} guildSettings - Guild settings
-     * @returns {Object} - Success or error message
-     */
-    async setPersonTemplate(guildID, query, guildSettings) {
-        return this.setTemplate(guildID, 'person', query, guildSettings);
-    }
-
-    /**
-     * Update return template for the `show` command.
-     *
-     * @param {string} guildID - Guild ID
-     * @param {string} query - Query
-     * @param {Object} guildSettings - Guild settings
-     * @returns {Object} - Success or error message
-     */
-    async setShowTemplate(guildID, query, guildSettings) {
-        return this.setTemplate(guildID, 'show', query, guildSettings);
-    }
-
-    /**
      * Update return template for a given command.
      *
      * @param {string} guildID - Guild ID
-     * @param {string} type - What command's template we're setting
      * @param {string} query - Query
      * @param {Object} guildSettings - Guild settings
      * @returns {Object} - Success or error message
      */
-    async setTemplate(guildID, type, query, guildSettings) {
-        if (!this.templateParts[type])
-            return this.error(`Unknown command: \`${type}\`.`);
+    async setTemplate(guildID, query, guildSettings) {
+        // Parse the command out the first position of our query.
+        query = query.split(' ');
+        const type = query[0].toLowerCase();
+        query = query.slice(1).join(' ');
 
+        if (!type)
+            return this.error('Please pass a command and a set of template parts. Valid commands are: `movie | person | show`. Valid template parts will be returned if you pass a command.');
+
+        if (!this.templateParts[type])
+            return this.error(`Invalid command: \`${type}\`. You can only set templates on \`movie\`, \`person\`, or \`show\` commands.`);
 
         // Check for template parts
         if (!query)
@@ -225,7 +179,7 @@ class ConfigCommand extends CommandStructure {
         let message = [msg];
 
         if ( type ) {
-            message.push(`Valid parts: \`${this.fields.join(this.templateParts[type], true)}\``);
+            message.push(`Valid parts for the **${type}** command: \`${this.fields.join(this.templateParts[type], true)}\``);
 
             const settingsKey = `${type}Template`;
             if ( config && config[settingsKey]) {
