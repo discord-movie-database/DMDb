@@ -20,6 +20,7 @@ class FlagsUtil extends UtilStructure {
             tv: { argRequired: false, desc: 'Get a results for TV shows.' },
             person: { argRequired: false, desc: 'Get a results for people.' },
             more: { argRequired: false, desc: 'Get more information for a result.' },
+            all: { argRequired: false, desc: 'Get all possible information for a result.' },
             reset: { argRequired: false, desc: 'Reset some config options.' }
         };
     }

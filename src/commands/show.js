@@ -13,7 +13,7 @@ class ShowCommand extends CommandStructure {
         super(client, {
             description: 'Get information about a TV show.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['more', 'year'],
+            flags: ['all', 'more', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 500,
@@ -49,7 +49,7 @@ class ShowCommand extends CommandStructure {
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates
-        const fields = this.fields.renderTemplate('show', response, flags.more, guildSettings);
+        const fields = this.fields.renderTemplate('show', response, flags, guildSettings);
 
         // Edit status message with response data.
         this.embed.edit(statusMessage, {

@@ -13,7 +13,7 @@ class MovieCommand extends CommandStructure {
         super(client, {
             description: 'Get the primary information about a movie.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['more', 'year'],
+            flags: ['all', 'more', 'year'],
             developerOnly: false,
             hideInHelp: false,
             weight: 700,
@@ -49,7 +49,7 @@ class MovieCommand extends CommandStructure {
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates
-        const fields = this.fields.renderTemplate('movie', response, flags.more, guildSettings);
+        const fields = this.fields.renderTemplate('movie', response, flags, guildSettings);
 
         // Edit status message with response data.
         this.embed.edit(statusMessage, {

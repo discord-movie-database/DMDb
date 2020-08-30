@@ -356,24 +356,35 @@ class FieldsUtil extends UtilStructure {
      *
      * @param {string} type - Type of template we want
      * @param {object} data - Keyed data as returned from the API
-     * @param {undefined|true} more - Whether the --more flag was passed
+     * @param {object} flags - Any --more or --all flags that may have been passed
      * @param {object} config - guildSettings to check for saved templates
      * @returns {object} - A {fields} field, or empty object
      */
-    renderTemplate(type, data, more, config) {
-        const settingsKey = `${type}Template`;
-        const defaults = {
-            movie: ['taglineOrGenre', 'voteOrStatus', 'releaseDate', 'runtimeOrLanguage', 'collection'],
-            person: ['knownFor', 'birthday', 'gender'],
-            show: ['taglineOrGenre', 'voteOrStatus', 'firstAired', 'episodeRuntime'],
-        };
-        const mores = {
-            movie: ['collection', 'tagline', 'status', 'releaseDate', 'runtime', 'vote', 'imdb', 'genre', 'languages', 'productionCountry', 'productionCompany', 'homepage', 'budget', 'revenue', 'spacer'],
-            person: ['gender', 'birthday', 'death', 'knownFor', 'imdb', 'placeOfBirth', 'homepage'],
-            show: ['tagline', 'status', 'type', 'inProduction', 'firstAired', 'lastAired', 'episodeRuntime', 'lastEpisode', 'nextEpisode', 'seasons', 'vote', 'createdBy', 'productionCompany', 'network', 'homepage'],
-        };
+    renderTemplate(type, data, flags, config) {
+        let template = [];
 
-        const template = (more ? mores[type] : (config && config[settingsKey]) ? config[settingsKey].split(',') : defaults[type]) || [];
+        if (flags.all) {
+            const stubData = this.stubDataForSupports();
+            Object.keys(this.fields).map((field) => {
+                if (this.fields[field](stubData).supports.includes(type))
+                    template.push(field);
+            });
+        } else {
+            const defaults = {
+                movie: ['taglineOrGenre', 'voteOrStatus', 'releaseDate', 'runtimeOrLanguage', 'collection'],
+                person: ['knownFor', 'birthday', 'gender'],
+                show: ['taglineOrGenre', 'voteOrStatus', 'firstAired', 'episodeRuntime'],
+            };
+            const mores = {
+                movie: ['collection', 'tagline', 'status', 'releaseDate', 'runtime', 'vote', 'imdb', 'genre', 'languages', 'productionCountry', 'productionCompany', 'homepage', 'budget', 'revenue', 'spacer'],
+                person: ['gender', 'birthday', 'death', 'knownFor', 'imdb', 'placeOfBirth', 'homepage'],
+                show: ['tagline', 'status', 'type', 'inProduction', 'firstAired', 'lastAired', 'episodeRuntime', 'lastEpisode', 'nextEpisode', 'seasons', 'vote', 'createdBy', 'productionCompany', 'network', 'homepage'],
+            };
+
+            const settingsKey = `${type}Template`;
+            template = (flags.more ? mores[type] : (config && config[settingsKey]) ? config[settingsKey].split(',') : defaults[type]) || [];
+        }
+
         const fields = template.map((fieldName) => this.fields[fieldName](data));
 
         // Filter out any empty objects renderField() might have included on errors

@@ -13,7 +13,7 @@ class PersonCommand extends CommandStructure {
         super(client, {
             description: 'Get the primary information about a person.',
             usage: '<Query or TMDb/IMDb ID>',
-            flags: ['more'],
+            flags: ['all', 'more'],
             developerOnly: false,
             hideInHelp: false,
             weight: 600
@@ -48,7 +48,7 @@ class PersonCommand extends CommandStructure {
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates
-        const fields = this.fields.renderTemplate('person', response, flags.more, guildSettings);
+        const fields = this.fields.renderTemplate('person', response, flags, guildSettings);
 
         // Edit status message with response.
         this.embed.edit(statusMessage, {
