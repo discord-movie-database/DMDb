@@ -95,8 +95,6 @@ class ConfigCommand extends CommandStructure {
             this.fields.fields[field](stubData).supports.map((f) => supports[f].push(field));
         });
 
-        // this.client.log.info('found fields', supports);
-
         return supports;
     }
 

@@ -215,8 +215,6 @@ class FieldsUtil extends UtilStructure {
             }),
 
             releaseDate: (data) => ({
-                // TODO: allow to filter by country?
-                // https://developers.themoviedb.org/3/movies/get-movie-release-date({
                 icon: '📆',
                 name: 'Release Date',
                 value: this.date(data.release_date),
