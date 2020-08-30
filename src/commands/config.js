@@ -194,7 +194,7 @@ class ConfigCommand extends CommandStructure {
         // TODO: provide the currently-saved template somewhere?
 
         // Format query
-        query = query.replace(/ /g, '').split(',');
+        query = query.replace(/[ ,|]+/g, ',').split(',');
 
         // Check if template contains valid fields
         let invalid = query.filter(t => !this.templateParts[type].includes(t));
