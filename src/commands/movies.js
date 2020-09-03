@@ -59,10 +59,10 @@ class MoviesCommand extends CommandStructure {
             thumbnail: { url: this.thumbnailURL(response.results[0].poster_path) },
             description: this.resultsDescription(response),
 
-            fields: response.results.map((result) => this.resultField(result.title, [
-                `Vote Average: ${this.check(result.vote_average)}`,
-                `Release Date: ${this.date(result.release_date)}`,
-                `${this.TMDbID(result.id)}`,
+            fields: response.results.map((result) => this.fields.renderResult(result.title, [
+                `Vote Average: ${this.fields.check(result.vote_average)}`,
+                `Release Date: ${this.fields.date(result.release_date)}`,
+                `${this.fields.TMDbID(result.id)}`,
             ], result.index)),
         });
     }

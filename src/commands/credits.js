@@ -42,7 +42,7 @@ class CreditsCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get media source.
-        const media = this.mediaSource(flags);
+        const media = this.flags.mediaSource(flags);
 
         // Get API options.
         const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
@@ -58,30 +58,30 @@ class CreditsCommand extends CommandStructure {
         // Edit status message with response.
         this.embed.edit(statusMessage, {
             title: `${_response.title || _response.name} Credits`,
-            url: this.TMDbShowURL(response.id),
+            url: _response.id ? this.fields.TMDbShowURL(_response.id) : '',
 
             thumbnail: { url: this.thumbnailURL(response.results[0].profile_path
                 || response.results[0].poster_path) },
             description: this.resultsDescription(response),
 
-            fields: response.results.map((credit) => this.resultField(this.check(credit.character),
+            fields: response.results.map((credit) => this.fields.renderResult(this.fields.check(credit.character),
                 flags.person ? credit.media_type === 'movie' ? [
                     // Media source is person and credit is movie
-                    this.mediaType(credit.media_type),
+                    this.flags.mediaType(credit.media_type),
                     `Name: ${credit.title}`,
-                    `Release: ${this.date(credit.release_date)}`,
-                    this.TMDbID(credit.id),
+                    `Release: ${this.fields.date(credit.release_date)}`,
+                    this.fields.TMDbID(credit.id),
                 ] : [
                     // Media source is person and credit is TV show
-                    this.mediaType(credit.media_type),
+                    this.flags.mediaType(credit.media_type),
                     `Name: ${credit.name}`,
-                    `FAD: ${this.date(credit.first_air_date)}`,
-                    this.TMDbID(credit.id),
+                    `FAD: ${this.fields.date(credit.first_air_date)}`,
+                    this.fields.TMDbID(credit.id),
                 ] : [
                     // Media source is TV show or person
-                    `Name: ${this.check(credit.name)}`,
-                    `Gender: ${this.gender(credit.gender)}`,
-                    this.TMDbID(credit.id),
+                    `Name: ${this.fields.check(credit.name)}`,
+                    `Gender: ${this.fields.gender(credit.gender)}`,
+                    this.fields.TMDbID(credit.id),
                 ], credit.index
             )),
         });

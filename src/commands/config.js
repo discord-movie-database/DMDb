@@ -7,6 +7,7 @@ import CommandStructure from '../structures/command';
  * @prop {Object} options - Config options
  * @prop {Array<string>} languages - ISO 639-1 Codes
  * @prop {Array<string>} countries - ISO 3166-1 alpha-2 Codes
+ * @prop {Object} templateParts - Keyed arrays of configurable template parts
  */
 class ConfigCommand extends CommandStructure {
     /**
@@ -18,7 +19,7 @@ class ConfigCommand extends CommandStructure {
         super(client, {
             description: 'Customise the bot for this guild. Manage Guild permission only.',
             usage: false,
-            flags: false,
+            flags: ['reset'],
             developerOnly: false,
             hideInHelp: false,
             weight: 0
@@ -32,6 +33,13 @@ class ConfigCommand extends CommandStructure {
                     + `Default: \`${this.client.config.prefix}\`.`,
                 usage: '<New Prefix>',
                 run: this.prefix,
+            },
+
+            'template': {
+                description: 'Configure what results are returned for some commands. '
+                    + 'Will be overridden when using `--more`.',
+                usage: '<movie | person | show> <some, valid, fields, in, order>',
+                run: this.setTemplate,
             },
 
             'toggle-command': {
@@ -66,6 +74,28 @@ class ConfigCommand extends CommandStructure {
 
         this.languages = ['en', 'de', 'fr', 'es', 'ru', 'it', 'pt', 'zh', 'hu', 'ko'];
         this.countries = ['us', 'gb', 'de', 'fr', 'es', 'ru', 'it', 'pt', 'cn', 'hu', 'kr'];
+        this.templateParts = this.discoverFieldSupports();
+    }
+
+    /**
+     * Autodiscover template parts by parsing field supports.
+     *
+     * @returns {Object} - Keyed arrays of supported fields
+     */
+    discoverFieldSupports() {
+        const supports = {
+            movie: [],
+            person: [],
+            show: [],
+        };
+
+        const stubData = this.fields.stubDataForSupports();
+
+        Object.keys(this.fields.fields).map((field) => {
+            this.fields.fields[field](stubData).supports.map((f) => supports[f].push(field));
+        });
+
+        return supports;
     }
 
     /**
@@ -74,22 +104,97 @@ class ConfigCommand extends CommandStructure {
      * @param {string} guildID - Guild ID
      * @param {string} query - Query
      * @param {Object} guildSettings - Guild settings
+     * @param {Object} flags - Flags object
      * @returns {Object} - Success or error message
      */
-    async prefix(guildID, query, guildSettings) {
+    async prefix(guildID, query, guildSettings, flags) {
+        const reset = (flags.reset || query === 'reset');
+
         // Check if prefix is valid
-        if (!/^(.+){1,32}$/.test(query))
+        if (!reset && !/^(.+){1,32}$/.test(query))
             return this.error('Prefix must be between 1 and 32 characters.');
 
         // Update prefix in database
         await this.repository.getOrUpdate(guildID, {
-            $set: { prefix: query === 'reset' ? '' : query }
+            $set: { prefix: reset ? '' : query }
         });
 
         // Success
-        return query === 'reset'
+        return reset
             ? this.success('Reset prefix.')
             : this.success(`Updated prefix to \`${query}\`.`);
+    }
+
+    /**
+     * Update return template for a given command.
+     *
+     * @param {string} guildID - Guild ID
+     * @param {string} query - Query
+     * @param {Object} guildSettings - Guild settings
+     * @param {Object} flags - Flags object
+     * @returns {Object} - Success or error message
+     */
+    async setTemplate(guildID, query, guildSettings, flags) {
+        // Parse the command out the first position of our query.
+        query = query.split(' ');
+        const type = query[0].toLowerCase();
+        query = query.slice(1).join(' ');
+
+        if (!type)
+            return this.error('Please pass a command and a set of template parts. Valid commands are: `movie | person | show`. Valid template parts will be returned if you pass a command.');
+
+        if (flags.reset || query === 'reset') {
+            const settingsObj = {};
+            settingsObj[`${type}Template`] = null;
+            await this.repository.getOrUpdate(guildID, { $set: settingsObj });
+            return this.success(`Reset ${type} template to default.`);
+        }
+
+        if (!this.templateParts[type])
+            return this.error(`Invalid command: \`${type}\`. You can only set templates on \`movie\`, \`person\`, or \`show\` commands.`);
+
+        // Check for template parts
+        if (!query)
+            return this.templateErrorMessage('Template parts cannot be empty.', type, guildSettings);
+
+        // Format query
+        query = query.replace(/[ ,|]+/g, ',').split(',');
+
+        // Check if template contains valid fields
+        let invalid = query.filter(t => !this.templateParts[type].includes(t));
+        if (invalid.length)
+            return this.templateErrorMessage(`Invalid template part${this.fields.plural(invalid)}: \`${this.fields.join(invalid, true)}\`.`, type);
+
+        // Update template parts in database
+        const settingsObj = {};
+        settingsObj[`${type}Template`] = query.join(',');
+        await this.repository.getOrUpdate(guildID, { $set: settingsObj });
+
+        // Success
+        return this.success(`Updated ${type} template to: \`${this.fields.join(query, true)}\`.`);
+    }
+
+    /**
+     * Format a return message from the setTemplate command.
+     *
+     * @param {string} msg - The main message to show
+     * @param {string} type - The command template to be set (triggers showing valid parts)
+     * @param {Object} config - Guild settings (triggers showing current template)
+     * @returns {Object} - Success or error message
+     */
+    templateErrorMessage(msg, type, config) {
+        let message = [msg];
+
+        if ( type ) {
+            message.push(`Valid parts for the **${type}** command: \`${this.fields.join(this.templateParts[type], true)}\``);
+
+            const settingsKey = `${type}Template`;
+            if ( config && config[settingsKey]) {
+                message.push(`Current template: \`${this.fields.join(config[settingsKey].split(','), true)}\``);
+            }
+        }
+
+        return this.error(message.join(`\n\n`));
     }
 
     /**
@@ -160,7 +265,7 @@ class ConfigCommand extends CommandStructure {
 
         // Check if language code is valid and exists
         if (this.languages.indexOf(query) < 0)
-            return this.error(`Invalid language code. Valid codes: ${this.join(this.languages)}.`);
+            return this.error(`Invalid language code. Valid codes: ${this.fields.join(this.languages)}.`);
 
         // Update API language in database
         await this.repository.getOrUpdate(guildID, { $set: { apiLanguage: query } });
@@ -183,7 +288,7 @@ class ConfigCommand extends CommandStructure {
 
         // Check if language code is valid and exists
         if (this.countries.indexOf(query) < 0)
-            return this.error(`Invalid country code. Valid codes: ${this.join(this.countries)}.`);
+            return this.error(`Invalid country code. Valid codes: ${this.fields.join(this.countries)}.`);
 
         // Update API language in database
         await this.repository.getOrUpdate(guildID, { $set: { apiRegion: query } });
@@ -231,17 +336,21 @@ class ConfigCommand extends CommandStructure {
 
         // Get option info
         const optionName = commandArguments[0].toLowerCase();
-        const optionArguments = commandArguments.slice(1).join(' ');
+        let optionArguments = commandArguments.slice(1).join(' ');
 
         // Check if option exists.
         const option = this.options[optionName];
         if (!option) return this.embed.error(message.channel.id, 'Option not found.');
 
+        // Check message for flags.
+        const flags = this.flags.parse(optionArguments, this.meta.flags);
+        optionArguments = flags.query; // Remove flags from query.
+
         // Try and run option function.
         try {
             // Run option function.
             const guildID = message.channel.guild.id;
-            const response = await option.run(guildID, optionArguments, guildSettings);
+            const response = await option.run(guildID, optionArguments, guildSettings, flags);
 
             // Success or error
             return response.success

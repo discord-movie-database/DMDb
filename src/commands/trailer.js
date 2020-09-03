@@ -42,7 +42,7 @@ class TrailersCommand extends CommandStructure {
         message.content = flags.query; // Remove flags from query.
 
         // Get media source.
-        const media = this.mediaSource(flags);
+        const media = this.flags.mediaSource(flags);
 
         // Get API options.
         const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
@@ -66,14 +66,14 @@ class TrailersCommand extends CommandStructure {
                 url: this.videoThumbnailURL(response.results[0].site, response.results[0].key) },
             description: this.resultsDescription(response),
 
-            fields: response.results.map((result) => this.resultField(result.name, [
-                this.videoSourceURL(result.site, result.key),
+            fields: response.results.map((result) => this.fields.renderResult(result.name, [
+                this.fields.videoSourceURL(result.site, result.key),
             ], result.index)),
         });
 
         // Return first video with big preview.
         return this.embed.edit(statusMessage,
-            this.videoSourceURL(response.results[0].site, response.results[0].key));
+            this.fields.videoSourceURL(response.results[0].site, response.results[0].key));
     }
 }
 

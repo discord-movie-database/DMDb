@@ -55,10 +55,10 @@ class PeopleCommand extends CommandStructure {
             thumbnail: { url: this.thumbnailURL(response.results[0].profile_path) },
             description: this.resultsDescription(response),
 
-            fields: response.results.map((result) => this.resultField(result.name, [
-                `Known For: ${this.list(result.known_for.slice(0, 2).map((known) => 
+            fields: response.results.map((result) => this.fields.renderResult(result.name, [
+                `Known For: ${this.fields.list(result.known_for.slice(0, 2).map((known) =>
                     known.media_type === 'movie' ? known.title : known.name))}`,
-                this.TMDbID(result.id)
+                this.fields.TMDbID(result.id)
             ], result.index)),
         });
     }

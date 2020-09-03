@@ -42,36 +42,36 @@ class InfoCommand extends CommandStructure {
 
         let uptimeParsed = '';
 
-        if (years) uptimeParsed += `${years} Year${this.plural(years)}, `;
-        if (months) uptimeParsed += `${months} Month${this.plural(months)}, `;
-        if (days) uptimeParsed += `${days} Day${this.plural(days)}, `;
-        if (hours) uptimeParsed += `${hours} Hour${this.plural(hours)}, `;
-        if (minutes) uptimeParsed += `${minutes} Minute${this.plural(minutes)}, `;
-        if (seconds) uptimeParsed += `${seconds} Second${this.plural(seconds)}`;
+        if (years) uptimeParsed += `${years} Year${this.fields.plural(years)}, `;
+        if (months) uptimeParsed += `${months} Month${this.fields.plural(months)}, `;
+        if (days) uptimeParsed += `${days} Day${this.fields.plural(days)}, `;
+        if (hours) uptimeParsed += `${hours} Hour${this.fields.plural(hours)}, `;
+        if (minutes) uptimeParsed += `${minutes} Minute${this.fields.plural(minutes)}, `;
+        if (seconds) uptimeParsed += `${seconds} Second${this.fields.plural(seconds)}`;
 
         return uptimeParsed;
     }
 
     /**
      * Converts bytes to human readable version.
-     * 
+     *
      * @param {number} bytes Bytes
      * @returns {string} Human readable
      */
     formatBytes(bytes) {
         if (bytes === 0) return '0 Bytes';
-    
+
         const k = 1024;
         const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-    
+
         const i = Math.floor(Math.log(bytes) / Math.log(k));
-    
+
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
 
     /**
      * Function to run when command is executed.
-     * 
+     *
      * @param {Object} message - Message object
      * @param {Array} commandArguments - Command arguments
      * @param {Object} guildSettings - Guild settings
@@ -81,7 +81,7 @@ class InfoCommand extends CommandStructure {
         // Create embed.
         this.embed.create(message.channel.id, {
             title: 'DMDb Information',
-            description: this.join([
+            description: this.fields.join([
                 '[Invite Bot](https://bit.ly/2PXWYLR)',
                 '[Support Server]( https://bit.ly/2kYFRPh)',
                 '[Source Code](https://github.com/discord-movie-database/)',
@@ -89,7 +89,7 @@ class InfoCommand extends CommandStructure {
 
             thumbnail: { url: 'https://i.imgur.com/ogiqJHb.png' },
 
-            fields: this.fields([{
+            fields: this.fields.checkFields([{
                 name: 'Bot Version',
                 value: packageInfo.version,
             }, {
@@ -100,13 +100,13 @@ class InfoCommand extends CommandStructure {
                 value: `${process.versions.node}`,
             }, {
                 name: 'Guilds',
-                value: `${this.number(this.stats.getGuilds())}`,
+                value: `${this.fields.number(this.stats.getGuilds())}`,
             }, {
                 name: 'Channels',
-                value: `${this.number(this.stats.getChannels())}`,
+                value: `${this.fields.number(this.stats.getChannels())}`,
             }, {
                 name: 'Users',
-                value: `${this.number(this.stats.getUsers())}`,
+                value: `${this.fields.number(this.stats.getUsers())}`,
             }, {
                 name: 'Shard Count',
                 value: `${this.client.shards.size}`,

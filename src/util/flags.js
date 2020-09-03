@@ -19,7 +19,9 @@ class FlagsUtil extends UtilStructure {
             year: { argRequired: true, desc: 'Get results from a specific year.' },
             tv: { argRequired: false, desc: 'Get a results for TV shows.' },
             person: { argRequired: false, desc: 'Get a results for people.' },
-            more: { argRequired: false, desc: 'Get more information for a result.' }
+            more: { argRequired: false, desc: 'Get more information for a result.' },
+            all: { argRequired: false, desc: 'Get all possible information for a result.' },
+            reset: { argRequired: false, desc: 'Reset some config options.' }
         };
     }
 
@@ -67,6 +69,26 @@ class FlagsUtil extends UtilStructure {
      */
     year(value) {
         return value && /^\d{4}$/.test(value) ? value : 'All';
+    }
+
+    /**
+     * Get media source from flags.
+     *
+     * @param {Object} flags - Flags
+     * @returns {string} - Media source
+     */
+    mediaSource(flags) {
+        return flags.tv ? 'tv' : flags.person ? 'person' : 'movie';
+    }
+
+    /**
+     * Converts media type value to readable.
+     *
+     * @param {string} value - Value
+     * @returns {string} - Updated value
+     */
+    mediaType(value) {
+        return value === 'tv' ? 'TV' : value === 'movie' ? 'Movie' : this.check(value);
     }
 }
 
