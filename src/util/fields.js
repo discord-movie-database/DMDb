@@ -369,7 +369,7 @@ class FieldsUtil extends UtilStructure {
             });
         } else {
             const defaults = {
-                movie: ['taglineOrGenre', 'voteOrStatus', 'releaseDate', 'runtimeOrLanguage', 'collection'],
+                movie: ['taglineOrGenre', 'voteOrStatus', 'releaseDate', 'runtimeOrLanguage'],
                 person: ['knownFor', 'birthday', 'gender'],
                 show: ['taglineOrGenre', 'voteOrStatus', 'firstAired', 'episodeRuntime'],
             };

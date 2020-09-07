@@ -45,7 +45,8 @@ class MoviesCommand extends CommandStructure {
         const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
 
         // Get response from API.
-        const response = await this.tmdb.search.movie(message.content, options);
+        const response = await this.client.tmdb.search.getMovies({ 
+            ...options, query: message.content });
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Verify year flag.

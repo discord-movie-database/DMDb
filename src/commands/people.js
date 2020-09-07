@@ -44,7 +44,8 @@ class PeopleCommand extends CommandStructure {
         const options = this.APIOptions(guildSettings, { page: flags.page });
 
         // Get response from API.
-        const response = await this.tmdb.search.person(message.content, options);
+        const response = await this.client.tmdb.search.getPeople({
+            ...options, query: message.content });
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.

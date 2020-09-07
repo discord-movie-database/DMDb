@@ -37,14 +37,14 @@ class PopularCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
-        // Get media source.
-        const media = this.flags.mediaSource(flags);
-
         // Get options from API.
         const options = this.APIOptions(guildSettings, { page: flags.page || message.content });
 
+        // Get media from API.
+        const media = await this.flags.mediaSource(flags);
+
         // Get results from API.
-        const response = await this.tmdb[media].popular(options);
+        const response = await this.client.tmdb[media].getPopular(options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.

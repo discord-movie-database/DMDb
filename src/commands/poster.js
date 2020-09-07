@@ -41,14 +41,15 @@ class PosterCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
-        // Get media source.
-        const media = this.flags.mediaSource(flags);
-
         // Get API options.
         const options = this.APIOptions(guildSettings, { year: flags.year });
 
+        // Get media from API.
+        const media = await this.getMedia(flags)({
+            externalId: message.content, query: message.content });
+
         // Get response from API.
-        const response = await this.tmdb[media].details(message.content, options);
+        const response = await media.getDetails(options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Check for poster.

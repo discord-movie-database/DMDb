@@ -28,7 +28,6 @@ class CommandStructure {
 
         this.embed = this.client.util.getUtil('embed');
         this.flags = this.client.util.getUtil('flags');
-        this.tmdb = this.client.util.getUtil('tmdb');
         this.fields = this.client.util.getUtil('fields');
 
         this.meta = {};
@@ -89,6 +88,13 @@ class CommandStructure {
         }, timeoutDuration || 10000);
 
         return statusMessage;
+    }
+    
+    getMedia(flags) {
+        if (flags.tv) return this.client.tmdb.getTVShowFromMethod.bind(this.client.tmdb);
+        if (flags.person) return this.client.tmdb.getPersonFromMethod.bind(this.client.tmdb);
+
+        return this.client.tmdb.getMovieFromMethod.bind(this.client.tmdb);
     }
 
     /**

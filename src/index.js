@@ -4,6 +4,7 @@ import Eris from 'eris';
 
 import consola from 'consola';
 import axios from 'axios';
+import TMDb from 'tmdb';
 
 import RepositoryHandler from './handlers/repository';
 import UtilHandler from './handlers/util';
@@ -36,6 +37,12 @@ class Client extends Eris {
 
         this.log = consola;
         this.axios = axios;
+        this.tmdb = new TMDb.V3({
+            api_key: config.tokens.tmdb
+        }, {
+            results_per_page: 5,
+            custom_id: true
+        });
 
         this.config = config;
 

@@ -41,7 +41,7 @@ class AiringCommand extends CommandStructure {
         const options = this.APIOptions(guildSettings, { page: flags.page || message.content });
 
         // Get response from API.
-        const response = await this.tmdb.tv.airing(options);
+        const response = await this.client.tmdb.tv.getAiringToday(options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response data.

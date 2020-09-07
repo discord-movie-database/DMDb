@@ -41,30 +41,31 @@ class CreditsCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
-        // Get media source.
-        const media = this.flags.mediaSource(flags);
-
         // Get API options.
         const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
 
+        // Get media from API.
+        const media = await this.getMedia(flags)({
+            externalId: message.content, query: message.content });
+
         // Get response from API.
-        const _response = await this.tmdb[media].credits(message.content, options, true);
-        if (_response.error) return this.embed.error(statusMessage, _response.error);
+        const response = await media.getDetails({ ...options, append_to_response: 'credits' });
+        if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Put response results into correct format.
-        const response = this.resultStructure(_response.cast, flags.page);
-        if (response.error) return this.embed.error(statusMessage, response.error);
+        const credits = this.resultStructure(response.credits.cast, flags.page);
+        if (credits.error) return this.embed.error(statusMessage, credits.error);
 
         // Edit status message with response.
         this.embed.edit(statusMessage, {
-            title: `${_response.title || _response.name} Credits`,
-            url: _response.id ? this.fields.TMDbShowURL(_response.id) : '',
+            title: `${response.title || response.name} Credits`,
+            url: response.id ? this.fields.TMDbShowURL(response.id) : '',
 
-            thumbnail: { url: this.thumbnailURL(response.results[0].profile_path
-                || response.results[0].poster_path) },
-            description: this.resultsDescription(response),
+            thumbnail: { url: this.thumbnailURL(credits.results[0].profile_path
+                || credits.results[0].poster_path) },
+            description: this.resultsDescription(credits),
 
-            fields: response.results.map((credit) => this.fields.renderResult(this.fields.check(credit.character),
+            fields: credits.results.map((credit) => this.fields.renderResult(this.fields.check(credit.character),
                 flags.person ? credit.media_type === 'movie' ? [
                     // Media source is person and credit is movie
                     this.flags.mediaType(credit.media_type),

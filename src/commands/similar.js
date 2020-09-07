@@ -40,14 +40,15 @@ class SimilarCommand extends CommandStructure {
         const flags = this.flags.parse(message.content, this.meta.flags);
         message.content = flags.query; // Remove flags from query.
 
-        // Get media source.
-        const media = this.flags.mediaSource(flags);
-
         // Get API options.
         const options = this.APIOptions(guildSettings, { page: flags.page, year: flags.year });
 
+        // Get media from API.
+        const media = await this.getMedia(flags)({
+            externalId: message.content, query: message.content });
+
         // Get results from API.
-        const response = await this.tmdb[media].similar(message.content, options, true)
+        const response = await media.getSimilar(options)
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with results.

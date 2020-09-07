@@ -43,8 +43,12 @@ class PersonCommand extends CommandStructure {
         // Get API options.
         const options = this.APIOptions(guildSettings, {});
 
+        // Get person from API.
+        const person = await this.client.tmdb.getPersonFromMethod({
+            externalId: message.content, query: message.content });
+
         // Get response from API.
-        const response = await this.tmdb.person.details(message.content, options);
+        const response = await person.getDetails();
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates

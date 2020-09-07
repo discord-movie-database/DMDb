@@ -41,7 +41,7 @@ class UpcomingCommand extends CommandStructure {
         const options = this.APIOptions(guildSettings, { page: flags.page || message.content });
 
         // Get response from API.
-        const response = await this.tmdb.movie.upcoming(options);
+        const response = await this.client.tmdb.movie.getUpcoming(options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Edit status message with response.

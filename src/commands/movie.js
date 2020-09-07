@@ -44,8 +44,12 @@ class MovieCommand extends CommandStructure {
         // Get API options.
         const options = this.APIOptions(guildSettings, { year: flags.year });
 
+        // Get movie from API.
+        const movie = await this.client.tmdb.getMovieFromMethod({
+            externalId: message.content, query: message.content });
+
         // Get response from API.
-        const response = await this.tmdb.movie.details(message.content, options);
+        const response = await movie.getDetails(options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates

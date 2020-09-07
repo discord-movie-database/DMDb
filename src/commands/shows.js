@@ -45,7 +45,8 @@ class ShowsCommand extends CommandStructure {
         const options = this.APIOptions(guildSettings, {});
 
         // Get results from API.
-        const response = await this.tmdb.search.tv(message.content, options);
+        const response = await this.client.tmdb.search.getTVShows({
+            ...options, query: message.content });
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Validate year flags.

@@ -44,8 +44,12 @@ class ShowCommand extends CommandStructure {
         // Set API options.
         const options = this.APIOptions(guildSettings, { year: flags.year });
 
+        // Get show from API.
+        const show = await this.client.tmdb.getTVShowFromMethod({
+            externalId: message.content, query: message.content });
+
         // Get response from API.
-        const response = await this.tmdb.tv.details(message.content, options);
+        const response = await show.getDetails(options);
         if (response.error) return this.embed.error(statusMessage, response.error);
 
         // Prepare fields based on user-defined or default templates
