@@ -1,4 +1,5 @@
 # Discord Movie Database (DMDb) 🎬
+
 An advanced and customisable bot to get information about movies, TV shows and people within
 Discord. It's perfect for servers with a movie channel.
 
