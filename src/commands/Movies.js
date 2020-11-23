@@ -64,7 +64,7 @@ export default class Movies extends Command {
                 description: this.fields.renderResultsSummary(response),
                 fields: this.fields.renderResults(response.results, {
                     name: 'title',
-                    value: ['vote_average', 'release_date', 'tmdb_id'],
+                    value: ['vote_average', 'release_date_short', 'tmdb_id'],
                 }),
             });
         } catch (error) {

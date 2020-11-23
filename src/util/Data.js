@@ -147,20 +147,22 @@ export default class Data extends Util {
      * Converts a computer date to a human readable format.
      *
      * @param {string} value Date
+     * @param {string} [short] Use short date?
      * @returns {string}
      */
-    date(value) {
+    date(value, short) {
         if (!value) return this.check(value);
 
         const date = new Date(value);
 
         const day = date.getDate();
-        const month = date.getUTCMonth();
+        const monthNum = date.getUTCMonth();
         const year = date.getUTCFullYear();
 
         const nth = this.nth(day);
+        const month = short ? this.shortMonths[monthNum] : this.longMonths[monthNum];
 
-        return [`${day}${nth}`, this.longMonths[month], year].join(' ');
+        return [`${day}${nth}`, month, year].join(' ');
     }
 
     /**

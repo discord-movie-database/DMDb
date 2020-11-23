@@ -64,6 +64,12 @@ export default class Fields extends Data {
                 value: this.date(data.first_air_date),
             }),
 
+            first_aired_short: (data) => ({
+                icon: '📆',
+                name: 'First Aired',
+                value: this.date(data.first_air_date, true),
+            }),
+
             gender: (data) => ({
                 icon: this.gender(data.gender, true),
                 name: 'Gender',
@@ -154,6 +160,12 @@ export default class Fields extends Data {
                 value: this.date(data.release_date),
             }),
 
+            release_date_short: (data) => ({
+                icon: '📆',
+                name: 'Release Date',
+                value: this.date(data.release_date, true),
+            }),
+
             release_year: (data) => ({
                 icon: '📆',
                 name: 'Release Year',
@@ -193,12 +205,18 @@ export default class Fields extends Data {
                 inline: false,
             }),
 
+            vote_average: (data) => ({
+                icon: '⭐',
+                name: 'Vote Average',
+                value: `**${this.check(data.vote_average)}**`,
+            }),
+
             votes_summary: (data) => ({
                 icon: '⭐',
                 name: 'Votes Summary',
                 value:
-                    `**${this.check(data.vote_average)}** ` +
-                    `(${this.number(data.vote_count)} votes)`,
+                    `**${this.check(data.vote_average)}**` +
+                    `${data.vote_average ? ` (${this.number(data.vote_count)} votes)` : ''}`,
             }),
 
             score_summary: (data) => ({
@@ -206,7 +224,7 @@ export default class Fields extends Data {
                 name: 'User Score',
                 value:
                     `**${this.score(data.vote_average)}** ` +
-                    `(${this.number(data.vote_count)} votes)`,
+                    `${data.vote_average ? ` (${this.number(data.vote_count)} votes)` : ''}`,
             }),
 
             media_type: (data) => ({

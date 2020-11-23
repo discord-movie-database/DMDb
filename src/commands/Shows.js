@@ -64,7 +64,7 @@ export default class Shows extends Command {
 
                 fields: this.fields.renderResults(response.results, {
                     name: 'name',
-                    value: ['vote_average', 'first_aired', 'tmdb_id'],
+                    value: ['vote_average', 'first_aired_short', 'tmdb_id'],
                 }),
             });
         } catch (error) {
