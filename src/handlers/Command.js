@@ -129,7 +129,7 @@ export default class Command extends Handler {
         this.client.command.executed += 1;
 
         const log =
-            `G${message.channel.guild.id} -> U${message.author.id} -> M${message.id} -> ` +
+            `G ${message.channel.guild.id} -> U ${message.author.id} -> M ${message.id} -> ` +
             `${commandName}${commandArgs ? ` -> ${commandArgs}` : ''}`;
 
         try {

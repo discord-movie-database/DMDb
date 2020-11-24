@@ -195,9 +195,10 @@ export default class Data extends Util {
      */
     gender(value, isSymbol) {
         const genders = {
-            0: [this.check(value), '⚥'],
+            0: [this.check(value), '❔'],
             1: ['Female', '♀️'],
             2: ['Male', '♂️'],
+            3: ['Non-Binary', '⚧'],
         };
 
         const type = isSymbol ? 1 : 0;
