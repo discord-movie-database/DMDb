@@ -22,5 +22,6 @@ module.exports = {
         'no-underscore-dangle': 'off',
         'no-prototype-builtins': 'off',
         'no-eval': 'off',
+        'prefer-destructuring': 'off',
     },
 };

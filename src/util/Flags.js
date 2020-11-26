@@ -31,8 +31,20 @@ export default class Flags extends Util {
      * @returns {Object}
      */
     parse(input, valid) {
-        const split = input.split(' ');
         const flags = {};
+
+        if (valid.indexOf('year') > -1) {
+            const yearFormat = /\((\d{4})\)/;
+            const hasYear = input.match(yearFormat);
+
+            if (hasYear) {
+                flags.year = hasYear[1];
+
+                input = input.replace(yearFormat, '');
+            }
+        }
+
+        const split = input.trim().split(' ');
 
         for (let i = 0; i < split.length; i += 1) {
             let argument = split[i];
