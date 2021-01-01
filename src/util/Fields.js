@@ -264,6 +264,10 @@ export default class Fields extends Data {
                 value: '—',
             }),
 
+            index: (data) => ({
+                value: `**${data.index}**`,
+            }),
+
             title_or_name: (data) =>
                 data.title ? this.fields.title(data) : this.fields.name(data),
 
@@ -399,7 +403,7 @@ export default class Fields extends Data {
 
                 return {
                     name: this.renderField(structure.name, data).value,
-                    value: this.join([`**${data.index}**`, ...renderedValueFields]),
+                    value: this.join(renderedValueFields),
                 };
             });
         }

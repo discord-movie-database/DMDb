@@ -57,7 +57,7 @@ export default class People extends Command {
                 description: this.fields.renderResultsSummary(response),
                 fields: this.fields.renderResults(response.results, {
                     name: 'name',
-                    value: ['known_for', 'tmdb_id'],
+                    value: ['index', 'known_for', 'tmdb_id'],
                 }),
             });
         } catch (error) {
