@@ -42,7 +42,7 @@ export default class Show extends Command {
             const method = { externalId: flags.output, query: flags.output };
 
             const resp = await this.client.tmdb
-                .getTVShowFromMethod(method, { ...options, year: flags.year })
+                .getTVShowFromMethod(method, { ...options, first_air_date_year: flags.year })
                 .then((show) => show.getDetails(options))
                 .catch((error) => ({ error }));
 

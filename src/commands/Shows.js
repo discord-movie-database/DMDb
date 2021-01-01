@@ -42,7 +42,7 @@ export default class Shows extends Command {
             const options = {
                 query: flags.output,
                 page: flags.page,
-                year: flags.year,
+                first_air_date_year: flags.year,
 
                 ...this.defaultOptions(guildSettings),
             };
