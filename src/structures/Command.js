@@ -23,7 +23,8 @@ export default class Command {
      * @param {Array<string>} [meta.flags] Command flags
      * @param {boolean} [meta.developerOnly] Restrict command to developers only?
      * @param {boolean} [meta.hideInHelp] Hide command in help command?
-     * @param {number} [meta.weight] Weight to position command in help command.
+     * @param {number} [meta.weight] Weight to position command in help command
+     * @param {number} [meta.customFlags] One-off custom flags
      */
     constructor(client, meta) {
         this.client = client;
@@ -38,6 +39,8 @@ export default class Command {
             developerOnly: false,
             hideInHelp: false,
             weight: 0,
+
+            customFlags: {},
 
             ...meta,
         };

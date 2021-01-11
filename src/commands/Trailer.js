@@ -20,6 +20,10 @@ export default class Trailer extends Command {
             developerOnly: false,
             hideInHelp: false,
             weight: 250,
+
+            customFlags: {
+                all: { argsRequired: false },
+            },
         });
     }
 
@@ -37,9 +41,7 @@ export default class Trailer extends Command {
 
             const statusMessage = await this.statusMessage(message);
 
-            const flags = this.flags.parse(commandArgs, this.meta.flags, {
-                all: { argsRequired: false },
-            });
+            const flags = this.flags.parse(commandArgs, this.meta.flags, this.meta.customFlags);
 
             const options = { ...this.defaultOptions(guildSettings), year: flags.year };
             const method = { externalId: flags.output, query: flags.output };
@@ -64,7 +66,7 @@ export default class Trailer extends Command {
                 thumbnail: { url: this.data.imageURL(response.poster_path) },
 
                 title:
-                    `Trailers & More for ${response.title || response.name}` +
+                    `Trailers & Videos for ${response.title || response.name}` +
                     ` (${this.data.year(response.release_date || response.first_air_date)})`,
 
                 description: this.fields.renderResultsSummary(videos),

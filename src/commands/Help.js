@@ -54,11 +54,14 @@ export default class Help extends Command {
      * Formats flags into string.
      *
      * @param {Array<string>} flags Flags to format
+     * @param {Object} customFlags Custom flags
      * @returns {string}
      */
-    formatFlags(flags) {
+    formatFlags(flags, customFlags) {
+        flags = flags || [];
+
         const formatted = flags.map((flagName) => {
-            const flag = this.flags.flags[flagName];
+            const flag = this.flags.flags[flagName] || customFlags[flagName];
 
             return `[${flag.argsRequired ? `--${flagName} <#>` : `--${flagName}`}]`;
         });
@@ -120,7 +123,7 @@ export default class Help extends Command {
             embed.fields.push({
                 name:
                     `${prefix}${command.meta.name} ${command.meta.arguments || ''} ` +
-                    `${command.meta.flags ? this.formatFlags(command.meta.flags) : ''}`,
+                    `${this.formatFlags(command.meta.flags, command.meta.customFlags)}`,
                 value: `**-** ${command.meta.description}`,
             });
         }
@@ -160,7 +163,10 @@ export default class Help extends Command {
 
                 {
                     name: 'Flags',
-                    value: command.meta.flags ? this.formatFlags(command.meta.flags) : 'N/A',
+                    value:
+                        command.meta.flags && command.meta.customFlags
+                            ? this.formatFlags(command.meta.flags, command.meta.customFlags)
+                            : 'N/A',
                     inline: false,
                 },
 
