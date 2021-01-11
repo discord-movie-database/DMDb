@@ -15,7 +15,7 @@ export default class Trailer extends Command {
             aliases: null,
             description: 'Get the trailer for a movie or TV show.',
             arguments: '<query | tmdb id>',
-            flags: ['show', 'page', 'year'],
+            flags: ['show', 'page', 'year', 'all'],
             toggleable: true,
             developerOnly: false,
             hideInHelp: false,
@@ -37,7 +37,10 @@ export default class Trailer extends Command {
 
             const statusMessage = await this.statusMessage(message);
 
-            const flags = this.flags.parse(commandArgs, this.meta.flags);
+            const flags = this.flags.parse(commandArgs, this.meta.flags, {
+                all: { argsRequired: false },
+            });
+
             const options = { ...this.defaultOptions(guildSettings), year: flags.year };
             const method = { externalId: flags.output, query: flags.output };
 
@@ -49,7 +52,7 @@ export default class Trailer extends Command {
 
             const videos = response.videos.results;
 
-            if (videos.total_results === 1) {
+            if (!flags.all || videos.total_results === 1) {
                 const video = videos.results[0];
                 const source = this.data.videoSourceURL(video.site, video.key);
 

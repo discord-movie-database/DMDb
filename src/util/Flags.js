@@ -28,12 +28,14 @@ export default class Flags extends Util {
      * Parses flags in input.
      *
      * @param {string} input Input value
+     * @param {Array<string>} validFlags Valid flag names
+     * @param {Object} customFlags One-off custom flags
      * @returns {Object}
      */
-    parse(input, valid) {
+    parse(input, validFlags, customFlags = {}) {
         const flags = {};
 
-        if (valid.indexOf('year') > -1) {
+        if (validFlags.indexOf('year') > -1) {
             const yearFormat = /\((\d{4})\)/;
             const hasYear = input.match(yearFormat);
 
@@ -52,9 +54,9 @@ export default class Flags extends Util {
             if (argument && argument.startsWith('--')) {
                 argument = argument.slice(2).toLowerCase();
 
-                const flag = this.flags[argument];
+                const flag = this.flags[argument] || customFlags[argument];
 
-                if (valid.indexOf(argument) > -1 && flag) {
+                if (validFlags.indexOf(argument) > -1 && flag) {
                     if (flag.argsRequired) {
                         flags[argument] = split[i + 1];
 
