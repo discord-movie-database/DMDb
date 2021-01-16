@@ -206,7 +206,7 @@ export default class Template extends Command {
             const validFields = this.fields.templates[mediaName.toLowerCase()].supports;
 
             const inputFields = optionArgs.slice(2).join(' ').split(/[ ,]+/);
-            if (inputFields.length === 0)
+            if (!inputFields[0])
                 return this.embed.error(message, `Valid fields: \`${validFields.join(', ')}\``);
 
             const invalidFields = this.invalidFields(inputFields, mediaName);
